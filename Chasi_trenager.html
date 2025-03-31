@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренажёр изучения часов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .clock-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            margin: 50px auto;
+        }
+
+        .clock {
+            width: 100%;
+            height: 100%;
+            border: 10px solid #333;
+            border-radius: 50%;
+            position: relative;
+            background-color: #fff;
+            transform-origin: center;
+        }
+
+        .hour-hand, .minute-hand {
+            position: absolute;
+            background-color: #333;
+            transform-origin: bottom center;
+            left: 50%;
+            top: 50%;
+        }
+
+        .hour-hand {
+            width: 9px;
+            height: 80px;
+            margin-left: -3px;
+            margin-top: -80px;
+        }
+
+        .minute-hand {
+            width: 6px;
+            height: 110px;
+            margin-left: -2px;
+            margin-top: -110px;
+        }
+
+        .options {
+            margin-top: 50px;
+        }
+
+		.option {
+           background-color: white;
+           margin: 5px;
+           padding: 10px 20px;
+           color: black;
+           border: 2px solid #555555;
+           cursor: pointer;
+        }
+
+        .option:hover {
+           background-color: #555555;
+           color: white;
+        }
+
+
+		#refreshButton {
+           background-color: white; 
+           color: black; 
+           border: 2px solid #008CBA;
+		   margin-top: 20px;
+		   padding: 10px 20px;
+		   cursor: pointer;
+        }
+
+         #refreshButton:hover {
+           background-color: #008CBA;
+           color: white;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+		
+		#zadanie {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+		
+		#startButton {
+            background-color: white;
+            font-size: 24px;
+            padding: 10px 20px;  
+            color: black; 
+            border: 2px solid #04AA6D;
+        }
+
+        #startButton:hover {
+            background-color: #04AA6D;
+            color: white;
+        }
+
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="startButton">Начать</button>
+		<div id="zadanie">Выбери правильное значение времени на часах.</div>
+        <div class="clock-container">
+            <div class="clock">
+			<svg version="1.1" id="_Слой_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+	 y="0px" viewBox="0 0 897.9 897.9" style="enable-background:new 0 0 897.9 897.9;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#000000;stroke-width:7.0866;stroke-linecap:round;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-width:11.3386;stroke-linecap:round;stroke-miterlimit:10;}
+	.st2{font-family:'Roboto-Bold';}
+	.st3{font-size:70.8661px;}
+</style>
+<circle cx="449" cy="449" r="23.1"/>
+<line class="st0" x1="402.6" y1="8.1" x2="404.2" y2="23.3"/>
+<line class="st0" x1="356.8" y1="15.4" x2="360" y2="30.3"/>
+<line class="st0" x1="312" y1="27.4" x2="316.7" y2="41.9"/>
+<line class="st0" x1="268.7" y1="44" x2="274.9" y2="57.9"/>
+<line class="st0" x1="188.4" y1="90.3" x2="197.4" y2="102.7"/>
+<line class="st0" x1="152.3" y1="119.5" x2="162.6" y2="130.9"/>
+<line class="st0" x1="119.5" y1="152.3" x2="130.9" y2="162.6"/>
+<line class="st0" x1="90.3" y1="188.4" x2="102.7" y2="197.4"/>
+<line class="st0" x1="44" y1="268.7" x2="57.9" y2="274.9"/>
+<line class="st0" x1="27.4" y1="312" x2="41.9" y2="316.7"/>
+<line class="st0" x1="15.4" y1="356.8" x2="30.3" y2="360"/>
+<line class="st0" x1="8.1" y1="402.6" x2="23.3" y2="404.2"/>
+<line class="st0" x1="8.1" y1="495.3" x2="23.3" y2="493.7"/>
+<line class="st0" x1="15.4" y1="541.1" x2="30.3" y2="538"/>
+<line class="st0" x1="27.4" y1="586" x2="41.9" y2="581.2"/>
+<line class="st0" x1="44" y1="629.3" x2="57.9" y2="623.1"/>
+<line class="st0" x1="90.3" y1="709.5" x2="102.7" y2="700.6"/>
+<line class="st0" x1="119.5" y1="745.6" x2="130.9" y2="735.4"/>
+<line class="st0" x1="152.3" y1="778.4" x2="162.6" y2="767.1"/>
+<line class="st0" x1="188.4" y1="807.6" x2="197.4" y2="795.3"/>
+<line class="st0" x1="268.7" y1="854" x2="274.9" y2="840"/>
+<line class="st0" x1="312" y1="870.6" x2="316.7" y2="856.1"/>
+<line class="st0" x1="356.8" y1="882.6" x2="360" y2="867.7"/>
+<line class="st0" x1="402.6" y1="889.8" x2="404.2" y2="874.7"/>
+<line class="st0" x1="495.3" y1="889.8" x2="493.7" y2="874.7"/>
+<line class="st0" x1="541.1" y1="882.6" x2="538" y2="867.7"/>
+<line class="st0" x1="586" y1="870.6" x2="581.2" y2="856.1"/>
+<line class="st0" x1="629.3" y1="854" x2="623.1" y2="840"/>
+<line class="st0" x1="709.5" y1="807.6" x2="700.6" y2="795.3"/>
+<line class="st0" x1="745.6" y1="778.4" x2="735.4" y2="767.1"/>
+<line class="st0" x1="778.4" y1="745.6" x2="767.1" y2="735.4"/>
+<line class="st0" x1="807.6" y1="709.5" x2="795.3" y2="700.6"/>
+<line class="st0" x1="854" y1="629.3" x2="840" y2="623.1"/>
+<line class="st0" x1="870.6" y1="586" x2="856.1" y2="581.2"/>
+<line class="st0" x1="882.6" y1="541.1" x2="867.7" y2="538"/>
+<line class="st0" x1="889.8" y1="495.3" x2="874.7" y2="493.7"/>
+<line class="st0" x1="889.8" y1="402.6" x2="874.7" y2="404.2"/>
+<line class="st0" x1="882.6" y1="356.8" x2="867.7" y2="360"/>
+<line class="st0" x1="870.6" y1="312" x2="856.1" y2="316.7"/>
+<line class="st0" x1="854" y1="268.7" x2="840" y2="274.9"/>
+<line class="st0" x1="807.6" y1="188.4" x2="795.3" y2="197.4"/>
+<line class="st0" x1="778.4" y1="152.3" x2="767.1" y2="162.6"/>
+<line class="st0" x1="745.6" y1="119.5" x2="735.4" y2="130.9"/>
+<line class="st0" x1="709.5" y1="90.3" x2="700.6" y2="102.7"/>
+<line class="st0" x1="629.3" y1="44" x2="623.1" y2="57.9"/>
+<line class="st0" x1="586" y1="27.4" x2="581.2" y2="41.9"/>
+<line class="st0" x1="541.1" y1="15.4" x2="538" y2="30.3"/>
+<line class="st0" x1="495.3" y1="8.1" x2="493.7" y2="23.3"/>
+<line class="st1" x1="670.6" y1="65.1" x2="657.8" y2="87.2"/>
+<line class="st1" x1="832.9" y1="227.3" x2="810.7" y2="240.1"/>
+<line class="st1" x1="892.3" y1="449" x2="866.7" y2="449"/>
+<line class="st1" x1="832.9" y1="670.6" x2="810.7" y2="657.8"/>
+<line class="st1" x1="670.6" y1="832.9" x2="657.8" y2="810.7"/>
+<line class="st1" x1="449" y1="892.3" x2="449" y2="866.7"/>
+<line class="st1" x1="227.3" y1="832.9" x2="240.1" y2="810.7"/>
+<line class="st1" x1="65.1" y1="670.6" x2="87.2" y2="657.8"/>
+<line class="st1" x1="5.7" y1="449" x2="31.2" y2="449"/>
+<line class="st1" x1="65.1" y1="227.3" x2="87.2" y2="240.1"/>
+<line class="st1" x1="227.3" y1="65.1" x2="240.1" y2="87.2"/>
+<line class="st1" x1="449" y1="5.7" x2="449" y2="31.2"/>
+<text transform="matrix(1 0 0 1 605.2845 144.23)" class="st2 st3">1</text>
+<text transform="matrix(1 0 0 1 750.9727 279.1771)" class="st2 st3">2</text>
+<text transform="matrix(1 0 0 1 801.4412 475.5963)" class="st2 st3">3</text>
+<text transform="matrix(1 0 0 1 753.0093 652.3608)" class="st2 st3">4</text>
+<text transform="matrix(1 0 0 1 611.0286 790.6028)" class="st2 st3">5</text>
+<text transform="matrix(1 0 0 1 424.1452 842.8157)" class="st2 st3">6</text>
+<text transform="matrix(1 0 0 1 242.3541 795.1061)" class="st2 st3">7</text>
+<text transform="matrix(1 0 0 1 104.6938 660.162)" class="st2 st3">8</text>
+<text transform="matrix(1 0 0 1 57.8317 474.8881)" class="st2 st3">9</text>
+<text transform="matrix(1 0 0 1 95.7217 287.6973)" class="st2 st3">10</text>
+<text transform="matrix(1 0 0 1 227.0537 148.7513)" class="st2 st3">11</text>
+<text transform="matrix(1 0 0 1 403.4331 96.5059)" class="st2 st3">12</text>
+</svg>
+                <div class="hour-hand" id="hourHand"></div>
+                <div class="minute-hand" id="minuteHand"></div>
+            </div>
+        </div>
+        <div class="options hidden" id="options">
+            <!-- Кнопки ответов будут созданы динамически -->
+        </div>
+        <button id="refreshButton" class="hidden">Обновить</button>
+        <div id="result"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const hourHand = document.getElementById('hourHand');
+            const minuteHand = document.getElementById('minuteHand');
+            const optionsContainer = document.getElementById('options');
+            const refreshButton = document.getElementById('refreshButton');
+            const startButton = document.getElementById('startButton');
+            const resultField = document.getElementById('result');
+
+            let currentHours = 0;
+            let currentMinutes = 0;
+            let correctAnswers = 0;
+            let wrongAnswers = 0;
+
+            // Функция для установки времени на циферблате
+            function setClock(hours, minutes) {
+                const hourDeg = (hours % 24) * 30 + (minutes / 60) * 30;
+                const minuteDeg = minutes * 6;
+
+                hourHand.style.transform = `rotate(${hourDeg}deg)`;
+                minuteHand.style.transform = `rotate(${minuteDeg}deg)`;
+            }
+
+            // Функция для генерации случайного времени
+            function randomizeClock() {
+                currentHours = Math.floor(Math.random() * 24);
+                currentMinutes = Math.floor(Math.random() * 12) * 5; // Шаг 5 минут
+                setClock(currentHours, currentMinutes);
+                updateOptions();
+            }
+
+            // Функция для обновления кнопок ответов
+            function updateOptions() {
+                optionsContainer.innerHTML = ''; // Очищаем контейнер с кнопками
+
+                // Создаём правильный ответ
+                const correctAnswer = `${currentHours}:${currentMinutes < 10 ? '0' + currentMinutes : currentMinutes}`;
+
+                // Создаём массив с вариантами ответов
+                const answers = [correctAnswer];
+
+                // Добавляем случайные неправильные ответы
+                while (answers.length < 4) {
+                    const randomHours = Math.floor(Math.random() * 24);
+                    const randomMinutes = Math.floor(Math.random() * 12) * 5;
+                    const randomAnswer = `${randomHours}:${randomMinutes < 10 ? '0' + randomMinutes : randomMinutes}`;
+
+                    if (!answers.includes(randomAnswer)) {
+                        answers.push(randomAnswer);
+                    }
+                }
+
+                // Перемешиваем ответы
+                answers.sort(() => Math.random() - 0.5);
+
+                // Создаём кнопки для каждого ответа
+                answers.forEach(answer => {
+                    const button = document.createElement('button');
+                    button.className = 'option';
+                    button.textContent = answer;
+                    button.addEventListener('click', checkAnswer);
+                    optionsContainer.appendChild(button);
+                });
+            }
+
+            // Функция для проверки ответа
+            function checkAnswer(event) {
+                const selectedAnswer = event.target.textContent;
+                const correctAnswer = `${currentHours}:${currentMinutes < 10 ? '0' + currentMinutes : currentMinutes}`;
+
+                if (selectedAnswer === correctAnswer) {
+                    correctAnswers++;
+                    resultField.textContent = `Правильно! Правильных ответов: ${correctAnswers}, Ошибок: ${wrongAnswers}`;
+                } else {
+                    wrongAnswers++;
+                    resultField.textContent = `Неправильно. Правильный ответ: ${correctAnswer}. Правильных ответов: ${correctAnswers}, Ошибок: ${wrongAnswers}`;
+                }
+                randomizeClock();
+            }
+
+            // Обработчики событий
+            startButton.addEventListener('click', () => {
+                optionsContainer.classList.remove('hidden');
+                refreshButton.classList.remove('hidden');
+				startButton.classList.add('hidden');
+                randomizeClock();
+            });
+
+            refreshButton.addEventListener('click', () => {
+                randomizeClock();
+            });
+
+            // Инициализация при загрузке страницы
+            optionsContainer.classList.add('hidden');
+            refreshButton.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

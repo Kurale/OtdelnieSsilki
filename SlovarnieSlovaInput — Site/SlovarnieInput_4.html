@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Тренажёр словарных слов</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #aacef8;
+            position: relative;
+        }
+
+        #gameSVG {
+            width: 885px;
+            height: 990px;
+            transform: scale(0.85);
+            transform-origin: center;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+        }
+
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(11, 70px);
+            gap: 8px;
+            padding: 24px;
+        }
+
+        .key {
+            width: 50px;
+            height: 50px;
+            background: rgba(171, 209, 245, 0.95);
+            font-family: 'Roboto', sans-serif;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+
+        .key:hover {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .incorrect {
+            color: #ff3b3b;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .energy-filled path, .energy-filled rect {
+            fill: #4CAF50;
+            transition: fill 0.5s ease;
+        }
+
+        #textInput {
+            width: 100%;
+            height: 100%;
+            border: none;
+            font-size: 60px;
+            color: #1a4563;
+            background: transparent;
+            text-align: center;
+            outline: none;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        #textInput::placeholder {
+            color: rgba(26, 69, 99, 0.5);
+        }
+
+        #virtualKeyboardPosition {
+            visibility: hidden;
+        }
+
+        #wordToCheck {
+            display: none;
+        }
+
+        #energyCircle {
+            visibility: hidden;
+        }
+
+        /* Стили для изображения внутри SVG */
+        #gameSVG image {
+            width: 50%; /* Уменьшаем на 20% от размера контейнера */
+            height: 100%;
+            x: 10%; /* Центрируем по горизонтали */
+            y: -25%; /* Центрируем по вертикали */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg id="gameSVG" width="885" height="990" viewBox="0 0 885 990">
+            <rect id="backgroundGame" width="885" height="990" fill="#2196F3"/>
+
+            <!-- Контейнер для изображения -->
+            <g id="imgPosition" transform="translate(180 91)" fill="#fff" stroke="#1a4563" stroke-width="1">
+                <rect width="614" height="598" rx="32" stroke="none"/>
+                <rect x="0.5" y="0.5" width="613" height="597" rx="31.5" fill="none"/>
+                <image id="gameImage" href="" width="491.2" height="478.4" x="61.4" y="59.8"/>
+            </g>
+
+            <g id="inputPosition" transform="translate(194 566)" fill="#fff" stroke="#1a4563" stroke-width="1">
+                <rect width="584" height="105" rx="20" stroke="none"/>
+                <rect x="0.5" y="0.5" width="583" height="104" rx="19.5" fill="none"/>
+                <foreignObject width="584" height="105">
+                    <input id="textInput" type="text" readonly>
+                </foreignObject>
+            </g>
+
+            <text id="title" transform="translate(487 58)" fill="#fff" font-size="40" font-family="ArialMT, Arial"><tspan x="-178.408" y="0">Подпиши картинку!</tspan></text>
+
+            <g id="battery" transform="translate(30 100.949)">
+                <rect width="121" height="533" rx="23" fill="#fff"/>
+                <rect x="8" y="7" width="105" height="517" rx="23" fill="none" stroke="#43b4ff" stroke-width="3"/>
+                <path d="M15,0H51A15,15,0,0,1,66,15V25H0V15A15,15,0,0,1,15,0Z" transform="translate(28 -25)" fill="#fff"/>
+            </g>
+
+            <g id="energi" transform="translate(30 85)">
+                <g id="energi1" transform="translate(18 489)"><path d="M0,0H86V27A15,15,0,0,1,71,42H14A14,14,0,0,1,0,28V0Z" fill="#fff" stroke="#43b4ff"/></g>
+                <g id="energi2" transform="translate(18 438)"><rect width="86" height="42" fill="#fff" stroke="#43b4ff"/></g>
+                <g id="energi3" transform="translate(18 387)"><rect width="86" height="42" fill="#fff" stroke="#43b4ff"/></g>
+                <g id="energi4" transform="translate(18 336)"><rect width="86" height="42" fill="#fff" stroke="#43b4ff"/></g>
+                <g id="energi5" transform="translate(18 285)"><rect width="86" height="42" fill="#fff" stroke="#43b4ff"/></g>
+                <g id="energi6" transform="translate(18 234)"><rect width="86" height="42" fill="#fff" stroke="#43b4ff"/></g>
+                <g id="energi7" transform="translate(18 183)"><rect width="86" height="42" fill="#fff" stroke="#43b4ff"/></g>
+                <g id="energi8" transform="translate(18 132)"><rect width="86" height="42" fill="#fff" stroke="#43b4ff"/></g>
+                <g id="energi9" transform="translate(18 81)"><rect width="86" height="42" fill="#fff" stroke="#43b4ff"/></g>
+                <g id="energi10" transform="translate(18 32)"><path d="M12,0H74A12,12,0,0,1,86,12V40H0V12A12,12,0,0,1,12,0Z" fill="#fff" stroke="#43b4ff"/></g>
+            </g>
+
+            <g id="Provoda" transform="translate(-514 -41)">
+                <line x1="608.5" y1="675.5" x2="609.5" y2="818.5" stroke="#fff" stroke-linecap="round" stroke-width="8"/>
+                <line x1="609.5" y1="818.5" x2="1350.5" y2="818.5" stroke="#fff" stroke-linecap="round" stroke-width="8"/>
+                <line x1="1350.5" y1="403.5" x2="1350.5" y2="818.5" stroke="#fff" stroke-linecap="round" stroke-width="8"/>
+                <line x1="1308" y1="403.5" x2="1350" y2="403.5" stroke="#fff" stroke-linecap="round" stroke-width="8"/>
+            </g>
+
+            <circle id="energyCircle" cx="0" cy="0" r="15" fill="#4CAF50" visibility="hidden">
+                <animateMotion id="circleMotion" dur="2s" begin="indefinite" fill="freeze">
+                    <mpath href="#energyPath"/>
+                </animateMotion>
+                <animate id="circleVisibility" attributeName="visibility" from="hidden" to="visible" dur="0.1s" begin="indefinite" fill="freeze"/>
+            </circle>
+
+            <path id="energyPath" fill="none" stroke="none" d="
+                M 794 362.5
+                L 836.5 362.5
+                L 836.5 777.5
+                L 94.5 777.5
+                L 94.5 595
+                L 91 595" />
+
+            <g id="btnCheck" transform="translate(119 864)">
+                <rect width="253" height="95" rx="21" fill="#0983fe" stroke="#203b5a" stroke-width="1"/>
+                <g transform="translate(63.508 0)">
+                    <ellipse transform="translate(64.694 82.392) rotate(-109)" fill="none" stroke="#f2f5f6" stroke-width="8" cx="32.41" cy="32.41" rx="32.41" ry="32.41"/>
+                    <line x1="-64.694" y1="-30" x2="-67" y2="32" transform="rotate(-109)" stroke="#f2f5f6" stroke-linecap="round" stroke-width="10"/>
+                    <ellipse cx="8.913" cy="8.913" rx="8.913" ry="8.913" transform="translate(87.761 35.708)" fill="#fff"/>
+                    <ellipse cx="3.456" cy="3.456" rx="3.456" ry="3.456" transform="translate(67.874 28.795)" fill="#fff"/>
+                </g>
+            </g>
+
+            <g id="Arrow" transform="translate(543 864)">
+                <rect width="252" height="95" rx="21" fill="#f9a106" stroke="#203b5a" stroke-width="1"/>
+                <line x1="75.5" y1="47.5" x2="173.5" y2="47.5" stroke="#fff" stroke-linecap="round" stroke-width="8"/>
+                <line x1="142.5" y1="30.5" x2="173.5" y2="47.5" stroke="#fff" stroke-linecap="round" stroke-width="8"/>
+                <line x1="142.5" y1="64.5" x2="173.5" y2="47.5" stroke="#fff" stroke-linecap="round" stroke-width="8"/>
+            </g>
+
+            <rect id="virtualKeyboardPosition" transform="translate(0 698)" width="885" height="292" rx="41" fill="#fff" stroke="#707070" stroke-width="1"/>
+
+            <g id="keyboardLayer"></g>
+        </svg>
+    </div>
+    <div id="wordToCheck"></div>
+
+    <script>
+        const wordObjects = [
+            { word: 'жаворонок', img: 'img/жаворонок.png', checkElementId: 'wordToCheck' },
+            { word: 'смородина', img: 'img/смородина.png', checkElementId: 'wordToCheck' },
+            { word: 'помидор', img: 'img/помидор.png', checkElementId: 'wordToCheck' },
+            { word: 'морковь', img: 'img/морковь.png', checkElementId: 'wordToCheck' },
+            { word: 'рябина', img: 'img/рябина.png', checkElementId: 'wordToCheck' },
+            { word: 'автобус', img: 'img/автобус.png', checkElementId: 'wordToCheck' },
+            { word: 'трамвай', img: 'img/трамвай.png', checkElementId: 'wordToCheck' },
+            { word: 'календарь', img: 'img/календарь.png', checkElementId: 'wordToCheck' },
+            { word: 'дятел', img: 'img/дятел.png', checkElementId: 'wordToCheck' },
+            { word: 'сапоги', img: 'img/сапоги.png', checkElementId: 'wordToCheck' },
+            { word: 'телевизор', img: 'img/телевизор.png', checkElementId: 'wordToCheck' },
+            { word: 'конфета', img: 'img/конфета.png', checkElementId: 'wordToCheck' },
+            { word: 'корзина', img: 'img/корзина.png', checkElementId: 'wordToCheck' },
+            { word: 'картофель', img: 'img/картофель.png', checkElementId: 'wordToCheck' },
+            { word: 'крапива', img: 'img/крапива.png', checkElementId: 'wordToCheck' },
+            { word: 'пальто', img: 'img/пальто.png', checkElementId: 'wordToCheck' },
+            { word: 'ладонь', img: 'img/ладонь.png', checkElementId: 'wordToCheck' },
+            { word: 'болото', img: 'img/болото.png', checkElementId: 'wordToCheck' }
+        ];
+
+        // Создание виртуальной клавиатуры
+        const keyboardLayout = [
+            'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х',
+            'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э',
+            'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '✖', '←',
+        ];
+
+        const keyboardContainer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        keyboardContainer.setAttribute('transform', 'translate(0 698)');
+        keyboardContainer.style.display = 'none';
+
+        let y = 10;
+        let x = 10;
+        keyboardLayout.forEach((letter, index) => {
+            const key = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            const keyBackground = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            const keyText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            
+            keyBackground.setAttribute('width', '70');
+            keyBackground.setAttribute('height', '70');
+            keyBackground.setAttribute('rx', '10');
+            keyBackground.setAttribute('fill', '#fff');
+            keyBackground.setAttribute('stroke', '#1a4563');
+            
+            keyText.setAttribute('x', '25');
+            keyText.setAttribute('y', '45');
+            keyText.setAttribute('font-size', '40');
+            keyText.textContent = letter;
+            
+            key.appendChild(keyBackground);
+            key.appendChild(keyText);
+            key.setAttribute('transform', `translate(${x} ${y})`);
+            key.setAttribute('class', 'key');
+            key.dataset.letter = letter;
+            
+            const handleClick = (e) => {
+                e.stopPropagation();
+                const clickedLetter = letter;
+                if (clickedLetter === '✖') {
+                    currentInput = '';
+                } else if (clickedLetter === '←') {
+                    currentInput = currentInput.slice(0, -1);
+                } else {
+                    currentInput += clickedLetter;
+                }
+                textInput.value = currentInput;
+                
+                if (currentInput.length >= wordObjects[currentIndex].word.length) {
+                    keyboardContainer.style.display = 'none';
+                }
+            };
+            
+            key.addEventListener('click', handleClick);
+            keyboardContainer.appendChild(key);
+
+            x += 80;
+            if ((index + 1) % 11 === 0) {
+                y += 80;
+                x = 10;
+            }
+        });
+
+        const svg = document.getElementById('gameSVG');
+        const keyboardLayer = svg.querySelector('#keyboardLayer');
+        keyboardLayer.appendChild(keyboardContainer);
+
+        // Логика игры
+        let currentInput = '';
+        let currentIndex = 0;
+        let energyLevel = 0;
+
+        const textInput = document.getElementById('textInput');
+        const energyBars = Array.from(svg.querySelectorAll('#energi g'));
+        const gameImage = svg.querySelector('#gameImage');
+        const wordToCheck = document.getElementById('wordToCheck');
+        const energyCircle = svg.querySelector('#energyCircle');
+        const circleMotion = svg.querySelector('#circleMotion');
+        const circleVisibility = svg.querySelector('#circleVisibility');
+
+        // Функция для отображения текущего объекта (изображения)
+        function loadCurrentObject() {
+            gameImage.setAttribute('href', wordObjects[currentIndex].img);
+            wordToCheck.textContent = wordObjects[currentIndex].word;
+            currentInput = '';
+            textInput.value = '';
+            energyCircle.setAttribute('visibility', 'hidden');
+        }
+
+        // Загружаем первый объект
+        loadCurrentObject();
+
+        // Показ клавиатуры при клике на input
+        textInput.addEventListener('click', () => {
+            keyboardContainer.style.display = 'block';
+        });
+
+        // Скрытие клавиатуры при клике вне её
+        document.addEventListener('click', (e) => {
+            if (!textInput.contains(e.target) && !keyboardContainer.contains(e.target)) {
+                keyboardContainer.style.display = 'none';
+            }
+        });
+
+        // Проверка слова
+        svg.querySelector('#btnCheck').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentInput === wordToCheck.textContent) {
+                if (energyLevel < energyBars.length) {
+                    circleVisibility.beginElement();
+                    circleMotion.beginElement();
+
+                    setTimeout(() => {
+                        const bar = energyBars[energyLevel];
+                        bar.classList.add('energy-filled');
+                        if (energyLevel >= energyBars.length - 1) {
+                            energyBars.forEach((bar, index) => {
+                                const gradient = `linear-gradient(45deg, #4CAF50 ${index * 10}%, #2196F3 100%)`;
+                                bar.querySelector('path, rect').style.fill = gradient;
+                            });
+                        }
+                        energyLevel++;
+
+                        // Задержка перед сменой картинки
+                        setTimeout(() => {
+                            currentIndex = (currentIndex + 1) % wordObjects.length;
+                            loadCurrentObject();
+                            keyboardContainer.style.display = 'none';
+                        }, 500);
+                    }, 2000);
+                } else {
+                    energyLevel = 1;
+                    energyBars.forEach(bar => {
+                        bar.classList.remove('energy-filled');
+                        bar.querySelector('path, rect').style.fill = '#4CAF50';
+                    });
+                    energyBars[0].classList.add('energy-filled');
+
+                    // Задержка перед сменой картинки в случае нового цикла
+                    setTimeout(() => {
+                        currentIndex = (currentIndex + 1) % wordObjects.length;
+                        loadCurrentObject();
+                        keyboardContainer.style.display = 'none';
+                    }, 500);
+                }
+            } else {
+                textInput.style.color = 'red';
+                setTimeout(() => {
+                    if (energyLevel > 0) {
+                        energyLevel--;
+                        energyBars[energyLevel].classList.remove('energy-filled');
+                    }
+                    currentInput = '';
+                    textInput.value = '';
+                    textInput.style.color = '#1a4563';
+                }, 1000);
+            }
+        });
+
+        // Переход к следующему объекту кнопкой Arrow
+        svg.querySelector('#Arrow').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % wordObjects.length;
+            loadCurrentObject();
+            keyboardContainer.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

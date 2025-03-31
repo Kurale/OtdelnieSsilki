@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 2</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Задание 2</h2>
+        <ol id="quiz">
+            <li><span>Уменьшите число 27 в 3 раза.</span> <input class="input-box" type="text" maxlength="1" data-answer="9"></li>
+            <hr>
+            <li><span>Уменьшаемое 26, вычитаемое 7. Найдите разность.</span> <input class="input-box" type="text" maxlength="2" data-answer="19"></li>
+            <hr>
+            <li><span>Сумма чисел — 82. Одно из слагаемых 53. Найдите второе слагаемое.</span> <input class="input-box" type="text" maxlength="2" data-answer="29"></li>
+            <hr>
+            <li><span>Запиши число, в котором 3 десятка и 9 единиц.</span> <input class="input-box" type="text" maxlength="2" data-answer="39"></li>
+            <hr>
+            <li><span>Найдите произведение 7 и 7.</span> <input class="input-box" type="text" maxlength="2" data-answer="49"></li>
+            <hr>
+            <li><span>Из суммы чисел 58 и 15 вычтите 14.</span> <input class="input-box" type="text" maxlength="2" data-answer="59"></li>
+            <hr>
+            <li><span>Уменьшите 77 на 8.</span> <input class="input-box" type="text" maxlength="2" data-answer="69"></li>
+            <hr>
+            <li><span>Выразите в минутах: 1 ч 19 мин.</span> <input class="input-box" type="text" maxlength="2" data-answer="79"></li>
+            <hr>
+            <li><span>Запишите число, в котором 8 десятков и 9 единиц.</span> <input class="input-box" type="text" maxlength="2" data-answer="89"></li>
+            <hr>
+            <li><span>Сумму ответов заданий №8 и №2 увеличьте на 1.</span> <input class="input-box" type="text" maxlength="2" data-answer="99"></li>
+        </ol>
+        <div class="button-container">
+            <button id="checkBtn" class="hidden">Проверить</button>
+            <a id="nextBtn" class="hidden next-btn" href="#">Дальше</a>
+        </div>
+        <p id="result"></p>
+        <div id="resultSvg" class="hidden"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

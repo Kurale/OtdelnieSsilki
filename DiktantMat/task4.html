@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 4</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Задание 4</h2>
+        <ol id="quiz">
+            <li><span>Запиши пятое по счету круглое число.</span> <input class="input-box" type="text" maxlength="2" data-answer="50"></li>
+            <hr>
+            <li><span>Запиши число, в котором 0 сотен 9 десятков и 7 единиц.</span> <input class="input-box" type="text" maxlength="8" data-answer="97"></li>
+            <hr>
+            <li><span>Уменьши 54 в 9 раз.</span> <input class="input-box" type="text" maxlength="1" data-answer="6"></li>
+            <hr>
+            <li><span>На сколько 100 больше 95?</span> <input class="input-box" type="text" maxlength="1" data-answer="5"></li>
+            <hr>
+            <li><span>Запиши произведение чисел 5 и 5.</span> <input class="input-box" type="text" maxlength="2" data-answer="25"></li>
+            <hr>
+            <li><span>К сумме чисел 54 и 30 прибавь 4.</span> <input class="input-box" type="text" maxlength="2" data-answer="88"></li>
+            <hr>
+            <li><span>Делимое — 48, делитель — 6. Найди частное.</span> <input class="input-box" type="text" maxlength="1" data-answer="8"></li>
+            <hr>
+            <li><span>Сколько нужно добавить единиц к числу 81, чтобы получить 88?</span> <input class="input-box" type="text" maxlength="1" data-answer="7"></li>
+            <hr>
+            <li><span>Из 5 дм вычти 20 см. Ответ запиши в сантиметрах.</span> <input class="input-box" type="text" maxlength="5" data-answer="30"></li>
+            <hr>
+            <li><span>Длина стороны квадрата 5 дм. Найди периметр квадрата. Ответ запиши в дециметрах.</span> <input class="input-box" type="text" maxlength="4" data-answer="20"></li>
+        </ol>
+        <div class="button-container">
+            <button id="checkBtn" class="hidden">Проверить</button>
+            <a id="nextBtn" class="hidden next-btn" href="#">Дальше</a>
+        </div>
+        <p id="result"></p>
+        <div id="resultSvg" class="hidden"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

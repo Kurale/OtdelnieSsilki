@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 3</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Задание 3</h2>
+        <ol id="quiz">
+            <li><span>Запишите число, которое больше 23, но меньше 25.</span> <input class="input-box" type="text" maxlength="2" data-answer="24"></li>
+            <hr>
+            <li><span>Запишите число, в разряде десятков которого содержится цифра 3, а разряд единиц больше на 6.</span> <input class="input-box" type="text" maxlength="2" data-answer="39"></li>
+            <hr>
+            <li><span>Увеличьте 3 в 3 раза.</span> <input class="input-box" type="text" maxlength="1" data-answer="9"></li>
+            <hr>
+            <li><span>Уменьшаемое — 55, вычитаемое — 43. Найдите разность.</span> <input class="input-box" type="text" maxlength="2" data-answer="12"></li>
+            <hr>
+            <li><span>Множители — 2 и 8. Найдите произведение.</span> <input class="input-box" type="text" maxlength="2" data-answer="16"></li>
+            <hr>
+            <li><span>Сумма — 30, одно слагаемое — 9. Найдите второе слагаемое.</span> <input class="input-box" type="text" maxlength="2" data-answer="21"></li>
+            <hr>
+            <li><span>Делимое — 28, делитель — 4. Найдите частное.</span> <input class="input-box" type="text" maxlength="1" data-answer="7"></li>
+            <hr>
+            <li><span>Частное чисел 10 и 5 увеличьте на 15.</span> <input class="input-box" type="text" maxlength="2" data-answer="17"></li>
+            <hr>
+            <li><span>Произведение чисел 8 и 2 уменьшите на 7.</span> <input class="input-box" type="text" maxlength="1" data-answer="9"></li>
+            <hr>
+            <li><span>Длина тетради 3 см, а книги в 7 раз длиннее. Какая длина у книги?</span> <input class="input-box" type="text" maxlength="2" data-answer="21"></li>
+        </ol>
+        <div class="button-container">
+            <button id="checkBtn" class="hidden">Проверить</button>
+            <a id="nextBtn" class="hidden next-btn" href="#">Дальше</a>
+        </div>
+        <p id="result"></p>
+        <div id="resultSvg" class="hidden"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

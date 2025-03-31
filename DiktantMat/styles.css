@@ -1,0 +1,147 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    background-color: #a4e7c7;
+}
+
+.start-container {
+    position: relative;
+    width: 600px;
+    height: 800px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(1, 76, 12, 0.2);
+}
+
+.next-btn-overlay {
+    position: absolute;
+    top: 495px; /* Расположение над кругом SVG */
+    left: 251px; /* Центрирование по горизонтали */
+    width: 97px; /* Диаметр круга */
+    height: 97px; /* Диаметр круга */
+    background: transparent;
+    cursor: pointer;
+}
+
+.next-btn-overlay:active {
+    transform: scale(0.95); /* Эффект нажатия */
+    transition: transform 0.1s ease;
+}
+
+/* Стили для index.html */
+.container {
+    text-align: left;
+    max-width: 600px;
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 33, 9, 0.2);
+}
+
+.input-box {
+    width: 50px;
+    text-align: center;
+    font-size: 24px;
+    border: 1px solid #ccc;
+    margin-left: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+#quiz {
+    font-size: 24px;
+    list-style-type: none;
+    padding: 0;
+}
+
+#quiz li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+#quiz li span {
+    flex: 1;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #ddd;
+    margin: 15px 0;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    font-size: 20px;
+    padding: 5px 15px;
+    margin-top: 10px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.next-btn {
+    font-size: 20px;
+    padding: 5px 15px;
+    margin-top: 10px;
+    text-decoration: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.next-btn:hover {
+    background-color: #0056b3;
+}
+
+#result {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+#resultSvg {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.star1, .star2, .star3 {
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: center;
+}
+
+@keyframes starAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

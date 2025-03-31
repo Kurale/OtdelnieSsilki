@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 5</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Задание 5</h2>
+        <ol id="quiz">
+            <li><span>Запишите число, в разряде десятков которого стоит цифра 9, а в разряде единиц цифра 8.</span> <input class="input-box" type="text" maxlength="2" data-answer="98"></li>
+            <hr>
+            <li><span>Запишите число, которое больше 90, но меньше 92.</span> <input class="input-box" type="text" maxlength="2" data-answer="91"></li>
+            <hr>
+            <li><span>Уменьшите 32 в 4 раза.</span> <input class="input-box" type="text" maxlength="1" data-answer="8"></li>
+            <hr>
+            <li><span>Уменьшаемое — 80, вычитаемое — 10. Найдите разность.</span> <input class="input-box" type="text" maxlength="2" data-answer="70"></li>
+            <hr>
+            <li><span>Делимое — 24, делитель — 6. Найдите частное.</span> <input class="input-box" type="text" maxlength="1" data-answer="4"></li>
+            <hr>
+            <li><span>5 дм 6 см увеличьте на 13 см. Ответ запиши в сантиметрах.</span> <input class="input-box" type="text" maxlength="5" data-answer="69"></li>
+            <hr>
+            <li><span>Найдите произведение чисел 7 и 4.</span> <input class="input-box" type="text" maxlength="2" data-answer="28"></li>
+            <hr>
+            <li><span>Разность чисел 23 и 20 увеличьте в 6 раз.</span> <input class="input-box" type="text" maxlength="2" data-answer="18"></li>
+            <hr>
+            <li><span>Частное чисел 18 и 2 увеличьте на 6.</span> <input class="input-box" type="text" maxlength="2" data-answer="15"></li>
+            <hr>
+            <li><span>В журнале 40 страниц, а в газете 5 страниц. Сколько всего страниц?</span> <input class="input-box" type="text" maxlength="2" data-answer="45"></li>
+        </ol>
+        <div class="button-container">
+            <button id="checkBtn" class="hidden">Проверить</button>
+            <a id="nextBtn" class="hidden next-btn" href="#">Дальше</a>
+        </div>
+        <p id="result"></p>
+        <div id="resultSvg" class="hidden"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #a4e7c7;
+}
+
+#resultSvg {
+    width: 600px;
+    height: 800px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 33, 9, 0.2);
+    position: relative;
+}
+
+#Star_1, #Star_2, #Star_3 {
+    opacity: 0;
+    transform: scale(0);
+    transform-origin: center;
+}
+
+@keyframes starAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#home, #next {
+    cursor: pointer;
+    pointer-events: all;
+    transition: transform 0.3s ease;
+}
+
+#home:hover #Ellipse_1,
+#next:hover #Ellipse_2 {
+    fill: #26C17D;
+}
+
+#home:active, #next:active {
+    transform: scale(0.95);
+}
+
+#next.hidden {
+    display: none;
+}
+
+#home {
+    position: relative;
+    z-index: 10;
+}
+
+/* Центрирование Home, когда Next скрыт */
+#forDiktantScore:has(#next.hidden) #home {
+    transform: translateX(150px); /* Сдвиг вправо на 150px для центрирования */
+}
