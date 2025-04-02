@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Переводим единицы!</title>
+    <link rel="stylesheet" href="styles.css">
+	
+	<style>
+	body {
+    font-family: Arial, sans-serif;
+    padding: 90px;
+    margin: 0;
+    min-height: 100vh;
+    box-sizing: border-box;
+    
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
+#exercises-container {
+    text-align: center;
+    position: relative;
+    display: flex;
+    width: 585px;
+    margin: auto;
+    border: 6px solid rgb(59, 72, 115);
+    border-radius: 25px;
+    background-image: url(gradient_2.svg);
+    }
+
+table {
+    text-align: center;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 900px; /* Ограничиваем ширину таблицы */
+    color: rgb(44, 60, 101);
+}
+
+.exercise td {
+    padding: 30px;
+    font-size: 37px;
+}
+
+.exercise td:first-child {
+    text-align: right; /* Выравниваем текст вправо */
+    width: 120%; /* Задаем ширину для текста */
+    font-size: 37px;
+}
+
+.exercise td:nth-child(2) {
+    width: 100px; /* Фиксированная ширина для input */
+    text-align: center;
+    font-size: 37px;
+}
+
+.exercise td:last-child {
+    text-align: left; /* Единицы измерения слева от input */
+    width: 80%;
+    font-size: 37px;
+}
+
+input {
+    font-size: 37px;
+    padding: 5px;
+    width: 100px;
+    transition: border-color 0.3s;
+    border-radius: 15px;
+    border: 5px solid rgb(59, 72, 115);
+    color: #f2b077;
+    background-color: #3f587e;
+}
+
+#keyboard {
+    display: none;
+    width: 300px;
+    position: absolute;
+    z-index: 1000;
+    user-select: none;
+}
+
+#keyboard g {
+    cursor: pointer;
+}
+
+#keyboard g:hover circle,
+#keyboard g:hover path {
+    opacity: 0.8;
+}
+
+#timer {
+            font-size: 24px;
+            margin: 20px auto;
+            text-align: center;
+            color: #023859;
+        }
+        
+        #avatar-selection, #results {
+            text-align: center;
+            font-size: 32px;
+            margin: 20px auto;
+            color: #034f7e;
+        }
+        
+        .emoji-btn {
+            font-size: 40px;
+            margin: 10px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        
+        #continue-btn {
+            font-size: 20px;
+            padding: 10px 20px;
+            margin: 20px;
+            background-color: #f2b077;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+	</style>
+</head>
+<body>
+
+    <div id="avatar-selection">
+        <h2>Выбери себе аватар:</h2>
+        <button class="emoji-btn" onclick="startGame('🐱')">🐱</button>
+        <button class="emoji-btn" onclick="startGame('🐶')">🐶</button>
+        <button class="emoji-btn" onclick="startGame('🐰')">🐰</button>
+        <button class="emoji-btn" onclick="startGame('🦊')">🦊</button>
+        <button class="emoji-btn" onclick="startGame('🐻')">🐻</button>
+    </div>
+    
+    <div id="timer" style="display: none;">Время: 0:00</div>
+
+    <div id="exercises-container">
+        
+        <table>
+            <tbody id="exercise-table">
+                <tr class="exercise" id="ex1">
+    <td>5 м 3 см =</td>
+    <td><input type="text" maxlength="3" id="input1" readonly></td>
+    <td>см</td>
+</tr>
+<tr class="exercise" id="ex2">
+    <td>4 т 500 кг =</td>
+    <td><input type="text" maxlength="4" id="input2" readonly></td>
+    <td>кг</td>
+</tr>
+<tr class="exercise" id="ex3">
+    <td>1 ч 40 мин =</td>
+    <td><input type="text" maxlength="3" id="input3" readonly></td>
+    <td>мин</td>
+</tr>
+            </tbody>
+        </table>
+    
+    <svg id="keyboard" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426 433.3">
+        <g id="fon">
+            <rect x="1.4" y="1.4" width="318.5" height="422.6" rx="31.3" ry="31.3" style="fill:#023859; stroke:#038c8c; stroke-miterlimit:10; stroke-width:2.8px;"/>
+        </g>
+        <g id="btn1"><circle cx="56.8" cy="58.8" r="38.8" style="fill:#f2b077; stroke-width:0px;"/><text transform="translate(35.2 82.4)" style="fill:#023859; font-family:ArialMT, Arial; font-size:70.9px;"><tspan x="0" y="0">1</tspan></text></g>
+        <g id="btn2"><circle cx="161.1" cy="58.8" r="38.8" style="fill:#f2b077; stroke-width:0px;"/><text transform="translate(141.6 83.2)" style="fill:#023859; font-family:ArialMT, Arial; font-size:70.9px;"><tspan x="0" y="0">2</tspan></text></g>
+        <g id="btn3"><circle cx="265.5" cy="58.8" r="38.8" style="fill:#f2b077; stroke-width:0px;"/><text transform="translate(246.9 83.2)" style="fill:#023859; font-family:ArialMT, Arial; font-size:70.9px;"><tspan x="0" y="0">3</tspan></text></g>
+        <g id="btn4"><circle cx="56.8" cy="162.2" r="38.8" style="fill:#f2b077; stroke-width:0px;"/><text transform="translate(35.2 185.7)" style="fill:#023859; font-family:ArialMT, Arial; font-size:70.9px;"><tspan x="0" y="0">4</tspan></text></g>
+        <g id="btn5"><circle cx="161.1" cy="162.2" r="38.8" style="fill:#f2b077; stroke-width:0px;"/><text transform="translate(141.6 186.6)" style="fill:#023859; font-family:ArialMT, Arial; font-size:70.9px;"><tspan x="0" y="0">5</tspan></text></g>
+        <g id="btn6"><circle cx="265.5" cy="162.2" r="38.8" style="fill:#f2b077; stroke-width:0px;"/><text transform="translate(244.7 186.6)" style="fill:#023859; font-family:ArialMT, Arial; font-size:70.9px;"><tspan x="0" y="0">6</tspan></text></g>
+        <g id="btn7"><circle cx="56.8" cy="265.6" r="38.8" style="fill:#f2b077; stroke-width:0px;"/><text transform="translate(37.3 291.2)" style="fill:#023859; font-family:ArialMT, Arial; font-size:70.9px;"><tspan x="0" y="0">7</tspan></text></g>
+        <g id="btn8"><circle cx="161.1" cy="265.6" r="38.8" style="fill:#f2b077; stroke-width:0px;"/><text transform="translate(142.5 290)" style="fill:#023859; font-family:ArialMT, Arial; font-size:70.9px;"><tspan x="0" y="0">8</tspan></text></g>
+        <g id="btn9"><circle cx="265.5" cy="265.6" r="38.8" style="fill:#f2b077; stroke-width:0px;"/><text transform="translate(246.6 289.1)" style="fill:#023859; font-family:ArialMT, Arial; font-size:70.9px;"><tspan x="0" y="0">9</tspan></text></g>
+        <g id="btn0"><circle cx="165.9" cy="368.7" r="38.8" style="fill:#f2b077; stroke-width:0px;"/><text transform="translate(146.3 394)" style="fill:#023859; font-family:ArialMT, Arial; font-size:70.9px;"><tspan x="0" y="0">0</tspan></text></g>
+        <g id="nazad"><path d="m267.3,407.1c-21.1,0-38.3-17.2-38.3-38.3s17.2-38.3,38.3-38.3,38.3,17.2,38.3,38.3-17.2,38.3-38.3,38.3Z" style="fill:#d9c24e; stroke-width:0px;"/><path d="m267.3,330.9c20.9,0,37.8,17,37.8,37.8s-17,37.8-37.8,37.8-37.8-17-37.8-37.8,17-37.8,37.8-37.8m0-1c-21.4,0-38.8,17.4-38.8,38.8s17.4,38.8,38.8,38.8,38.8-17.4,38.8-38.8-17.4-38.8-38.8-38.8h0Z" style="fill:#d9c24e; stroke-width:0px;"/><line x1="292.9" y1="368.7" x2="252.5" y2="368.7" style="fill:none; stroke:#023859; stroke-miterlimit:10; stroke-width:8.5px;"/><polygon points="255.6 358.1 237.2 368.7 255.6 379.3 255.6 358.1" style="fill:#023859; stroke-width:0px;"/></g>
+        <g id="reset"><circle cx="58.6" cy="368.7" r="38.8" style="fill:#d9c24e; stroke-width:0px;"/><text transform="translate(40 387.8)" style="fill:#023859; font-family:ArialMT, Arial; font-size:70.9px;"><tspan x="0" y="0">с</tspan></text></g>
+    </svg>
+</div>
+
+<div id="results" style="display: none;">
+    <h2>Результаты</h2>
+    <p id="player1-result"></p>
+    <p id="player2-result" style="display: none;"></p>
+    <p id="winner" style="display: none;"></p>
+    <button id="continue-btn" onclick="continueGame()">Продолжить</button>
+</div>
+
+</body>
+
+    <script>
+	class UnitConversionGame {
+    constructor() {
+        this.keyboard = document.getElementById('keyboard');
+        this.activeInput = null;
+        this.currentSetIndex = 0;
+        this.player1Time = 0;
+        this.player2Time = 0;
+        this.currentPlayer = 0;
+        this.player1Avatar = '';
+        this.player2Avatar = '';
+        this.timerInterval = null;
+        this.startTime = 0;
+        this.exerciseSets = [
+            // Исходные наборы
+            {
+                exercises: [
+                    { text: '5 м 3 см =', answer: '503', unit: 'см', maxLength: 3 },
+                    { text: '4 т 500 кг =', answer: '4500', unit: 'кг', maxLength: 4 },
+                    { text: '1 ч 40 мин =', answer: '100', unit: 'мин', maxLength: 3 }
+                ]
+            },
+
+            {
+        exercises: [
+            { text: '6000 - 450 =', answer: '5550', unit: '', maxLength: 4 },
+            { text: '5 ч 30 мин =', answer: '330', unit: 'мин', maxLength: 3 },
+            { text: '3 дм 5 см =', answer: '35', unit: 'см', maxLength: 2 }
+            ]
+    },
+    {
+        exercises: [
+            { text: '4 дм 8 см =', answer: '48', unit: 'см', maxLength: 2 },
+            { text: '300 - 75 =', answer: '225', unit: '', maxLength: 3 },
+            { text: '3000 г =', answer: '3', unit: 'кг', maxLength: 1 }
+        ]
+    },
+            {
+                exercises: [
+                    { text: '1 дм 7 см =', answer: '17', unit: 'см', maxLength: 2 },
+                    { text: '900 + 95 =', answer: '995', unit: '', maxLength: 3 },
+                    { text: '1 кг 150 г =', answer: '1150', unit: 'г', maxLength: 4 }
+                ]
+            }
+        ];
+        this.init();
+    }
+
+    init() {
+        this.keyboard.style.display = 'none';
+        this.addButtonListeners();
+        window.addEventListener('resize', () => this.updateKeyboardPosition());
+        this.showPlayerSelection();
+    }
+
+    showPlayerSelection() {
+        const selectionDiv = document.getElementById('avatar-selection');
+        if (this.currentPlayer === 0) {
+            selectionDiv.innerHTML = `
+                <h2>Выберите себе аватар :</h2>
+                <button class="emoji-btn" onclick="game.startGame('🐱')">🐱</button>
+                <button class="emoji-btn" onclick="game.startGame('🐶')">🐶</button>
+                <button class="emoji-btn" onclick="game.startGame('🐰')">🐰</button>
+                <button class="emoji-btn" onclick="game.startGame('🦊')">🦊</button>
+                <button class="emoji-btn" onclick="game.startGame('🐻')">🐻</button>
+            `;
+        }
+    }
+
+    startGame(avatar) {
+        if (this.currentPlayer === 0) {
+            this.player1Avatar = avatar;
+            this.currentPlayer = 1;
+        } else if (this.currentPlayer === 1) {
+            this.player2Avatar = avatar;
+            this.currentPlayer = 2;
+        }
+        
+        document.getElementById('avatar-selection').style.display = 'none';
+        document.getElementById('exercises-container').style.display = 'block';
+        document.getElementById('timer').style.display = 'block';
+        
+        this.currentSetIndex = 0;
+        this.loadExerciseSet(this.currentSetIndex);
+        this.startTimer();
+    }
+
+    startTimer() {
+        this.startTime = Date.now();
+        this.timerInterval = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            document.getElementById('timer').textContent = 
+                `Время: ${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        }, 1000);
+    }
+
+    stopTimer() {
+        clearInterval(this.timerInterval);
+        return Math.floor((Date.now() - this.startTime) / 1000);
+    }
+
+    loadExerciseSet(setIndex) {
+        const set = this.exerciseSets[setIndex];
+        const tableBody = document.getElementById('exercise-table');
+        tableBody.innerHTML = '';
+        for (let i = 0; i < 3; i++) {
+            const row = document.createElement('tr');
+            row.className = 'exercise';
+            row.id = `ex${i + 1}`;
+            row.innerHTML = `
+                <td>${set.exercises[i].text}</td>
+                <td><input type="text" maxlength="${set.exercises[i].maxLength}" id="input${i + 1}"></td>
+                <td>${set.exercises[i].unit}</td>
+            `;
+            tableBody.appendChild(row);
+        }
+        this.addInputListeners();
+    }
+
+    addInputListeners() {
+        document.querySelectorAll('input').forEach(input => {
+            input.setAttribute('readonly', 'readonly');
+            input.removeEventListener('focus', this.showKeyboardBound);
+            this.showKeyboardBound = this.showKeyboard.bind(this, input);
+            input.addEventListener('focus', this.showKeyboardBound);
+        });
+    }
+
+    showKeyboard(input) {
+        this.activeInput = input;
+        this.keyboard.style.display = 'block';
+        this.updateKeyboardPosition();
+    }
+
+    updateKeyboardPosition() {
+        if (!this.activeInput || this.keyboard.style.display === 'none') return;
+        const inputRect = this.activeInput.getBoundingClientRect();
+        const container = document.getElementById('exercises-container');
+        const containerRect = container.getBoundingClientRect();
+        this.keyboard.style.top = `${inputRect.bottom - containerRect.top + 5}px`;
+        this.keyboard.style.left = `${inputRect.left - containerRect.left}px`;
+    }
+
+    hideKeyboard() {
+        this.keyboard.style.display = 'none';
+        this.activeInput = null;
+    }
+
+    addButtonListeners() {
+        for (let i = 0; i <= 9; i++) {
+            const btn = document.getElementById(`btn${i}`);
+            btn.addEventListener('click', () => {
+                if (this.activeInput && this.activeInput.value.length < this.activeInput.maxLength) {
+                    this.activeInput.value += i;
+                    this.checkAnswer();
+                }
+            });
+        }
+
+        document.getElementById('nazad').addEventListener('click', () => {
+            if (this.activeInput && this.activeInput.value.length > 0) {
+                this.activeInput.value = this.activeInput.value.slice(0, -1);
+                this.checkAnswer();
+            }
+        });
+
+        document.getElementById('reset').addEventListener('click', () => {
+            if (this.activeInput) {
+                this.activeInput.value = '';
+                this.checkAnswer();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!this.keyboard.contains(e.target) && !e.target.matches('input')) {
+                this.hideKeyboard();
+            }
+        });
+    }
+
+    checkAnswer() {
+        if (!this.activeInput) return;
+        
+        const currentSet = this.exerciseSets[this.currentSetIndex];
+        const exerciseIndex = parseInt(this.activeInput.id.replace('input', '')) - 1;
+        const correctAnswer = currentSet.exercises[exerciseIndex].answer;
+
+        if (this.activeInput.value === correctAnswer) {
+            this.activeInput.style.borderColor = 'green';
+            this.hideKeyboard();
+            this.checkAllCorrect();
+        } else {
+            this.activeInput.style.borderColor = 'red';
+        }
+    }
+
+    checkAllCorrect() {
+        const inputs = document.querySelectorAll('input');
+        const currentSet = this.exerciseSets[this.currentSetIndex];
+        const allCorrect = Array.from(inputs).every((input, index) => 
+            input.value === currentSet.exercises[index].answer
+        );
+
+        if (allCorrect && this.currentSetIndex < this.exerciseSets.length - 1) {
+            this.currentSetIndex++;
+            this.loadExerciseSet(this.currentSetIndex);
+            inputs.forEach(input => input.style.borderColor = '');
+        } else if (allCorrect) {
+            const time = this.stopTimer();
+            this.showResults(time);
+        }
+    }
+
+    showResults(time) {
+        document.getElementById('exercises-container').style.display = 'none';
+        document.getElementById('timer').style.display = 'none';
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.style.display = 'block';
+
+        if (this.currentPlayer === 1) {
+            this.player1Time = time;
+            resultsDiv.innerHTML = `
+                <h2>Результаты</h2>
+                <p>${this.player1Avatar} Игрок 1: ${Math.floor(time / 60)}:${time % 60 < 10 ? '0' + time % 60 : time % 60}</p>
+                <button id="continue-btn" onclick="game.showPlayer2Selection()">Продолжить</button>
+            `;
+        } else {
+            this.player2Time = time;
+            const winner = this.player1Time < this.player2Time ? 
+                `${this.player1Avatar} Игрок 1` : `${this.player2Avatar} Игрок 2`;
+            resultsDiv.innerHTML = `
+                <h2>Результаты</h2>
+                <p>${this.player1Avatar} Игрок 1: ${Math.floor(this.player1Time / 60)}:${this.player1Time % 60 < 10 ? '0' + this.player1Time % 60 : this.player1Time % 60}</p>
+                <p>${this.player2Avatar} Игрок 2: ${Math.floor(time / 60)}:${time % 60 < 10 ? '0' + time % 60 : time % 60}</p>
+                <p>Победитель: ${winner}!</p>
+                <button id="continue-btn" onclick="location.reload()">Играть снова</button>
+            `;
+        }
+    }
+
+    showPlayer2Selection() {
+        document.getElementById('results').style.display = 'none';
+        const selectionDiv = document.getElementById('avatar-selection');
+        selectionDiv.style.display = 'block';
+        selectionDiv.innerHTML = `
+            <h2>Выберите себе аватар:</h2>
+            <button class="emoji-btn" onclick="game.startGame('🍎')">🍎</button>
+            <button class="emoji-btn" onclick="game.startGame('🍕')">🍕</button>
+            <button class="emoji-btn" onclick="game.startGame('🍔')">🍔</button>
+            <button class="emoji-btn" onclick="game.startGame('🍟')">🍟</button>
+            <button class="emoji-btn" onclick="game.startGame('🍦')">🍦</button>
+        `;
+    }
+}
+
+let game;
+document.addEventListener('DOMContentLoaded', () => {
+    game = new UnitConversionGame();
+});
+	</script>
+</body>
+</html>
