@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Тренажёр деления - Пример 2</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            position: relative;
+        }
+        .input-zone.active {
+            stroke: #ff8800; /* Золотая обводка при активации */
+            stroke-width: 3;
+        }
+        .input-zone.next {
+            fill: #FFFF00;
+            fill-opacity: 0.5;
+        }
+        .input-text {
+            pointer-events: none;
+        }
+        .input-text.active {
+            fill: #FFD700;
+        }
+        .keyboard-button {
+            cursor: pointer;
+        }
+        .keyboard-button:hover circle, .keyboard-button:hover rect {
+            fill: #3A7BB0;
+        }
+        .correct {
+            fill: #02a602;
+        }
+        .incorrect {
+            fill: #FF0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg width="454" height="491" viewBox="0 0 454 491" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="delenieNaOdnoznachnie" clip-path="url(#clip0_147_19)">
+                <g id="bgTrenager">
+                    <rect id="Rectangle 83" x="1.5" y="1.5" width="451" height="488" rx="13.5" fill="#AACBEA" stroke="#26578F" stroke-width="3"/>
+                    <path id="Line 12" d="M239 33L239 133" stroke="#606060" stroke-width="4" stroke-linecap="round"/>
+                    <path id="Line 13" d="M239 78L343 78" stroke="#606060" stroke-width="4" stroke-linecap="round"/>
+                    <path id="Line 14" d="M125 138H153" stroke="#606060" stroke-width="4" stroke-linecap="round"/>
+                    <path id="Line 16" d="M101 78.5H118" stroke="#606060" stroke-width="3" stroke-linecap="round"/>
+                    <path id="Line 17" d="M101 194.5H118" stroke="#606060" stroke-width="3" stroke-linecap="round"/>
+                    <path id="Line 18" d="M101 308H118" stroke="#606060" stroke-width="3" stroke-linecap="round"/>
+                    <path id="Line 15" d="M125 250H178" stroke="#606060" stroke-width="4" stroke-linecap="round"/>
+                    <path id="Line 19" d="M174 366H210" stroke="#606060" stroke-width="4" stroke-linecap="round"/>
+                    <path id="Arrow 1" d="M110.707 112.707C111.098 112.317 111.098 111.683 110.707 111.293L104.343 104.929C103.953 104.538 103.319 104.538 102.929 104.929C102.538 105.319 102.538 105.953 102.929 106.343L108.586 112L102.929 117.657C102.538 118.047 102.538 118.681 102.929 119.071C103.319 119.462 103.953 119.462 104.343 119.071L110.707 112.707ZM72 113L110 113V111L72 111V113Z" fill="#A8E5FF"/>
+                    <path id="Arrow 4" d="M110.707 167.707C111.098 167.317 111.098 166.683 110.707 166.293L104.343 159.929C103.953 159.538 103.319 159.538 102.929 159.929C102.538 160.319 102.538 160.953 102.929 161.343L108.586 167L102.929 172.657C102.538 173.047 102.538 173.681 102.929 174.071C103.319 174.462 103.953 174.462 104.343 174.071L110.707 167.707ZM72 168H110V166H72V168Z" fill="#DEFFA8"/>
+                    <path id="Arrow 6" d="M110.707 279.707C111.098 279.317 111.098 278.683 110.707 278.293L104.343 271.929C103.953 271.538 103.319 271.538 102.929 271.929C102.538 272.319 102.538 272.953 102.929 273.343L108.586 279L102.929 284.657C102.538 285.047 102.538 285.681 102.929 286.071C103.319 286.462 103.953 286.462 104.343 286.071L110.707 279.707ZM72 280H110V278H72V280Z" fill="#FD98B8"/>
+                    <path id="Arrow 2" d="M268.707 144.293C268.317 143.902 267.683 143.902 267.293 144.293L260.929 150.657C260.538 151.047 260.538 151.681 260.929 152.071C261.319 152.462 261.953 152.462 262.343 152.071L268 146.414L273.657 152.071C274.047 152.462 274.681 152.462 275.071 152.071C275.462 151.681 275.462 151.047 275.071 150.657L268.707 144.293ZM269 177V145H267V177H269Z" fill="#A8E5FF"/>
+                    <path id="Arrow 3" d="M296.707 144.293C296.317 143.902 295.683 143.902 295.293 144.293L288.929 150.657C288.538 151.047 288.538 151.681 288.929 152.071C289.319 152.462 289.953 152.462 290.343 152.071L296 146.414L301.657 152.071C302.047 152.462 302.681 152.462 303.071 152.071C303.462 151.681 303.462 151.047 303.071 150.657L296.707 144.293ZM297 177V145H295V177H297Z" fill="#DEFFA8"/>
+                    <path id="Arrow 5" d="M324.707 144.293C324.317 143.902 323.683 143.902 323.293 144.293L316.929 150.657C316.538 151.047 316.538 151.681 316.929 152.071C317.319 152.462 317.953 152.462 318.343 152.071L324 146.414L329.657 152.071C330.047 152.462 330.681 152.462 331.071 152.071C331.462 151.681 331.462 151.047 331.071 150.657L324.707 144.293ZM325 177V145H323V177H325Z" fill="#FD98B8"/>
+                    <path id="Line 20" d="M46 475.5L130 474.5" stroke="#26578F" stroke-width="5" stroke-linecap="round"/>
+                    <path id="Line 21" d="M185.03 475H272.03" stroke="#047415" stroke-width="5" stroke-linecap="round"/>
+                    <path id="Line 22" d="M325.03 475H409.03" stroke="#FF5656" stroke-width="5" stroke-linecap="round"/>
+                    <text id="делимое" fill="#26578F" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="20" letter-spacing="0em"><tspan x="47.0298" y="469.336">делимое</tspan></text>
+                    <text id="делитель" fill="#047415" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="20" letter-spacing="0em"><tspan x="185.03" y="469.336">делитель</tspan></text>
+                    <text id="частное" fill="#FF5656" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="20" letter-spacing="0em"><tspan x="329.03" y="469.336">частное</tspan></text>
+                    <rect id="Rectangle 89" x="242" y="188" width="157" height="233" rx="9" stroke="#26578F" stroke-width="2"/>
+                    <rect id="Rectangle 90" x="35.5" y="447.5" width="384" height="37" rx="9.5" stroke="white"/>
+                </g>
+                <text id="delimoe" fill="#26578F" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="125" y="72.4062">488</tspan></text>
+                <text id="inputValue1_1" class="input-text" fill="#5188C7" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="125" y="128.406"></tspan></text>
+                <text id="inputValue1_2" class="input-text" fill="#D9D9D9" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="152" y="128.406"></tspan></text>
+                <text id="inputValue1_3" class="input-text" fill="#D9D9D9" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="180" y="128.406"></tspan></text>
+                <text id="inputValue2_1" class="input-text" fill="#058F6F" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="124" y="183.406"></tspan></text>
+                <text id="inputValue2_2" class="input-text" fill="#058F6F" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="152" y="183.406"></tspan></text>
+                <text id="inputValue2_3" class="input-text" fill="#D9D9D9" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="180" y="183.406"></tspan></text>
+                <text id="inputValue3_1" class="input-text" fill="#5188C7" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="124" y="240.406"></tspan></text>
+                <text id="inputValue3_2" class="input-text" fill="#5188C7" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="152" y="240.406"></tspan></text>
+                <text id="inputValue3_3" class="input-text" fill="#D9D9D9" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="180" y="239.406"></tspan></text>
+                <text id="inputValue4_1" class="input-text" fill="#D9D9D9" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="125" y="296.406"></tspan></text>
+                <text id="inputValue4_2" class="input-text" fill="#D9D9D9" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="152" y="296.406"></tspan></text>
+                <text id="inputValue4_3" class="input-text" fill="#5188C7" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="179" y="296.406"></tspan></text>
+                <text id="inputValue5_1" class="input-text" fill="#D9D9D9" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="125" y="354.406"></tspan></text>
+                <text id="inputValue5_2" class="input-text" fill="#D9D9D9" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="153" y="354.406"></tspan></text>
+                <text id="inputValue5_3" class="input-text" fill="#058F6F" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="180" y="354.406"></tspan></text>
+                <text id="inputValue6_1" class="input-text" fill="#5188C7" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="180" y="418.406"></tspan></text>
+                <text id="delitel" fill="#047415" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="254" y="72.4062">2</tspan></text>
+                <text id="chastnoeInput3" class="input-text" fill="#FF5656" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="310" y="128.406"></tspan></text>
+                <text id="chastnoeInput2" class="input-text" fill="#FF5656" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="282" y="128.406"></tspan></text>
+                <text id="chastnoeInput1" class="input-text" fill="#FF5656" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="254" y="128.406"></tspan></text>
+                <g id="inputZoneGroup">
+                    <rect id="inputZone16" x="180.5" y="378.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone15" x="180.5" y="314.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone14" x="153.5" y="314.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone13" x="125.5" y="314.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone12" x="179.5" y="257.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone11" x="152.5" y="257.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone10" x="124.5" y="257.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone09" x="179.5" y="201.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone08" x="151.5" y="201.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone07" x="123.5" y="201.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone06" x="180.5" y="145.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone05" x="152.5" y="145.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone04" x="124.5" y="145.5" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone03" x="180.5" y="90" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone02" x="152.5" y="90" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                    <rect id="inputZone01" x="124.5" y="90" width="26" height="43" fill="#C1FDFA" fill-opacity="0.13" stroke="white" class="input-zone"/>
+                </g>
+                <g id="inputChastnoe03">
+                    <rect id="inputChastnoe03Rect" x="310" y="89" width="27" height="44" fill="#FEFDFD" fill-opacity="0.24" stroke="white" class="input-zone"/>
+                </g>
+                <g id="inputChastnoe02">
+                    <rect id="inputChastnoe02Rect" x="282.5" y="89.5" width="26" height="43" fill="#FEFDFD" fill-opacity="0.24" stroke="white" class="input-zone"/>
+                </g>
+                <g id="inputChastnoe01">
+                    <rect id="inputChastnoe01Rect" x="254" y="89" width="27" height="44" fill="#FEFDFD" fill-opacity="0.24" stroke="white" class="input-zone"/>
+                </g>
+                <g id="keyboard">
+                    <g id="btn0" class="keyboard-button">
+                        <circle id="Ellipse 17" cx="321.224" cy="360.224" r="21.224" fill="#4996D4" stroke="white" stroke-width="2"/>
+                        <text id="0" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="24" letter-spacing="0em"><tspan x="314.617" y="368.612">0</tspan></text>
+                    </g>
+                    <g id="btn9" class="keyboard-button">
+                        <circle id="Ellipse 17_2" cx="368.224" cy="311.224" r="21.224" fill="#4996D4" stroke="white" stroke-width="2"/>
+                        <text id="9" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="24" letter-spacing="0em"><tspan x="361.617" y="319.612">9</tspan></text>
+                    </g>
+                    <g id="btn8" class="keyboard-button">
+                        <circle id="Ellipse 17_3" cx="320.224" cy="311.224" r="21.224" fill="#4996D4" stroke="white" stroke-width="2"/>
+                        <text id="8" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="24" letter-spacing="0em"><tspan x="313.617" y="319.612">8</tspan></text>
+                    </g>
+                    <g id="btn7" class="keyboard-button">
+                        <circle id="Ellipse 17_4" cx="272.224" cy="311.224" r="21.224" fill="#4996D4" stroke="white" stroke-width="2"/>
+                        <text id="7" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="24" letter-spacing="0em"><tspan x="265.617" y="319.612">7</tspan></text>
+                    </g>
+                    <g id="btn6" class="keyboard-button">
+                        <circle id="Ellipse 17_5" cx="368.224" cy="264.224" r="21.224" fill="#4996D4" stroke="white" stroke-width="2"/>
+                        <text id="6" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="24" letter-spacing="0em"><tspan x="361.617" y="272.612">6</tspan></text>
+                    </g>
+                    <g id="btn5" class="keyboard-button">
+                        <circle id="Ellipse 17_6" cx="320.224" cy="264.224" r="21.224" fill="#4996D4" stroke="white" stroke-width="2"/>
+                        <text id="5" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="24" letter-spacing="0em"><tspan x="313.617" y="272.612">5</tspan></text>
+                    </g>
+                    <g id="btn4" class="keyboard-button">
+                        <circle id="Ellipse 17_7" cx="272.224" cy="264.224" r="21.224" fill="#4996D4" stroke="white" stroke-width="2"/>
+                        <text id="4" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="24" letter-spacing="0em"><tspan x="265.617" y="272.612">4</tspan></text>
+                    </g>
+                    <g id="btn3" class="keyboard-button">
+                        <circle id="Ellipse 17_8" cx="368.224" cy="217.224" r="21.224" fill="#4996D4" stroke="white" stroke-width="2"/>
+                        <text id="3" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="24" letter-spacing="0em"><tspan x="361.617" y="225.612">3</tspan></text>
+                    </g>
+                    <g id="btn2" class="keyboard-button">
+                        <circle id="Ellipse 17_9" cx="320.224" cy="217.224" r="21.224" fill="#4996D4" stroke="white" stroke-width="2"/>
+                        <text id="2" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="24" letter-spacing="0em"><tspan x="313.617" y="225.612">2</tspan></text>
+                    </g>
+                    <g id="btn1" class="keyboard-button">
+                        <circle id="Ellipse 17_10" cx="272.224" cy="217.224" r="21.224" fill="#4996D4" stroke="white" stroke-width="2"/>
+                        <text id="1" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="24" letter-spacing="0em"><tspan x="265.617" y="225.612">1</tspan></text>
+                    </g>
+                    <g id="btnCheck" class="keyboard-button">
+                        <rect id="Rectangle 87" x="251" y="386" width="56" height="27" rx="6" fill="#FEB61A" stroke="white" stroke-width="2"/>
+                        <text id="проверить" fill="#895500" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="10" letter-spacing="0em"><tspan x="254" y="403.418">проверить</tspan></text>
+                    </g>
+                    <g id="btnNext" class="keyboard-button">
+                        <rect id="Rectangle 88" x="334" y="386" width="56" height="27" rx="6" fill="#10DA53" stroke="white" stroke-width="2"/>
+                        <text id="дальше" fill="#015C2A" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="10" letter-spacing="0em"><tspan x="344" y="403.418">дальше</tspan></text>
+                    </g>
+                </g>
+            </g>
+            <defs>
+                <clipPath id="clip0_147_19">
+                    <rect width="454" height="491" fill="white"/>
+                </clipPath>
+            </defs>
+        </svg>
+    </div>
+
+    <script>
+        // Соответствие зон активации и текстовых полей
+        const zoneToTextMap = {
+    'inputZone01': 'inputValue1_1',
+    'inputZone02': 'inputValue1_2',
+    'inputZone03': 'inputValue1_3',
+    'inputZone04': 'inputValue2_1',
+    'inputZone05': 'inputValue2_2',
+    'inputZone06': 'inputValue2_3',
+    'inputZone07': 'inputValue3_1',
+    'inputZone08': 'inputValue3_2',
+    'inputZone09': 'inputValue3_3',
+    'inputZone10': 'inputValue4_1',
+    'inputZone11': 'inputValue4_2',
+    'inputZone12': 'inputValue4_3',
+    'inputZone13': 'inputValue5_1',
+    'inputZone14': 'inputValue5_2',
+    'inputZone15': 'inputValue5_3',
+    'inputZone16': 'inputValue6_1',
+    'inputChastnoe01Rect': 'chastnoeInput1',
+    'inputChastnoe02Rect': 'chastnoeInput2',
+    'inputChastnoe03Rect': 'chastnoeInput3'
+};
+
+// Последовательность активации зон для 488 ÷ 2
+const activationOrder = [
+    'inputChastnoe01Rect', // 2 (частное)
+    'inputZone01',         // 4 (первое вычитание)
+    'inputZone05',         // 8 (второе вычитание)
+    'inputChastnoe02Rect', // 4 (частное)
+    'inputZone08',         // 8 (третье вычитание)
+    'inputZone12',         // 8 (четвёртое вычитание)
+    'inputChastnoe03Rect', // 4 (частное)
+    'inputZone15',         // 8 (пятое вычитание)
+    'inputZone16'          // 0 (финальный остаток)
+];
+
+// Правильные значения для 488 ÷ 2
+const correctValues = {
+    'chastnoeInput1': '2',
+    'chastnoeInput2': '4',
+    'chastnoeInput3': '4',
+    'inputValue1_1': '4',
+    'inputValue1_2': '',
+    'inputValue1_3': '',
+    'inputValue2_1': '',
+    'inputValue2_2': '8',
+    'inputValue2_3': '',
+    'inputValue3_1': '',
+    'inputValue3_2': '8',
+    'inputValue3_3': '',
+    'inputValue4_1': '',
+    'inputValue4_2': '',
+    'inputValue4_3': '8',
+    'inputValue5_1': '',
+    'inputValue5_2': '',
+    'inputValue5_3': '8',
+    'inputValue6_1': '0'
+};
+
+        // Получаем элементы
+        const inputZones = document.querySelectorAll('.input-zone');
+        const keyboardButtons = document.querySelectorAll('.keyboard-button');
+        let activeInputText = null;
+        let currentStep = 0;
+
+        // Установка следующей активной зоны
+        function setNextZone() {
+            inputZones.forEach(zone => zone.classList.remove('next'));
+            if (currentStep < activationOrder.length) {
+                const nextZoneId = activationOrder[currentStep];
+                const nextZone = document.querySelector(`#${nextZoneId}`);
+                if (nextZone) {
+                    nextZone.classList.add('next');
+                }
+            }
+        }
+
+        // Функция активации поля ввода
+        function activateInput(zone) {
+            inputZones.forEach(z => z.classList.remove('active'));
+            document.querySelectorAll('.input-text').forEach(t => t.classList.remove('active'));
+
+            zone.classList.add('active');
+            const textId = zoneToTextMap[zone.id];
+            const textElement = document.querySelector(`#${textId}`);
+            if (textElement) {
+                textElement.classList.add('active');
+                activeInputText = textElement.querySelector('tspan');
+            }
+        }
+
+        // Проверка решения
+        function checkSolution() {
+            document.querySelectorAll('.input-text').forEach(text => {
+                const id = text.id;
+                const userValue = text.querySelector('tspan').textContent.trim();
+                const correctValue = correctValues[id] || '';
+                text.classList.remove('correct', 'incorrect');
+                if (userValue === correctValue && userValue !== '') {
+                    text.classList.add('correct');
+                } else if (userValue !== '' && userValue !== correctValue) {
+                    text.classList.add('incorrect');
+                }
+            });
+        }
+
+        // Переход к следующему примеру
+        function goToNextExample() {
+            window.location.href = 'easeLevel2.html'; // Ссылка на следующий файл
+        }
+
+        // Обработчик клика по зонам активации
+        inputZones.forEach(zone => {
+            zone.addEventListener('click', () => {
+                activateInput(zone);
+            });
+        });
+
+        // Обработчик клика по кнопкам клавиатуры
+        keyboardButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.id === 'btnCheck') {
+                    checkSolution();
+                } else if (button.id === 'btnNext') {
+                    goToNextExample();
+                } else if (activeInputText) {
+                    const value = button.querySelector('text tspan').textContent;
+                    activeInputText.textContent = value;
+                    if (activationOrder.indexOf(document.querySelector('.input-zone.active').id) === currentStep) {
+                        currentStep++;
+                    }
+                    setNextZone();
+                }
+            });
+        });
+
+        // Инициализация
+        setNextZone();
+    </script>
+</body>
+</html>
