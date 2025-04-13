@@ -1,0 +1,75 @@
+<svg width="1131" height="714" viewBox="0 0 1131 714" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="leveling">
+<rect id="Rectangle 113" width="228" height="714" fill="#DF4795"/>
+<rect id="Rectangle 114" x="228" width="343" height="714" fill="#28B54E"/>
+<rect id="Rectangle 115" x="645" width="334" height="714" fill="#D75757"/>
+<rect id="Rectangle 117" x="571" width="74" height="714" fill="#437AAA"/>
+<g id="Frame 4">
+<g id="input6">
+<text id="1" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="1028" y="199.438">1</tspan></text>
+<rect id="Rectangle 109" x="1002" y="163" width="76" height="44" stroke="white" stroke-width="2"/>
+</g>
+</g>
+<rect id="Rectangle 116" x="979" width="152" height="714" fill="#F49B1E"/>
+<g id="Rectangle 119" filter="url(#filter0_f_236_2)">
+<rect x="242" y="35" width="647" height="76" rx="15" fill="#C87A26"/>
+<rect x="243" y="36" width="645" height="74" rx="14" stroke="white" stroke-width="2"/>
+</g>
+<text id="&#208;&#163;&#209;&#129;&#209;&#130;&#208;&#189;&#208;&#190;&#208;&#181; &#208;&#180;&#208;&#181;&#208;&#187;&#208;&#181;&#208;&#189;&#208;&#184;&#208;&#181; &#209;&#129; &#208;&#190;&#208;&#177;&#209;&#138;&#209;&#143;&#209;&#129;&#208;&#189;&#208;&#181;&#208;&#189;&#208;&#184;&#208;&#181;&#208;&#188;." fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="263.242" y="87.4375">&#x423;&#x441;&#x442;&#x43d;&#x43e;&#x435; &#x434;&#x435;&#x43b;&#x435;&#x43d;&#x438;&#x435; &#x441; &#x43e;&#x431;&#x44a;&#x44f;&#x441;&#x43d;&#x435;&#x43d;&#x438;&#x435;&#x43c;.</tspan></text>
+<g id="btnLevel1">
+<g id="Rectangle 59" filter="url(#filter1_f_236_2)">
+<rect x="444" y="173" width="254" height="69" rx="15" fill="#C73157"/>
+<rect x="445" y="174" width="252" height="67" rx="14" stroke="white" stroke-width="2"/>
+</g>
+<text id="&#208;&#163;&#209;&#128;&#208;&#190;&#208;&#178;&#208;&#181;&#208;&#189;&#209;&#140; 1" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="476" y="222.438">&#x423;&#x440;&#x43e;&#x432;&#x435;&#x43d;&#x44c; 1</tspan></text>
+</g>
+<g id="btnLevel3">
+<g id="Rectangle 59_2" filter="url(#filter2_f_236_2)">
+<rect x="444" y="403" width="254" height="69" rx="15" fill="#C73157"/>
+<rect x="445" y="404" width="252" height="67" rx="14" stroke="white" stroke-width="2"/>
+</g>
+<text id="&#208;&#163;&#209;&#128;&#208;&#190;&#208;&#178;&#208;&#181;&#208;&#189;&#209;&#140; 3" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="476" y="452.438">&#x423;&#x440;&#x43e;&#x432;&#x435;&#x43d;&#x44c; 3</tspan></text>
+</g>
+<g id="btnLevel2">
+<g id="Rectangle 120" filter="url(#filter3_f_236_2)">
+<rect x="444" y="288" width="254" height="69" rx="15" fill="#6486F5"/>
+<rect x="445" y="289" width="252" height="67" rx="14" stroke="white" stroke-width="2"/>
+</g>
+<text id="&#208;&#163;&#209;&#128;&#208;&#190;&#208;&#178;&#208;&#181;&#208;&#189;&#209;&#140; 2" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="476" y="333.438">&#x423;&#x440;&#x43e;&#x432;&#x435;&#x43d;&#x44c; 2</tspan></text>
+</g>
+<g id="btnLevel4">
+<g id="Rectangle 120_2" filter="url(#filter4_f_236_2)">
+<rect x="444" y="518" width="254" height="69" rx="15" fill="#6486F5"/>
+<rect x="445" y="519" width="252" height="67" rx="14" stroke="white" stroke-width="2"/>
+</g>
+<text id="&#208;&#163;&#209;&#128;&#208;&#190;&#208;&#178;&#208;&#181;&#208;&#189;&#209;&#140; 4" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="476" y="563.438">&#x423;&#x440;&#x43e;&#x432;&#x435;&#x43d;&#x44c; 4</tspan></text>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_236_2" x="240" y="33" width="651" height="80" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="1" result="effect1_foregroundBlur_236_2"/>
+</filter>
+<filter id="filter1_f_236_2" x="442" y="171" width="258" height="73" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="1" result="effect1_foregroundBlur_236_2"/>
+</filter>
+<filter id="filter2_f_236_2" x="442" y="401" width="258" height="73" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="1" result="effect1_foregroundBlur_236_2"/>
+</filter>
+<filter id="filter3_f_236_2" x="442" y="286" width="258" height="73" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="1" result="effect1_foregroundBlur_236_2"/>
+</filter>
+<filter id="filter4_f_236_2" x="442" y="516" width="258" height="73" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="1" result="effect1_foregroundBlur_236_2"/>
+</filter>
+</defs>
+</svg>

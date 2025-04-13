@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Устное деление</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+        }
+        svg {
+            display: block;
+        }
+        .input-active rect {
+            stroke: #96f98b;
+            stroke-width: 3;
+        }
+        .correct text {
+            fill: #28B54E !important;
+        }
+        .incorrect text {
+            fill: #D75757 !important;
+        }
+        .keyboard-button {
+            cursor: pointer;
+            transition: opacity 0.1s;
+        }
+        .keyboard-button:active {
+            opacity: 0.7;
+        }
+        #annotation2 {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        #annotation2.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <svg width="1131" height="714" viewBox="0 0 1131 714" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="ustnoeDelenie">
+            <g id="Rectangle 113" filter="url(#filter0_f_208_3)">
+                <rect width="228" height="714" fill="#DF4795"/>
+            </g>
+            <g id="Rectangle 114" filter="url(#filter1_f_208_3)">
+                <rect x="228" width="343" height="714" fill="#28B54E"/>
+            </g>
+            <g id="Rectangle 115" filter="url(#filter2_f_208_3)">
+                <rect x="645" width="334" height="714" fill="#D75757"/>
+            </g>
+            <g id="Rectangle 117" filter="url(#filter3_f_208_3)">
+                <rect x="571" width="74" height="714" fill="#437AAA"/>
+            </g>
+            <g id="Rectangle 116" filter="url(#filter4_f_208_3)">
+                <rect x="979" width="152" height="714" fill="#F49B1E"/>
+            </g>
+            <g id="Rectangle 120" filter="url(#filter5_f_208_3)">
+                <rect x="40" y="150" width="1045" height="76" rx="15" fill="#3B53A4" fill-opacity="0.62"/>
+                <rect x="41" y="151" width="1043" height="74" rx="14" stroke="white" stroke-width="2"/>
+            </g>
+            <text id="number1" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="52" y="199.438">963</tspan></text>
+            <text id="result" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="1010" y="199.438"></tspan></text>
+            <text id="divisor" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="588" y="199.438">3</tspan></text>
+            <text id="remainder" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="168" y="199.438">0</tspan></text>
+            <text id="=" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="201" y="199.438">=</tspan></text>
+            <text id="=_2" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="621" y="199.438">=</tspan></text>
+            <text id="=_3" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="979" y="199.438">=</tspan></text>
+            <text id="(" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="225" y="199.125">(</tspan></text>
+            <text id=")" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="48" letter-spacing="0em"><tspan x="554" y="199.125">)</tspan></text>
+            <text id=":" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="139" y="195.438">:</tspan></text>
+            <text id=":_2" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="575" y="196.438">:</tspan></text>
+            <text id="+" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="337" y="199.438">+</tspan></text>
+            <text id="+_2" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="447" y="199.438">+</tspan></text>
+            <text id="+_3" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="744" y="199.438">+</tspan></text>
+            <text id="+_4" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="861" y="199.438">+</tspan></text>
+            <g id="Rectangle 119" filter="url(#filter6_f_208_3)">
+                <rect x="242" y="35" width="647" height="76" rx="15" fill="#C87A26"/>
+                <rect x="243" y="36" width="645" height="74" rx="14" stroke="white" stroke-width="2"/>
+            </g>
+            <g id="annotation1">
+                <g id="Rectangle 59" filter="url(#filter7_f_208_3)">
+                    <rect x="207" y="248" width="387" height="76" rx="15" fill="#3B53A4"/>
+                    <rect x="208" y="249" width="385" height="74" rx="14" stroke="white" stroke-width="2"/>
+                </g>
+                <text id="replace-text" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="24" letter-spacing="0em"><tspan x="288.125" y="277.062">Заменим делимое</tspan><tspan x="226.121" y="309.062">суммой разрядных слагаемых:</tspan></text>
+            </g>
+            <text id="title" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="263.242" y="87.4375">Устное деление с объяснением.</tspan></text>
+            <g id="annotation2">
+                <g id="Rectangle 118" filter="url(#filter8_f_208_3)">
+                    <rect x="622" y="248" width="387" height="76" rx="15" fill="#0C9356"/>
+                    <rect x="623" y="249" width="385" height="74" rx="14" stroke="white" stroke-width="2"/>
+                </g>
+                <text id="divide-text" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="24" letter-spacing="0em"><tspan x="647.688" y="294.062">Разделим каждое слагаемое:</tspan></text>
+            </g>
+            <g id="btnCheck">
+                <g id="Rectangle 59_2" filter="url(#filter9_f_208_3)">
+                    <rect x="53" y="485" width="254" height="69" rx="15" fill="#C73157"/>
+                    <rect x="54" y="486" width="252" height="67" rx="14" stroke="white" stroke-width="2"/>
+                </g>
+                <text id="проверить" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="80" y="531.438">проверить</tspan></text>
+            </g>
+            <g id="btnNext">
+                <g id="Rectangle 120_2" filter="url(#filter10_f_208_3)">
+                    <rect x="824" y="482" width="254" height="69" rx="15" fill="#6486F5"/>
+                    <rect x="825" y="483" width="252" height="67" rx="14" stroke="white" stroke-width="2"/>
+                </g>
+                <text id="дальше" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em"><tspan x="878" y="528.438">дальше</tspan></text>
+            </g>
+            <g id="input1" class="input">
+                <text id="input1-text" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em" text-anchor="middle"><tspan x="284" y="200"></tspan></text>
+                <rect id="Rectangle 110" x="246" y="163" width="76" height="44" stroke="white" stroke-width="2"/>
+                <rect class="hit-area" x="236" y="153" width="96" height="64" fill="transparent" fill-opacity="0"/>
+            </g>
+            <g id="input2" class="input">
+                <text id="input2-text" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em" text-anchor="middle"><tspan x="405" y="200"></tspan></text>
+                <rect id="Rectangle 111" x="367" y="163" width="76" height="44" stroke="white" stroke-width="2"/>
+                <rect class="hit-area" x="357" y="153" width="96" height="64" fill="transparent" fill-opacity="0"/>
+            </g>
+            <g id="input3" class="input">
+                <text id="input3-text" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em" text-anchor="middle"><tspan x="512" y="200"></tspan></text>
+                <rect id="Rectangle 112" x="474" y="163" width="76" height="44" stroke="white" stroke-width="2"/>
+                <rect class="hit-area" x="464" y="153" width="96" height="64" fill="transparent" fill-opacity="0"/>
+            </g>
+            <g id="input4" class="input">
+                <text id="input4-text" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em" text-anchor="middle"><tspan x="696" y="200"></tspan></text>
+                <rect id="Rectangle 107" x="658" y="163" width="76" height="44" stroke="white" stroke-width="2"/>
+                <rect class="hit-area" x="648" y="153" width="96" height="64" fill="transparent" fill-opacity="0"/>
+            </g>
+            <g id="input5" class="input">
+                <text id="input5-text" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em" text-anchor="middle"><tspan x="812" y="200"></tspan></text>
+                <rect id="Rectangle 108" x="774" y="163" width="76" height="44" stroke="white" stroke-width="2"/>
+                <rect class="hit-area" x="764" y="153" width="96" height="64" fill="transparent" fill-opacity="0"/>
+            </g>
+            <g id="input6" class="input">
+                <text id="input6-text" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em" text-anchor="middle"><tspan x="931" y="200"></tspan></text>
+                <rect id="Rectangle 109" x="893" y="163" width="76" height="44" stroke="white" stroke-width="2"/>
+                <rect class="hit-area" x="883" y="153" width="96" height="64" fill="transparent" fill-opacity="0"/>
+            </g>
+            <g id="input7" class="input">
+                <text id="input7-text" fill="white" xml:space="preserve" style="white-space: pre" font-family="Roboto" font-size="40" letter-spacing="0em" text-anchor="middle"><tspan x="1048" y="200"></tspan></text>
+                <rect id="Rectangle 113" x="1010" y="163" width="76" height="44" stroke="white" stroke-width="2"/>
+                <rect class="hit-area" x="1000" y="153" width="96" height="64" fill="transparent" fill-opacity="0"/>
+            </g>
+            <g id="keyboard" transform="translate(326.5, 357.5)">
+                <rect width="479" height="335" rx="52.5" fill="#3B53A4" fill-opacity="0.8"/>
+                <g class="keyboard-buttons">
+                    <g class="keyboard-button" transform="translate(50, 20)">
+                        <circle cx="40" cy="40" r="40" fill="#C73157"/>
+                        <text fill="white" font-family="Roboto" font-size="40" text-anchor="middle" x="40" y="52">1</text>
+                    </g>
+                    <g class="keyboard-button" transform="translate(150, 20)">
+                        <circle cx="40" cy="40" r="40" fill="#C73157"/>
+                        <text fill="white" font-family="Roboto" font-size="40" text-anchor="middle" x="40" y="52">2</text>
+                    </g>
+                    <g class="keyboard-button" transform="translate(250, 20)">
+                        <circle cx="40" cy="40" r="40" fill="#C73157"/>
+                        <text fill="white" font-family="Roboto" font-size="40" text-anchor="middle" x="40" y="52">3</text>
+                    </g>
+                    <g class="keyboard-button reset" transform="translate(370, 20)">
+                        <circle cx="40" cy="40" r="40" fill="#6486F5"/>
+                        <text fill="white" font-family="Roboto" font-size="40" text-anchor="middle" x="40" y="52">C</text>
+                    </g>
+                    <g class="keyboard-button" transform="translate(50, 130)">
+                        <circle cx="40" cy="40" r="40" fill="#C73157"/>
+                        <text fill="white" font-family="Roboto" font-size="40" text-anchor="middle" x="40" y="52">4</text>
+                    </g>
+                    <g class="keyboard-button" transform="translate(150, 130)">
+                        <circle cx="40" cy="40" r="40" fill="#C73157"/>
+                        <text fill="white" font-family="Roboto" font-size="40" text-anchor="middle" x="40" y="52">5</text>
+                    </g>
+                    <g class="keyboard-button" transform="translate(250, 130)">
+                        <circle cx="40" cy="40" r="40" fill="#C73157"/>
+                        <text fill="white" font-family="Roboto" font-size="40" text-anchor="middle" x="40" y="52">6</text>
+                    </g>
+                    <g class="keyboard-button backspace" transform="translate(370, 130)">
+                        <circle cx="40" cy="40" r="40" fill="#6486F5"/>
+                        <text fill="white" font-family="Roboto" font-size="40" text-anchor="middle" x="40" y="52">←</text>
+                    </g>
+                    <g class="keyboard-button" transform="translate(50, 240)">
+                        <circle cx="40" cy="40" r="40" fill="#C73157"/>
+                        <text fill="white" font-family="Roboto" font-size="40" text-anchor="middle" x="40" y="52">7</text>
+                    </g>
+                    <g class="keyboard-button" transform="translate(150, 240)">
+                        <circle cx="40" cy="40" r="40" fill="#C73157"/>
+                        <text fill="white" font-family="Roboto" font-size="40" text-anchor="middle" x="40" y="52">8</text>
+                    </g>
+                    <g class="keyboard-button" transform="translate(250, 240)">
+                        <circle cx="40" cy="40" r="40" fill="#C73157"/>
+                        <text fill="white" font-family="Roboto" font-size="40" text-anchor="middle" x="40" y="52">9</text>
+                    </g>
+                    <g class="keyboard-button" transform="translate(370, 240)">
+                        <circle cx="40" cy="40" r="40" fill="#C73157"/>
+                        <text fill="white" font-family="Roboto" font-size="40" text-anchor="middle" x="40" y="52">0</text>
+                    </g>
+                </g>
+            </g>
+        </g>
+        <defs>
+            <filter id="filter0_f_208_3" x="-7" y="-7" width="242" height="728" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                <feGaussianBlur stdDeviation="3.5" result="effect1_foregroundBlur_208_3"/>
+            </filter>
+            <filter id="filter1_f_208_3" x="221" y="-7" width="357" height="728" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                <feGaussianBlur stdDeviation="3.5" result="effect1_foregroundBlur_208_3"/>
+            </filter>
+            <filter id="filter2_f_208_3" x="638" y="-7" width="348" height="728" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                <feGaussianBlur stdDeviation="3.5" result="effect1_foregroundBlur_208_3"/>
+            </filter>
+            <filter id="filter3_f_208_3" x="564" y="-7" width="88" height="728" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                <feGaussianBlur stdDeviation="3.5" result="effect1_foregroundBlur_208_3"/>
+            </filter>
+            <filter id="filter4_f_208_3" x="972" y="-7" width="166" height="728" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                <feGaussianBlur stdDeviation="3.5" result="effect1_foregroundBlur_208_3"/>
+            </filter>
+            <filter id="filter5_f_208_3" x="38" y="146" width="1049" height="80" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                <feGaussianBlur stdDeviation="1" result="effect1_foregroundBlur_208_3"/>
+            </filter>
+            <filter id="filter6_f_208_3" x="240" y="33" width="651" height="80" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                <feGaussianBlur stdDeviation="1" result="effect1_foregroundBlur_208_3"/>
+            </filter>
+            <filter id="filter7_f_208_3" x="205" y="246" width="391" height="80" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                <feGaussianBlur stdDeviation="1" result="effect1_foregroundBlur_208_3"/>
+            </filter>
+            <filter id="filter8_f_208_3" x="620" y="246" width="391" height="80" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                <feGaussianBlur stdDeviation="1" result="effect1_foregroundBlur_208_3"/>
+            </filter>
+            <filter id="filter9_f_208_3" x="51" y="483" width="258" height="73" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                <feGaussianBlur stdDeviation="1" result="effect1_foregroundBlur_208_3"/>
+            </filter>
+            <filter id="filter10_f_208_3" x="822" y="480" width="258" height="73" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                <feGaussianBlur stdDeviation="1" result="effect1_foregroundBlur_208_3"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <script>
+        // Массив заданий: [число, делитель, остаток, результат, разрядные слагаемые]
+const tasks = [
+    {
+        number: 963,
+        divisor: 3,
+        remainder: 3,
+        result: 321,
+        components: [900, 60, 3, 300, 20, 1, 321]
+    },
+    {
+        number: 484,
+        divisor: 4,
+        remainder: 4,
+        result: 121,
+        components: [400, 80, 4, 100, 20, 1, 121]
+    },
+    {
+        number: 668,
+        divisor: 2,
+        remainder: 2,
+        result: 334,
+        components: [600, 60, 8, 300, 30, 4, 334]
+    }
+];
+
+let currentTaskIndex = 0;
+let activeInput = null;
+
+// Элементы SVG
+const numberText = document.getElementById('number1').querySelector('tspan');
+const divisorText = document.getElementById('divisor').querySelector('tspan');
+const remainderText = document.getElementById('remainder').querySelector('tspan');
+const resultText = document.getElementById('result').querySelector('tspan');
+const inputs = document.querySelectorAll('.input');
+const btnCheck = document.getElementById('btnCheck');
+const btnNext = document.getElementById('btnNext');
+const annotation2 = document.getElementById('annotation2');
+const keyboardButtons = document.querySelectorAll('.keyboard-button');
+
+// Загрузка задания
+function loadTask(index) {
+    const task = tasks[index];
+    numberText.textContent = task.number;
+    divisorText.textContent = task.divisor;
+    remainderText.textContent = task.remainder;
+    resultText.textContent = ''; // Не показываем результат изначально
+
+    // Очистка инпутов
+    inputs.forEach(input => {
+        const text = input.querySelector('text tspan');
+        text.textContent = '';
+        input.classList.remove('correct', 'incorrect', 'input-active');
+    });
+
+    // Обновление текста "Заменим число ..."
+    const replaceText = document.getElementById('replace-text').querySelectorAll('tspan');
+    replaceText[0].textContent = `Заменим число ${task.number} `;
+
+    // Скрыть annotation2
+    annotation2.classList.remove('visible');
+}
+
+// Проверка заполненности первых трёх инпутов
+function checkFirstThreeInputs() {
+    const firstThree = [inputs[0], inputs[1], inputs[2]];
+    const allFilled = firstThree.every(input => {
+        const text = input.querySelector('text tspan').textContent;
+        return text.trim() !== '';
+    });
+    if (allFilled) {
+        annotation2.classList.add('visible');
+    } else {
+        annotation2.classList.remove('visible');
+    }
+}
+
+// Выбор активного инпута
+inputs.forEach(input => {
+    const hitArea = input.querySelector('.hit-area');
+    hitArea.addEventListener('click', () => {
+        inputs.forEach(i => i.classList.remove('input-active'));
+        input.classList.add('input-active');
+        activeInput = input;
+    });
+});
+
+// Логика клавиатуры
+keyboardButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        if (!activeInput) return;
+        const textElement = activeInput.querySelector('text tspan');
+        const value = button.querySelector('text').textContent;
+
+        if (value === 'C') {
+            textElement.textContent = '';
+        } else if (value === '←') {
+            textElement.textContent = textElement.textContent.slice(0, -1);
+        } else {
+            textElement.textContent += value;
+        }
+
+        checkFirstThreeInputs();
+    });
+});
+
+// Проверка введённых данных
+btnCheck.addEventListener('click', () => {
+    const task = tasks[currentTaskIndex];
+    let allCorrect = true;
+
+    inputs.forEach((input, index) => {
+        const text = input.querySelector('text tspan').textContent;
+        const expected = task.components[index].toString();
+        if (text === expected) {
+            input.classList.add('correct');
+            input.classList.remove('incorrect');
+        } else {
+            input.classList.add('incorrect');
+            input.classList.remove('correct');
+            allCorrect = false;
+        }
+    });
+
+    if (allCorrect) {
+        btnNext.style.pointerEvents = 'auto';
+        btnNext.style.opacity = '1';
+    }
+});
+
+// Переход к следующему заданию или на level1_2.html
+btnNext.addEventListener('click', () => {
+    if (currentTaskIndex + 1 < tasks.length) {
+        // Переход к следующему заданию
+        currentTaskIndex += 1;
+        loadTask(currentTaskIndex);
+        btnNext.style.pointerEvents = 'none';
+        btnNext.style.opacity = '0.5';
+        activeInput = null;
+    } else {
+        // Все задания завершены, переход на level1_2.html
+        window.location.href = 'level1_2.html';
+    }
+});
+
+// Инициализация
+loadTask(currentTaskIndex);
+btnNext.style.pointerEvents = 'none';
+btnNext.style.opacity = '0.5';
+
+// Курсор для кнопок
+btnCheck.style.cursor = 'pointer';
+btnNext.style.cursor = 'pointer';
+    </script>
+</body>
+</html>

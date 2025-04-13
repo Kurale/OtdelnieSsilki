@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Устное деление</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Оставляем CSS без изменений, он подходит */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-container {
+            width: 1131px;
+            height: 714px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            z-index: 0;
+        }
+
+        .bg-section {
+            height: 100%;
+        }
+
+        .bg-1 { width: 228px; background-color: #DF4795; filter: blur(3.5px); }
+        .bg-2 { width: 343px; background-color: #28B54E; filter: blur(3.5px); }
+        .bg-3 { width: 334px; background-color: #D75757; filter: blur(3.5px); }
+        .bg-4 { width: 74px; background-color: #437AAA; filter: blur(3.5px); }
+        .bg-5 { width: 152px; background-color: #F49B1E; filter: blur(3.5px); }
+
+        .title-box {
+            position: absolute;
+            width: 647px;
+            height: 76px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 35px;
+            background: #C87A26;
+            border-radius: 15px;
+            border: 2px solid white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .title-text {
+            color: white;
+            font-size: 40px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .equation-container {
+            position: absolute;
+            width: 1075px;
+            height: 76px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 148px;
+            background: rgba(59, 83, 164, 0.62);
+            border-radius: 15px;
+            border: 2px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .equation {
+            display: flex;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+            gap: 10px;
+        }
+
+        .equation-text {
+            white-space: nowrap;
+        }
+
+        .input-box {
+            width: 76px;
+            height: 44px;
+            border: 2px solid white;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .input-box.active {
+            border-color: #67fcd6;
+            border-width: 3px;
+        }
+
+        .input-box.correct {
+            color: #28B54E;
+        }
+
+        .input-box.incorrect {
+            color: #D75757;
+        }
+
+        .input-value {
+            pointer-events: none;
+        }
+
+        .annotation {
+            position: absolute;
+            width: 387px;
+            height: 76px;
+            border-radius: 15px;
+            border: 2px solid white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .annotation-1 {
+            left: 207px;
+            top: 248px;
+            background: #3B53A4;
+        }
+
+        .annotation-2 {
+            left: 622px;
+            top: 248px;
+            background: #0C9356;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .annotation-2.visible {
+            opacity: 1;
+        }
+
+        .annotation-text {
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .btn {
+            position: absolute;
+            width: 254px;
+            height: 69px;
+            border-radius: 15px;
+            border: 2px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-check {
+            left: 53px;
+            top: 485px;
+            background: #C73157;
+        }
+
+        .btn-next {
+            left: 824px;
+            top: 482px;
+            background: #6486F5;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .btn-next.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .keyboard {
+            position: absolute;
+            width: 479px;
+            height: 335px;
+            left: 326px;
+            top: 350px;
+            border-radius: 52.5px;
+            background: rgba(59, 83, 164, 0.8);
+            border: 1px solid white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .keyboard-row {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .keyboard-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #C73157;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .keyboard-button:active {
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+
+        .keyboard-button.blue {
+            background: #6486F5;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 0.2;
+            }
+            100% {
+                transform: scale(20);
+                opacity: 0;
+            }
+        }
+
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Цветной фон -->
+        <div class="background">
+            <div class="bg-section bg-1"></div>
+            <div class="bg-section bg-2"></div>
+            <div class="bg-section bg-3"></div>
+            <div class="bg-section bg-4"></div>
+            <div class="bg-section bg-5"></div>
+        </div>
+
+        <!-- Заголовок -->
+        <div class="title-box">
+            <div class="title-text">Устное деление с объяснением.</div>
+        </div>
+
+        <!-- Уравнение -->
+        <div class="equation-container">
+            <div class="equation" id="equation">
+                <span class="equation-text" id="number1">944</span>
+                <span class="equation-text">:</span>
+                <span class="equation-text" id="divisor">4</span>
+                <span class="equation-text">=</span>
+                <span class="equation-text">(</span>
+                <div class="input-box" id="input1">
+                    <div class="input-value" id="input1-value"></div>
+                </div>
+                <span class="equation-text">+</span>
+                <div class="input-box" id="input2">
+                    <div class="input-value" id="input2-value"></div>
+                </div>
+                <span class="equation-text">)</span>
+                <span class="equation-text">:</span>
+                <span class="equation-text" id="divisor2">4</span>
+            </div>
+        </div>
+
+        <!-- Подсказки -->
+        <div class="annotation annotation-1">
+            <div class="annotation-text" id="annotation1-text">Разобьём число 944<br>на две части:</div>
+        </div>
+
+        <div class="annotation annotation-2" id="annotation2">
+            <div class="annotation-text" id="annotation2-text">Разделим второе слагаемое:</div>
+        </div>
+
+        <!-- Кнопки -->
+        <div class="btn btn-check" id="btnCheck">проверить</div>
+        <div class="btn btn-next" id="btnNext">дальше</div>
+
+        <!-- Клавиатура -->
+        <div class="keyboard">
+            <div class="keyboard-row">
+                <div class="keyboard-button" data-value="1">1</div>
+                <div class="keyboard-button" data-value="2">2</div>
+                <div class="keyboard-button" data-value="3">3</div>
+                <div class="keyboard-button blue" data-value="C">C</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="keyboard-button" data-value="4">4</div>
+                <div class="keyboard-button" data-value="5">5</div>
+                <div class="keyboard-button" data-value="6">6</div>
+                <div class="keyboard-button blue" data-value="←">←</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="keyboard-button" data-value="7">7</div>
+                <div class="keyboard-button" data-value="8">8</div>
+                <div class="keyboard-button" data-value="9">9</div>
+                <div class="keyboard-button" data-value="0">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Аудио для звуков -->
+    <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" preload="auto"></audio>
+    <audio id="correctSound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" preload="auto"></audio>
+
+    <script>
+        // Массив заданий
+        const tasks = [
+            {
+                number: 944,
+                divisor: 4,
+                result: 236,
+                components: [800, 144, 120, 24, 200, 30, 6, 236] // 8 компонентов: 800, 144, 120, 24, 200, 30, 6, 236
+            }
+            // Можно добавить другие задания в аналогичном формате
+        ];
+
+        let currentTaskIndex = 0;
+        let activeInput = null;
+        let stage = 1; // Этап: 1 - ввод 800 и 144, 2 - ввод 120 и 24, 3 - ввод 200, 30, 6 и 236
+
+        // Элементы DOM
+        const numberElement = document.getElementById('number1');
+        const divisorElement = document.getElementById('divisor');
+        const divisor2Element = document.getElementById('divisor2');
+        const equationElement = document.getElementById('equation');
+        const inputBoxes = document.querySelectorAll('.input-box');
+        const inputValues = document.querySelectorAll('.input-value');
+        const btnCheck = document.getElementById('btnCheck');
+        const btnNext = document.getElementById('btnNext');
+        const annotation1Text = document.getElementById('annotation1-text');
+        const annotation2 = document.getElementById('annotation2');
+        const annotation2Text = document.getElementById('annotation2-text');
+        const keyboardButtons = document.querySelectorAll('.keyboard-button');
+        const clickSound = document.getElementById('clickSound');
+        const correctSound = document.getElementById('correctSound');
+        const wrongSound = document.getElementById('wrongSound');
+
+        // Загрузка задания
+        function loadTask(index) {
+            const task = tasks[index];
+            numberElement.textContent = task.number;
+            divisorElement.textContent = task.divisor;
+            divisor2Element.textContent = task.divisor;
+            stage = 1;
+
+            // Очистка инпутов
+            inputValues.forEach(input => {
+                input.textContent = '';
+            });
+
+            inputBoxes.forEach(box => {
+                box.classList.remove('active', 'correct', 'incorrect');
+            });
+
+            // Сброс уравнения до начального состояния
+            equationElement.innerHTML = `
+                <span class="equation-text" id="number1">${task.number}</span>
+                <span class="equation-text">:</span>
+                <span class="equation-text" id="divisor">${task.divisor}</span>
+                <span class="equation-text">=</span>
+                <span class="equation-text">(</span>
+                <div class="input-box" id="input1">
+                    <div class="input-value" id="input1-value"></div>
+                </div>
+                <span class="equation-text">+</span>
+                <div class="input-box" id="input2">
+                    <div class="input-value" id="input2-value"></div>
+                </div>
+                <span class="equation-text">)</span>
+                <span class="equation-text">:</span>
+                <span class="equation-text" id="divisor2">${task.divisor}</span>
+            `;
+
+            // Обновление текста подсказки
+            annotation1Text.innerHTML = `Разобьём ${task.number} на две части:`;
+            annotation2Text.innerHTML = `Разделим второе слагаемое:`;
+            annotation2.classList.remove('visible');
+
+            // Деактивировать кнопку "дальше"
+            btnNext.classList.remove('active');
+
+            // Перепривязка событий для новых инпутов
+            bindInputEvents();
+        }
+
+        // Привязка событий для инпутов
+        function bindInputEvents() {
+            const newInputBoxes = document.querySelectorAll('.input-box');
+            newInputBoxes.forEach(box => {
+                box.addEventListener('click', function(e) {
+                    createRipple(e);
+                    newInputBoxes.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    activeInput = this;
+                    clickSound.currentTime = 0;
+                    clickSound.play();
+                });
+            });
+        }
+
+        // Проверка заполненности инпутов для текущего этапа
+        function checkInputs() {
+            if (stage === 1) {
+                const input1 = document.getElementById('input1-value').textContent;
+                const input2 = document.getElementById('input2-value').textContent;
+                if (input1 && input2) {
+                    annotation2.classList.add('visible');
+                } else {
+                    annotation2.classList.remove('visible');
+                }
+            } else if (stage === 2) {
+                const input3 = document.getElementById('input3-value').textContent;
+                const input4 = document.getElementById('input4-value').textContent;
+                if (input3 && input4) {
+                    annotation2.classList.add('visible');
+                } else {
+                    annotation2.classList.remove('visible');
+                }
+            }
+        }
+
+        // Эффект ripple при клике
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple-effect');
+            
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            button.appendChild(ripple);
+            
+            ripple.addEventListener('animationend', () => {
+                ripple.remove();
+            });
+        }
+
+        // Логика клавиатуры
+        keyboardButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (!activeInput) return;
+                
+                createRipple(e);
+                clickSound.currentTime = 0;
+                clickSound.play();
+                
+                const value = this.getAttribute('data-value');
+                const inputValue = activeInput.querySelector('.input-value');
+                
+                if (value === 'C') {
+                    inputValue.textContent = '';
+                } else if (value === '←') {
+                    inputValue.textContent = inputValue.textContent.slice(0, -1);
+                } else {
+                    inputValue.textContent += value;
+                }
+                
+                checkInputs();
+            });
+        });
+
+        // Проверка введённых данных
+        btnCheck.addEventListener('click', function(e) {
+            createRipple(e);
+            clickSound.currentTime = 0;
+            clickSound.play();
+            
+            const task = tasks[currentTaskIndex];
+            let allCorrect = true;
+            
+            if (stage === 1) {
+                const input1 = document.getElementById('input1-value').textContent;
+                const input2 = document.getElementById('input2-value').textContent;
+                
+                if (input1 === task.components[0].toString()) {
+                    document.getElementById('input1').classList.add('correct');
+                    document.getElementById('input1').classList.remove('incorrect');
+                } else {
+                    document.getElementById('input1').classList.add('incorrect');
+                    document.getElementById('input1').classList.remove('correct');
+                    allCorrect = false;
+                }
+                
+                if (input2 === task.components[1].toString()) {
+                    document.getElementById('input2').classList.add('correct');
+                    document.getElementById('input2').classList.remove('incorrect');
+                } else {
+                    document.getElementById('input2').classList.add('incorrect');
+                    document.getElementById('input2').classList.remove('correct');
+                    allCorrect = false;
+                }
+                
+                if (allCorrect) {
+                    // Переход ко второму этапу
+                    stage = 2;
+                    equationElement.innerHTML = `
+                        <span class="equation-text" id="number1">${task.number}</span>
+                        <span class="equation-text">:</span>
+                        <span class="equation-text" id="divisor">${task.divisor}</span>
+                        <span class="equation-text">=</span>
+                        <span class="equation-text">(</span>
+                        <span class="equation-text">${task.components[0]}</span>
+                        <span class="equation-text">+</span>
+                        <span class="equation-text">(</span>
+                        <div class="input-box" id="input3">
+                            <div class="input-value" id="input3-value"></div>
+                        </div>
+                        <span class="equation-text">+</span>
+                        <div class="input-box" id="input4">
+                            <div class="input-value" id="input4-value"></div>
+                        </div>
+                        <span class="equation-text">)</span>
+                        <span class="equation-text">)</span>
+                        <span class="equation-text">:</span>
+                        <span class="equation-text" id="divisor2">${task.divisor}</span>
+                    `;
+                    annotation1Text.innerHTML = `Разобьём ${task.components[1]} на две части:`;
+                    annotation2.classList.remove('visible');
+                    bindInputEvents();
+                    activeInput = null;
+                    correctSound.currentTime = 0;
+                    correctSound.play();
+                } else {
+                    wrongSound.currentTime = 0;
+                    wrongSound.play();
+                }
+            } else if (stage === 2) {
+                const input3 = document.getElementById('input3-value').textContent;
+                const input4 = document.getElementById('input4-value').textContent;
+                
+                if (input3 === task.components[2].toString()) {
+                    document.getElementById('input3').classList.add('correct');
+                    document.getElementById('input3').classList.remove('incorrect');
+                } else {
+                    document.getElementById('input3').classList.add('incorrect');
+                    document.getElementById('input3').classList.remove('correct');
+                    allCorrect = false;
+                }
+                
+                if (input4 === task.components[3].toString()) {
+                    document.getElementById('input4').classList.add('correct');
+                    document.getElementById('input4').classList.remove('incorrect');
+                } else {
+                    document.getElementById('input4').classList.add('incorrect');
+                    document.getElementById('input4').classList.remove('correct');
+                    allCorrect = false;
+                }
+                
+                if (allCorrect) {
+                    // Переход к третьему этапу
+                    stage = 3;
+                    equationElement.innerHTML = `
+                        <span class="equation-text" id="number1">${task.number}</span>
+                        <span class="equation-text">:</span>
+                        <span class="equation-text" id="divisor">${task.divisor}</span>
+                        <span class="equation-text">=</span>
+                        <span class="equation-text">(</span>
+                        <span class="equation-text">${task.components[0]}</span>
+                        <span class="equation-text">+</span>
+                        <span class="equation-text">${task.components[2]}</span>
+                        <span class="equation-text">+</span>
+                        <span class="equation-text">${task.components[3]}</span>
+                        <span class="equation-text">)</span>
+                        <span class="equation-text">:</span>
+                        <span class="equation-text">${task.divisor}</span>
+                        <span class="equation-text">=</span>
+                        <div class="input-box" id="input5">
+                            <div class="input-value" id="input5-value"></div>
+                        </div>
+                        <span class="equation-text">+</span>
+                        <div class="input-box" id="input6">
+                            <div class="input-value" id="input6-value"></div>
+                        </div>
+                        <span class="equation-text">+</span>
+                        <div class="input-box" id="input7">
+                            <div class="input-value" id="input7-value"></div>
+                        </div>
+                        <span class="equation-text">=</span>
+                        <div class="input-box" id="input8">
+                            <div class="input-value" id="input8-value"></div>
+                        </div>
+                    `;
+                    annotation1Text.innerHTML = `Разделим каждое слагаемое:`;
+                    annotation2Text.innerHTML = `Получим итоговый результат:`;
+                    annotation2.classList.remove('visible');
+                    bindInputEvents();
+                    activeInput = null;
+                    correctSound.currentTime = 0;
+                    correctSound.play();
+                } else {
+                    wrongSound.currentTime = 0;
+                    wrongSound.play();
+                }
+            } else if (stage === 3) {
+                const input5 = document.getElementById('input5-value').textContent;
+                const input6 = document.getElementById('input6-value').textContent;
+                const input7 = document.getElementById('input7-value').textContent;
+                const input8 = document.getElementById('input8-value').textContent;
+                
+                if (input5 === task.components[4].toString()) {
+                    document.getElementById('input5').classList.add('correct');
+                    document.getElementById('input5').classList.remove('incorrect');
+                } else {
+                    document.getElementById('input5').classList.add('incorrect');
+                    document.getElementById('input5').classList.remove('correct');
+                    allCorrect = false;
+                }
+                
+                if (input6 === task.components[5].toString()) {
+                    document.getElementById('input6').classList.add('correct');
+                    document.getElementById('input6').classList.remove('incorrect');
+                } else {
+                    document.getElementById('input6').classList.add('incorrect');
+                    document.getElementById('input6').classList.remove('correct');
+                    allCorrect = false;
+                }
+                
+                if (input7 === task.components[6].toString()) {
+                    document.getElementById('input7').classList.add('correct');
+                    document.getElementById('input7').classList.remove('incorrect');
+                } else {
+                    document.getElementById('input7').classList.add('incorrect');
+                    document.getElementById('input7').classList.remove('correct');
+                    allCorrect = false;
+                }
+                
+                if (input8 === task.components[7].toString()) {
+                    document.getElementById('input8').classList.add('correct');
+                    document.getElementById('input8').classList.remove('incorrect');
+                } else {
+                    document.getElementById('input8').classList.add('incorrect');
+                    document.getElementById('input8').classList.remove('correct');
+                    allCorrect = false;
+                }
+                
+                if (allCorrect) {
+                    correctSound.currentTime = 0;
+                    correctSound.play();
+                    btnNext.classList.add('active');
+                } else {
+                    wrongSound.currentTime = 0;
+                    wrongSound.play();
+                }
+            }
+        });
+
+        // Переход к следующему заданию или на level1_2.html
+btnNext.addEventListener('click', () => {
+    if (currentTaskIndex + 1 < tasks.length) {
+        // Переход к следующему заданию
+        currentTaskIndex += 1;
+        loadTask(currentTaskIndex);
+        btnNext.style.pointerEvents = 'none';
+        btnNext.style.opacity = '0.5';
+        activeInput = null;
+    } else {
+        // Все задания завершены, переход на leveling.html
+        window.location.href = 'leveling.html';
+    }
+});
+
+        // Инициализация
+        loadTask(currentTaskIndex);
+    </script>
+</body>
+</html>

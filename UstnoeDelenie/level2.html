@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Устное деление</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-container {
+            width: 1131px;
+            height: 714px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Фон с цветными полосами */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            z-index: 0;
+        }
+
+        .bg-section {
+            height: 100%;
+        }
+
+        .bg-1 { width: 228px; background-color: #DF4795; filter: blur(3.5px); }
+        .bg-2 { width: 343px; background-color: #28B54E; filter: blur(3.5px); }
+        .bg-3 { width: 334px; background-color: #D75757; filter: blur(3.5px); }
+        .bg-4 { width: 74px; background-color: #437AAA; filter: blur(3.5px); }
+        .bg-5 { width: 152px; background-color: #F49B1E; filter: blur(3.5px); }
+
+        /* Заголовок */
+        .title-box {
+            position: absolute;
+            width: 647px;
+            height: 76px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 35px;
+            background: #C87A26;
+            border-radius: 15px;
+            border: 2px solid white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .title-text {
+            color: white;
+            font-size: 40px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Основное уравнение */
+        .equation-container {
+            position: absolute;
+            width: 1075px;
+            height: 76px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 148px;
+            background: rgba(59, 83, 164, 0.62);
+            border-radius: 15px;
+            border: 2px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .equation {
+            display: flex;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+            gap: 10px;
+        }
+
+        .equation-text {
+            white-space: nowrap;
+        }
+
+        .input-box {
+            width: 76px;
+            height: 44px;
+            border: 2px solid white;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .input-box.active {
+            border-color: #67fcd6;
+            border-width: 3px;
+        }
+
+        .input-box.correct {
+            color: #28B54E;
+        }
+
+        .input-box.incorrect {
+            color: #D75757;
+        }
+
+        .input-value {
+            pointer-events: none;
+        }
+
+        /* Подсказки */
+        .annotation {
+            position: absolute;
+            width: 387px;
+            height: 76px;
+            border-radius: 15px;
+            border: 2px solid white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .annotation-1 {
+            left: 207px;
+            top: 248px;
+            background: #3B53A4;
+        }
+
+        .annotation-2 {
+            left: 622px;
+            top: 248px;
+            background: #0C9356;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .annotation-2.visible {
+            opacity: 1;
+        }
+
+        .annotation-text {
+            color: white;
+            font-size: 24px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* Кнопки */
+        .btn {
+            position: absolute;
+            width: 254px;
+            height: 69px;
+            border-radius: 15px;
+            border: 2px solid white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            z-index: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-check {
+            left: 53px;
+            top: 485px;
+            background: #C73157;
+        }
+
+        .btn-next {
+            left: 824px;
+            top: 482px;
+            background: #6486F5;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .btn-next.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Клавиатура */
+        .keyboard {
+            position: absolute;
+            width: 479px;
+            height: 335px;
+            left: 326px;
+            top: 350px;
+            border-radius: 52.5px;
+            background: rgba(59, 83, 164, 0.8);
+            border: 1px solid white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .keyboard-row {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .keyboard-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #C73157;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .keyboard-button .ripple-effect {
+            display: none !important;
+}
+
+        .keyboard-button:active {
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+
+        .keyboard-button.blue {
+            background: #6486F5;
+        }
+
+        /* Анимации */
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 0.2;
+            }
+            100% {
+                transform: scale(20);
+                opacity: 0;
+            }
+        }
+
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Цветной фон -->
+        <div class="background">
+            <div class="bg-section bg-1"></div>
+            <div class="bg-section bg-2"></div>
+            <div class="bg-section bg-3"></div>
+            <div class="bg-section bg-4"></div>
+            <div class="bg-section bg-5"></div>
+        </div>
+
+        <!-- Заголовок -->
+        <div class="title-box">
+            <div class="title-text">Устное деление с объяснением.</div>
+        </div>
+
+        <!-- Уравнение -->
+        <div class="equation-container">
+            <div class="equation">
+                <span class="equation-text" id="number1">408</span>
+                <span class="equation-text">:</span>
+                <span class="equation-text" id="divisor">4</span> <!-- Делитель как текст -->
+                <span class="equation-text">=</span>
+                <span class="equation-text">(</span>
+                <div class="input-box" id="input1">
+                    <div class="input-value" id="input1-value"></div>
+                </div>
+                <span class="equation-text">+</span>
+                <div class="input-box" id="input2">
+                    <div class="input-value" id="input2-value"></div>
+                </div>
+                <span class="equation-text">)</span>
+                <span class="equation-text">:</span>
+                <span class="equation-text" id="divisor2">4</span> <!-- Делитель как текст -->
+                <span class="equation-text">=</span>
+                <div class="input-box" id="input3">
+                    <div class="input-value" id="input3-value"></div>
+                </div>
+                <span class="equation-text">+</span>
+                <div class="input-box" id="input4">
+                    <div class="input-value" id="input4-value"></div>
+                </div>
+                <span class="equation-text">=</span>
+                <div class="input-box" id="input5"> <!-- Новое поле для итогового ответа -->
+                    <div class="input-value" id="input5-value"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Подсказки -->
+        <div class="annotation annotation-1">
+            <div class="annotation-text">Разобьём число 408<br>на две части:</div>
+        </div>
+
+        <div class="annotation annotation-2" id="annotation2">
+            <div class="annotation-text">Разделим каждое слагаемое:</div>
+        </div>
+
+        <!-- Кнопки -->
+        <div class="btn btn-check" id="btnCheck">проверить</div>
+        <div class="btn btn-next" id="btnNext">дальше</div>
+
+        <!-- Клавиатура -->
+        <div class="keyboard">
+            <div class="keyboard-row">
+                <div class="keyboard-button" data-value="1">1</div>
+                <div class="keyboard-button" data-value="2">2</div>
+                <div class="keyboard-button" data-value="3">3</div>
+                <div class="keyboard-button blue" data-value="C">C</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="keyboard-button" data-value="4">4</div>
+                <div class="keyboard-button" data-value="5">5</div>
+                <div class="keyboard-button" data-value="6">6</div>
+                <div class="keyboard-button blue" data-value="←">←</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="keyboard-button" data-value="7">7</div>
+                <div class="keyboard-button" data-value="8">8</div>
+                <div class="keyboard-button" data-value="9">9</div>
+                <div class="keyboard-button" data-value="0">0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Аудио для звуков -->
+    <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" preload="auto"></audio>
+    <audio id="correctSound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" preload="auto"></audio>
+
+    <script>
+        // Массив заданий
+        const tasks = [
+            {
+                number: 364,
+                divisor: 4,
+                result: 91,
+                components: [360, 4, 90, 1, 91] // Теперь 5 компонентов: 2 слагаемых, 2 частных и итог
+            },
+            {
+                number: 216,
+                divisor: 3,
+                result: 72,
+                components: [210, 6, 70, 2, 72]
+            },
+            {
+                number: 324,
+                divisor: 4,
+                result: 81,
+                components: [320, 4, 80, 1, 81]
+            },
+            {
+                number: 328,
+                divisor: 8,
+                result: 41,
+                components: [320, 8, 40, 1, 41]
+            },
+            {
+                number: 728,
+                divisor: 8,
+                result: 91,
+                components: [720, 8, 90, 1, 91]
+            }
+        ];
+
+        let currentTaskIndex = 0;
+        let activeInput = null;
+
+        // Элементы DOM
+        const numberElement = document.getElementById('number1');
+        const divisorElement = document.getElementById('divisor');
+        const divisor2Element = document.getElementById('divisor2');
+        const inputBoxes = document.querySelectorAll('.input-box');
+        const inputValues = document.querySelectorAll('.input-value');
+        const btnCheck = document.getElementById('btnCheck');
+        const btnNext = document.getElementById('btnNext');
+        const annotation2 = document.getElementById('annotation2');
+        const keyboardButtons = document.querySelectorAll('.keyboard-button');
+        const clickSound = document.getElementById('clickSound');
+        const correctSound = document.getElementById('correctSound');
+        const wrongSound = document.getElementById('wrongSound');
+
+        // Загрузка задания
+        function loadTask(index) {
+            const task = tasks[index];
+            numberElement.textContent = task.number;
+            divisorElement.textContent = task.divisor;
+            divisor2Element.textContent = task.divisor;
+
+            // Очистка инпутов
+            inputValues.forEach(input => {
+                input.textContent = '';
+            });
+
+            inputBoxes.forEach(box => {
+                box.classList.remove('active', 'correct', 'incorrect');
+            });
+
+            // Обновление текста подсказки
+            const annotationText = document.querySelector('.annotation-1 .annotation-text');
+            annotationText.innerHTML = `Разобьём ${task.number} на две части:`;
+
+            // Скрыть вторую подсказку
+            annotation2.classList.remove('visible');
+
+            // Деактивировать кнопку "дальше"
+            btnNext.classList.remove('active');
+        }
+
+        // Проверка заполненности первых двух инпутов
+        function checkFirstTwoInputs() {
+            const input1 = inputValues[0].textContent;
+            const input2 = inputValues[1].textContent;
+            
+            if (input1 && input2) {
+                annotation2.classList.add('visible');
+            } else {
+                annotation2.classList.remove('visible');
+            }
+        }
+
+        // Эффект ripple при клике
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple-effect');
+            
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            button.appendChild(ripple);
+            
+            ripple.addEventListener('animationend', () => {
+                ripple.remove();
+            });
+        }
+
+        // Выбор активного инпута
+        inputBoxes.forEach(box => {
+            box.addEventListener('click', function(e) {
+                // Эффект ripple
+                createRipple(e);
+                
+                // Снять активность со всех инпутов
+                inputBoxes.forEach(b => b.classList.remove('active'));
+                
+                // Установить активность текущему
+                this.classList.add('active');
+                activeInput = this;
+                
+                // Воспроизвести звук
+                clickSound.currentTime = 0;
+                clickSound.play();
+            });
+        });
+
+        // Логика клавиатуры
+        keyboardButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (!activeInput) return;
+                
+                createRipple(e);
+                clickSound.currentTime = 0;
+                clickSound.play();
+                
+                const value = this.getAttribute('data-value');
+                const inputValue = activeInput.querySelector('.input-value');
+                
+                if (value === 'C') {
+                    inputValue.textContent = '';
+                } else if (value === '←') {
+                    inputValue.textContent = inputValue.textContent.slice(0, -1);
+                } else {
+                    inputValue.textContent += value;
+                }
+                
+                checkFirstTwoInputs();
+            });
+        });
+
+        // Проверка введённых данных
+        btnCheck.addEventListener('click', function(e) {
+            createRipple(e);
+            clickSound.currentTime = 0;
+            clickSound.play();
+            
+            const task = tasks[currentTaskIndex];
+            let allCorrect = true;
+            
+            inputBoxes.forEach((box, index) => {
+                const value = box.querySelector('.input-value').textContent;
+                const expected = task.components[index].toString();
+                
+                if (value === expected) {
+                    box.classList.add('correct');
+                    box.classList.remove('incorrect');
+                } else {
+                    box.classList.add('incorrect');
+                    box.classList.remove('correct');
+                    allCorrect = false;
+                }
+            });
+            
+            if (allCorrect) {
+                correctSound.currentTime = 0;
+                correctSound.play();
+                btnNext.classList.add('active');
+            } else {
+                wrongSound.currentTime = 0;
+                wrongSound.play();
+            }
+        });
+
+        // Переход к следующему заданию или на level1_2.html
+btnNext.addEventListener('click', () => {
+    if (currentTaskIndex + 1 < tasks.length) {
+        // Переход к следующему заданию
+        currentTaskIndex += 1;
+        loadTask(currentTaskIndex);
+        btnNext.style.pointerEvents = 'none';
+        btnNext.style.opacity = '0.5';
+        activeInput = null;
+    } else {
+        // Все задания завершены, переход на leveling.html
+        window.location.href = 'leveling.html';
+    }
+});
+
+        // Инициализация
+        loadTask(currentTaskIndex);
+    </script>
+</body>
+</html>

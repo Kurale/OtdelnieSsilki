@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Устное деление с объяснением</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+            width: 1131px;
+            height: 714px;
+            position: relative;
+        }
+        
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+        }
+        
+        .bg-section {
+            height: 100%;
+        }
+        
+        .bg-1 {
+            width: 228px;
+            background-color: #DF4795;
+            filter: blur(3.5px);
+        }
+        
+        .bg-2 {
+            width: 343px;
+            background-color: #28B54E;
+            filter: blur(3.5px);
+        }
+        
+        .bg-3 {
+            width: 334px;
+            background-color: #D75757;
+            filter: blur(3.5px);
+        }
+        
+        .bg-4 {
+            width: 74px;
+            background-color: #437AAA;
+            filter: blur(3.5px);
+        }
+        
+        .bg-5 {
+            width: 152px;
+            background-color: #F49B1E;
+            filter: blur(3.5px);
+        }
+        
+        .title-box {
+            position: absolute;
+            width: 647px;
+            height: 76px;
+            left: 242px;
+            top: 35px;
+            background: #C87A26;
+            border-radius: 15px;
+            filter: blur(1px);
+            border: 2px solid white;
+        }
+        
+        .title-text {
+            position: absolute;
+            left: 263px;
+            top: 47px;
+            font-size: 40px;
+            color: white;
+        }
+        
+        .main-box {
+            position: absolute;
+            width: 1075px;
+            height: 76px;
+            left: 25px;
+            top: 148px;
+            background: #3B53A4;
+            opacity: 0.62;
+            border-radius: 15px;
+            filter: blur(1px);
+            border: 2px solid white;
+        }
+        
+        .equation {
+            position: absolute;
+            top: 155px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+        }
+        
+        .input-box {
+            position: relative;
+            width: 76px;
+            height: 44px;
+            border: 2px solid white;
+            margin: 0 10px;
+        }
+        
+        .input-text {
+            position: absolute;
+            top: -10px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .annotation-1 {
+            position: absolute;
+            width: 387px;
+            height: 76px;
+            left: 207px;
+            top: 248px;
+            background: #3B53A4;
+            border-radius: 15px;
+            filter: blur(1px);
+            border: 2px solid white;
+        }
+        
+        .annotation-1-text {
+            position: absolute;
+            left: 226px;
+            top: 250px;
+            font-size: 24px;
+            color: white;
+            text-align: center;
+            line-height: 1.4;
+        }
+        
+        .annotation-2 {
+            position: absolute;
+            width: 387px;
+            height: 76px;
+            left: 622px;
+            top: 248px;
+            background: #0C9356;
+            border-radius: 15px;
+            filter: blur(1px);
+            border: 2px solid white;
+        }
+        
+        .annotation-2-text {
+            position: absolute;
+            left: 625px;
+            top: 270px;
+            font-size: 24px;
+            color: white;
+            text-align: center;
+            width: 385px;
+        }
+        
+        .keyboard {
+            position: absolute;
+            width: 479px;
+            height: 335px;
+            left: 327px;
+            top: 358px;
+            z-index: 1;
+            border: 1px solid white;
+            border-radius: 52.5px;
+        }
+        
+        .btn-check {
+            position: absolute;
+            width: 254px;
+            height: 69px;
+            left: 53px;
+            top: 485px;
+            background: #C73157;
+            border-radius: 15px;
+            filter: blur(1px);
+            border: 2px solid white;
+        }
+        
+        .btn-check-text {
+            position: absolute;
+            left: 80px;
+            top: 501px;
+            font-size: 40px;
+            color: white;
+        }
+        
+        .btn-next {
+            position: absolute;
+            width: 254px;
+            height: 69px;
+            left: 824px;
+            top: 482px;
+            background: #6486F5;
+            border-radius: 15px;
+            filter: blur(1px);
+            border: 2px solid white;
+        }
+        
+        .btn-next-text {
+            position: absolute;
+            left: 878px;
+            top: 498px;
+            font-size: 40px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="bg-section bg-1"></div>
+        <div class="bg-section bg-2"></div>
+        <div class="bg-section bg-3"></div>
+        <div class="bg-section bg-4"></div>
+        <div class="bg-section bg-5"></div>
+    </div>
+    
+    <div class="title-box"></div>
+    <div class="title-text">Устное деление с объяснением.</div>
+    
+    <div class="main-box"></div>
+    
+    <div class="equation">
+        <span style="margin-right: 10px;">309</span>
+        <span style="margin-right: 10px;">:</span>
+        <div class="input-box">
+            <div class="input-text">3</div>
+        </div>
+        <span style="margin-right: 10px;">=</span>
+        <span style="margin-right: 10px; font-size: 48px;">(</span>
+        <div class="input-box">
+            <div class="input-text">300</div>
+        </div>
+        <span style="margin-right: 10px;">+</span>
+        <div class="input-box">
+            <div class="input-text">9</div>
+        </div>
+        <span style="margin-right: 10px; font-size: 48px;">)</span>
+        <span style="margin-right: 10px;">:</span>
+        <div class="input-box">
+            <div class="input-text">3</div>
+        </div>
+        <span style="margin-right: 10px;">=</span>
+        <div class="input-box">
+            <div class="input-text">100</div>
+        </div>
+        <span style="margin-right: 10px;">+</span>
+        <div class="input-box">
+            <div class="input-text">3</div>
+        </div>
+        <span style="margin-right: 10px;">=</span>
+        <span style="margin-right: 10px;">103</span>
+        <div class="input-box" style="width: 75px; height: 42px; border-width: 3px;">
+            <div class="input-text">1</div>
+        </div>
+    </div>
+    
+    <div class="annotation-1"></div>
+    <div class="annotation-1-text">
+        Заменим число 309<br>
+        суммой разрядных слагаемых:
+    </div>
+    
+    <div class="annotation-2"></div>
+    <div class="annotation-2-text">
+        Разделим каждое слагаемое:
+    </div>
+    
+    <div class="keyboard"></div>
+    
+    <div class="btn-check"></div>
+    <div class="btn-check-text">проверить</div>
+    
+    <div class="btn-next"></div>
+    <div class="btn-next-text">дальше</div>
+</body>
+</html>
