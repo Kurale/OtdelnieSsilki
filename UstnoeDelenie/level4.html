@@ -714,20 +714,25 @@
             }
         });
 
-        // Переход к следующему заданию или на level1_2.html
-btnNext.addEventListener('click', () => {
-    if (currentTaskIndex + 1 < tasks.length) {
-        // Переход к следующему заданию
-        currentTaskIndex += 1;
-        loadTask(currentTaskIndex);
-        btnNext.style.pointerEvents = 'none';
-        btnNext.style.opacity = '0.5';
-        activeInput = null;
-    } else {
-        // Все задания завершены, переход на leveling.html
-        window.location.href = 'leveling.html';
-    }
-});
+  // Переход к следующему заданию или на leveling.html
+  btnNext.addEventListener('click', function(e) {
+            createRipple(e);
+            try {
+                clickSound.currentTime = 0;
+                clickSound.play();
+            } catch (error) {
+                console.error('Ошибка воспроизведения clickSound:', error);
+            }
+            
+            if (currentTaskIndex + 1 < tasks.length) {
+                currentTaskIndex += 1;
+                loadTask(currentTaskIndex);
+                btnNext.classList.remove('active');
+                activeInput = null;
+            } else {
+                window.location.href = 'leveling.html';
+            }
+        });
 
         // Инициализация
         loadTask(currentTaskIndex);
