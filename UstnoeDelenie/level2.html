@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Устное деление</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -20,14 +20,16 @@
             min-height: 100vh;
             background-color: #f0f0f0;
             position: relative;
-            overflow: hidden;
+            overflow: auto;
         }
 
         .app-container {
-            display: block;
             width: 1131px;
             height: 714px;
-            position: relative;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         }
