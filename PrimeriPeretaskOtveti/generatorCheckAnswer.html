@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Интерактивное перетаскивание</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap" rel="stylesheet">
+  <style>
+    body { 
+      margin: 0; 
+      font-family: Roboto, sans-serif; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      min-height: 100vh; 
+      background: #f0f0f0; 
+    }
+    .Generator { 
+      position: relative; 
+    }
+    .Element0, .Element1, .Element2, .Element3, .Element4, .Element5, .Element6, .Element7, .Element8, .Element9 { 
+      cursor: grab; 
+      width: 32px; 
+      height: 64px; 
+      padding: 12px 3px; 
+      box-sizing: border-box; 
+      display: inline-flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center; 
+    }
+    .Element0:active, .Element1:active, .Element2:active, .Element3:active, .Element4:active, 
+    .Element5:active, .Element6:active, .Element7:active, .Element8:active, .Element9:active { 
+      cursor: grabbing; 
+    }
+    .Btnmultiply1, .Btnmultiply2, .Btnmultiply3, .Btnmultiply4, 
+    .Btndivide1, .Btndivide2, .Btndivide3, .Btndivide4 { 
+      cursor: pointer; 
+    }
+    .Insert11, .Insert12, .Insert21, .Insert22, .Insert31, .Insert32, 
+    .Insert41, .Insert42, .Insertanswer1, .Insertanswer2, .Insertanswer3, .Insertanswer4 { 
+      position: relative; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+    }
+    .clone { 
+      cursor: grab; 
+    }
+    .clone:hover { 
+      outline: 2px solid red; 
+    }
+    /* Отключение выделения текста */
+    .Generator, .Generator * { 
+      user-select: none; 
+    }
+    /* Фиксированная ширина для знаков операции и равно */
+    [data-layer="×"], [data-layer=":"], [data-layer="="] { 
+      width: 26px; 
+      text-align: center; 
+    }
+    /* Стили для обратной связи */
+    .correct {
+      background: #90EE90 !important; /* Зелёный фон */
+      box-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00 !important; /* Светящаяся обводка */
+    }
+    .incorrect {
+      background: #FF6347 !important; /* Красный фон */
+      box-shadow: 0 0 10px #FF0000, 0 0 20px #FF0000 !important; /* Светящаяся обводка */
+    }
+    /* Цветовая анимация при вставке */
+    @keyframes colorPulse {
+      0% { box-shadow: 0 0 5px #0070C0; }
+      50% { box-shadow: 0 0 15px #00BFFF; }
+      100% { box-shadow: 0 0 5px #0070C0; }
+    }
+    .inserted {
+      animation: colorPulse 0.4s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+<div data-layer="Generator" class="Generator" style="width: 960px; height: 960px; background: white; overflow: hidden">
+  <div data-layer="element0" class="Element0" style="left: 96px; top: 224px; position: absolute; background: #088DED; border-radius: 6px; outline: 1px #1096EA solid; outline-offset: -1px;">
+    <div data-layer="0" style="align-self: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">0</div>
+  </div>
+  <div data-layer="element1" class="Element1" style="left: 96px; top: 288px; position: absolute; background: #088DED; border-radius: 6px; outline: 1px #1096EA solid; outline-offset: -1px;">
+    <div data-layer="1" style="align-self: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">1</div>
+  </div>
+  <div data-layer="element2" class="Element2" style="left: 96px; top: 352px; position: absolute; background: #088DED; border-radius: 6px; outline: 1px #1096EA solid; outline-offset: -1px;">
+    <div data-layer="2" style="align-self: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">2</div>
+  </div>
+  <div data-layer="element3" class="Element3" style="left: 96px; top: 416px; position: absolute; background: #088DED; border-radius: 6px; outline: 1px #1096EA solid; outline-offset: -1px;">
+    <div data-layer="3" style="align-self: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">3</div>
+  </div>
+  <div data-layer="element4" class="Element4" style="left: 96px; top: 480px; position: absolute; background: #088DED; border-radius: 6px; outline: 1px #1096EA solid; outline-offset: -1px;">
+    <div data-layer="4" style="align-self: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">4</div>
+  </div>
+  <div data-layer="element5" class="Element5" style="left: 96px; top: 544px; position: absolute; background: #088DED; border-radius: 6px; outline: 1px #1096EA solid; outline-offset: -1px;">
+    <div data-layer="5" style="align-self: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">5</div>
+  </div>
+  <div data-layer="element6" class="Element6" style="left: 96px; top: 608px; position: absolute; background: #088DED; border-radius: 6px; outline: 1px #1096EA solid; outline-offset: -1px;">
+    <div data-layer="6" style="align-self: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">6</div>
+  </div>
+  <div data-layer="element7" class="Element7" style="left: 96px; top: 672px; position: absolute; background: #088DED; border-radius: 6px; outline: 1px #1096EA solid; outline-offset: -1px;">
+    <div data-layer="7" style="align-self: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">7</div>
+  </div>
+  <div data-layer="element8" class="Element8" style="left: 96px; top: 736px; position: absolute; background: #088DED; border-radius: 6px; outline: 1px #1096EA solid; outline-offset: -1px;">
+    <div data-layer="8" style="align-self: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">8</div>
+  </div>
+  <div data-layer="element9" class="Element9" style="left: 96px; top: 800px; position: absolute; background: #088DED; border-radius: 6px; outline: 1px #1096EA solid; outline-offset: -1px;">
+    <div data-layer="9" style="align-self: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">9</div>
+  </div>
+  <div data-layer="btnMultiply1" class="Btnmultiply1" style="width: 64px; height: 64px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; left: 735px; top: 252px; position: absolute; background: #088DED; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+    <div data-layer="×" style="align-center: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">×</div>
+  </div>
+  <div data-layer="btnMultiply2" class="Btnmultiply2" style="width: 64px; height: 64px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; left: 735px; top: 416px; position: absolute; background: #088DED; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+    <div data-layer="×" style="align-center: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">×</div>
+  </div>
+  <div data-layer="btnMultiply3" class="Btnmultiply3" style="width: 64px; height: 64px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; left: 735px; top: 576px; position: absolute; background: #088DED; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+    <div data-layer="×" style="align-center: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">×</div>
+  </div>
+  <div data-layer="btnMultiply4" class="Btnmultiply4" style="width: 64px; height: 64px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; left: 735px; top: 736px; position: absolute; background: #088DED; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+    <div data-layer="×" style="align-center: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">×</div>
+  </div>
+  <div data-layer="btnDivide1" class="Btndivide1" style="width: 64px; height: 64px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; left: 831px; top: 252px; position: absolute; background: #088DED; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+    <div data-layer=":" style="align-center: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">:</div>
+  </div>
+  <div data-layer="btnDivide2" class="Btndivide2" style="width: 64px; height: 64px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; left: 831px; top: 416px; position: absolute; background: #088DED; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+    <div data-layer=":" style="align-center: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">:</div>
+  </div>
+  <div data-layer="btnDivide3" class="Btndivide3" style="width: 64px; height: 64px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; left: 831px; top: 576px; position: absolute; background: #088DED; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+    <div data-layer=":" style="align-center: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">:</div>
+  </div>
+  <div data-layer="btnDivide4" class="Btndivide4" style="width: 64px; height: 64px; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; left: 831px; top: 736px; position: absolute; background: #088DED; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+    <div data-layer=":" style="align-center: stretch; color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">:</div>
+  </div>
+  <div data-layer="primer1" class="Primer1" style="width: 448px; height: 96px; left: 240px; top: 240px; position: absolute; background: #088DED; border-radius: 22px; justify-content: center; align-items: center; gap: 19px; display: inline-flex">
+    <div data-layer="insert1_1" class="Insert11" style="width: 96px; height: 64px; background: #92D2FF; border-radius: 4px; outline: 5px #0070C0 solid"></div>
+    <div data-layer="×" style="color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">×</div>
+    <div data-layer="insert1_2" class="Insert12" style="width: 96px; height: 64px; background: #92D2FF; border-radius: 4px; outline: 5px #0070C0 solid"></div>
+    <div data-layer="=" style="color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">=</div>
+    <div data-layer="insertAnswer1" class="Insertanswer1" style="width: 96px; height: 64px; background: #92D2FF; border-radius: 4px; outline: 2px #0070c07a solid"></div>
+  </div>
+  <div data-layer="primer2" class="Primer2" style="width: 448px; height: 96px; left: 240px; top: 400px; position: absolute; background: #088DED; border-radius: 22px; justify-content: center; align-items: center; gap: 19px; display: inline-flex">
+    <div data-layer="insert2_1" class="Insert21" style="width: 96px; height: 64px; background: #92D2FF; border-radius: 4px; outline: 5px #0070C0 solid"></div>
+    <div data-layer="×" style="color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">×</div>
+    <div data-layer="insert2_2" class="Insert22" style="width: 96px; height: 64px; background: #92D2FF; border-radius: 4px; outline: 5px #0070C0 solid"></div>
+    <div data-layer="=" style="color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">=</div>
+    <div data-layer="insertAnswer2" class="Insertanswer2" style="width: 96px; height: 64px; background: #92D2FF; border-radius: 4px; outline: 2px #0070c083 solid"></div>
+  </div>
+  <div data-layer="primer3" class="Primer3" style="width: 448px; height: 96px; left: 240px; top: 560px; position: absolute; background: #088DED; border-radius: 22px; justify-content: center; align-items: center; gap: 19px; display: inline-flex">
+    <div data-layer="insert3_1" class="Insert31" style="width: 96px; height: 64px; background: #92D2FF; border-radius: 4px; outline: 5px #0070C0 solid"></div>
+    <div data-layer="×" style="color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">×</div>
+    <div data-layer="insert3_2" class="Insert32" style="width: 96px; height: 64px; background: #92D2FF; border-radius: 4px; outline: 5px #0070C0 solid"></div>
+    <div data-layer="=" style="color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">=</div>
+    <div data-layer="insertAnswer3" class="Insertanswer3" style="width: 96px; height: 64px; background: #92D2FF; border-radius: 4px; outline: 2px #0070c07d solid"></div>
+  </div>
+  <div data-layer="primer4" class="Primer4" style="width: 448px; height: 96px; left: 240px; top: 720px; position: absolute; background: #088DED; border-radius: 22px; justify-content: center; align-items: center; gap: 19px; display: inline-flex">
+    <div data-layer="insert4_1" class="Insert41" style="width: 96px; height: 64px; background: #92D2FF; border-radius: 4px; outline: 5px #0070C0 solid"></div>
+    <div data-layer="×" style="color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">×</div>
+    <div data-layer="insert4_2" class="Insert42" style="width: 96px; height: 64px; background: #92D2FF; border-radius: 4px; outline: 5px #0070C0 solid"></div>
+    <div data-layer="=" style="color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">=</div>
+    <div data-layer="insertAnswer4" class="Insertanswer4" style="width: 96px; height: 64px; background: #92D2FF; border-radius: 4px; outline: 2px #0070c082 solid"></div>
+  </div>
+  <div data-layer="titul" class="Titul" style="width: 896px; height: 96px; padding: 10px; left: 32px; top: 32px; position: absolute; background: #088DED; border-radius: 10px; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+    <div data-layer="Решаем примеры весело!" style="color: white; font-size: 48px; font-family: Roboto; font-weight: 400; word-wrap: break-word">Решаем примеры весело!</div>
+  </div>
+  <div data-layer="logo" class="Logo" style="height: 110px; padding-left: 10px; padding-right: 10px; padding-top: 5px; padding-bottom: 5px; left: 128px; top: 860px; position: absolute; justify-content: center; align-items: flex-start; gap: 10px; display: inline-flex">
+    <div data-layer="PrimariGuru" class="Primariguru" style="color: rgba(146, 209, 255, 0.40); font-size: 128px; font-family: Roboto; font-weight: 400; word-wrap: break-word">PrimariGuru</div>
+  </div>
+</div>
+
+<script>
+  const GRID_SIZE = 32;
+  let draggedElement = null;
+  let offsetX, offsetY;
+
+  // Функция для привязки к сетке
+  function snapToGrid(value) {
+    return Math.round(value / GRID_SIZE) * GRID_SIZE;
+  }
+
+  // Создание копии элемента
+  function createElementClone(element) {
+    const clone = element.cloneNode(true);
+    clone.style.position = 'absolute';
+    clone.style.zIndex = 1000;
+    clone.className = element.className + ' clone';
+    return clone;
+  }
+
+  // Проверка, находится ли элемент над областью вставки
+  function isOverInsert(element, insert) {
+    const elemRect = element.getBoundingClientRect();
+    const insertRect = insert.getBoundingClientRect();
+    return (
+      elemRect.left < insertRect.right &&
+      elemRect.right > insertRect.left &&
+      elemRect.top < insertRect.bottom &&
+      elemRect.bottom > insertRect.top
+    );
+  }
+
+  // Проверка, находится ли элемент в зоне примера
+  function isInPrimer(clientX, clientY) {
+    const primers = document.querySelectorAll('[data-layer^="primer"]');
+    for (const primer of primers) {
+      const rect = primer.getBoundingClientRect();
+      if (
+        clientX >= rect.left &&
+        clientX <= rect.right &&
+        clientY >= rect.top &&
+        clientY <= rect.bottom
+      ) {
+        return primer;
+      }
+    }
+    return null;
+  }
+
+  // Функция для получения числа из insert
+  function getNumberFromInsert(insert) {
+    const clones = Array.from(insert.querySelectorAll('.clone')).sort((a, b) => {
+      return parseFloat(a.style.left) - parseFloat(b.style.left);
+    });
+    const digits = clones.map(clone => clone.querySelector('div').textContent);
+    return digits.length > 0 ? parseInt(digits.join(''), 10) : NaN;
+  }
+
+  // Функция проверки ответов
+  function checkAnswers() {
+    for (let i = 1; i <= 4; i++) {
+      const primer = document.querySelector(`.Primer${i}`);
+      const insert1 = primer.querySelector(`[data-layer="insert${i}_1"]`);
+      const insert2 = primer.querySelector(`[data-layer="insert${i}_2"]`);
+      const insertAnswer = primer.querySelector(`[data-layer="insertAnswer${i}"]`);
+      const sign = primer.querySelector('[data-layer="×"], [data-layer=":"]').textContent;
+
+      // Удаляем предыдущие классы стилей
+      insertAnswer.classList.remove('correct', 'incorrect');
+
+      // Получаем числа
+      const num1 = getNumberFromInsert(insert1);
+      const num2 = getNumberFromInsert(insert2);
+      const answer = getNumberFromInsert(insertAnswer);
+
+      // Проверяем корректность
+      if (!isNaN(num1) && !isNaN(num2) && !isNaN(answer)) {
+        let correctAnswer;
+        if (sign === '×') {
+          correctAnswer = num1 * num2;
+        } else if (sign === ':') {
+          correctAnswer = num2 !== 0 && Number.isInteger(num1 / num2) ? num1 / num2 : NaN;
+        }
+        if (!isNaN(correctAnswer) && answer === correctAnswer) {
+          insertAnswer.classList.add('correct');
+        } else {
+          insertAnswer.classList.add('incorrect');
+        }
+      }
+    }
+  }
+
+  // Обработка начала перетаскивания для исходных элементов
+  document.querySelectorAll('[data-layer^="element"]').forEach(element => {
+    element.addEventListener('mousedown', e => {
+      if (e.button === 0) {
+        e.preventDefault();
+        draggedElement = createElementClone(element);
+        document.querySelector('.Generator').appendChild(draggedElement);
+        const rect = element.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+        draggedElement.style.left = `${rect.left - offsetX}px`;
+        draggedElement.style.top = `${rect.top - offsetY}px`;
+      }
+    });
+  });
+
+  // Обработка начала перетаскивания для клонов внутри insert
+  document.querySelector('.Generator').addEventListener('mousedown', e => {
+    if (e.button === 0) {
+      const target = e.target.closest('.clone');
+      if (target && target.parentElement.matches('[data-layer^="insert"]')) {
+        e.preventDefault();
+        draggedElement = target;
+        const rect = target.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+        document.querySelector('.Generator').appendChild(target);
+        target.style.left = `${rect.left - offsetX}px`;
+        target.style.top = `${rect.top - offsetY}px`;
+      }
+    }
+  });
+
+  // Обработка движения мыши
+  document.addEventListener('mousemove', e => {
+    if (draggedElement) {
+      const generator = document.querySelector('.Generator');
+      const genRect = generator.getBoundingClientRect();
+      let newX = e.clientX - offsetX - genRect.left;
+      let newY = e.clientY - offsetY - genRect.top;
+
+      // Ограничение перемещения
+      newX = Math.max(0, Math.min(newX, 960 - draggedElement.offsetWidth));
+      newY = Math.max(0, Math.min(newY, 960 - draggedElement.offsetHeight));
+
+      // Привязка к сетке в зоне примера
+      const primer = isInPrimer(e.clientX, e.clientY);
+      if (primer) {
+        newX = snapToGrid(newX);
+        newY = snapToGrid(newY);
+      }
+
+      draggedElement.style.left = `${newX}px`;
+      draggedElement.style.top = `${newY}px`;
+    }
+  });
+
+  // Обработка окончания перетаскивания
+  document.addEventListener('mouseup', e => {
+    if (draggedElement && e.button === 0) {
+      const inserts = document.querySelectorAll('[data-layer^="insert"]');
+      let placed = false;
+
+      inserts.forEach(insert => {
+        if (isOverInsert(draggedElement, insert) && insert.querySelectorAll('.clone').length < 3) {
+          const insertRect = insert.getBoundingClientRect();
+          const genRect = document.querySelector('.Generator').getBoundingClientRect();
+          let newX = draggedElement.offsetLeft - (insertRect.left - genRect.left);
+          let newY = draggedElement.offsetTop - (insertRect.top - genRect.top);
+          newX = snapToGrid(newX);
+          newY = snapToGrid(newY);
+          newX = Math.max(0, Math.min(newX, insertRect.width - draggedElement.offsetWidth));
+          newY = Math.max(0, Math.min(newY, insertRect.height - draggedElement.offsetHeight));
+          draggedElement.style.left = `${newX}px`;
+          draggedElement.style.top = `${newY}px`;
+          draggedElement.style.transform = '';
+          insert.appendChild(draggedElement);
+          // Добавляем цветовую анимацию к полю insert
+          insert.classList.add('inserted');
+          setTimeout(() => insert.classList.remove('inserted'), 400); // Удаляем класс после анимации
+          placed = true;
+          checkAnswers(); // Проверяем ответы
+        }
+      });
+
+      if (!placed) {
+        draggedElement.remove();
+      }
+      draggedElement = null;
+    }
+  });
+
+  // Обработка правого клика для удаления
+  document.querySelector('.Generator').addEventListener('contextmenu', e => {
+    const target = e.target.closest('.clone');
+    if (target) {
+      e.preventDefault();
+      target.remove();
+      checkAnswers(); // Проверяем ответы
+    }
+  });
+
+  // Обработка кнопок умножения
+  document.querySelectorAll('[data-layer^="btnMultiply"]').forEach(button => {
+    button.addEventListener('click', () => {
+      const index = button.className.match(/\d/)[0];
+      const primer = document.querySelector(`.Primer${index}`);
+      const sign = primer.querySelector('[data-layer="×"], [data-layer=":"]');
+      sign.textContent = '×';
+      sign.setAttribute('data-layer', '×');
+      checkAnswers(); // Проверяем ответы
+    });
+  });
+
+  // Обработка кнопок деления
+  document.querySelectorAll('[data-layer^="btnDivide"]').forEach(button => {
+    button.addEventListener('click', () => {
+      const index = button.className.match(/\d/)[0];
+      const primer = document.querySelector(`.Primer${index}`);
+      const sign = primer.querySelector('[data-layer="×"], [data-layer=":"]');
+      sign.textContent = ':';
+      sign.setAttribute('data-layer', ':');
+      checkAnswers(); // Проверяем ответы
+    });
+  });
+</script>
+</body>
+</html>
