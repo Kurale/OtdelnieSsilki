@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Физическая модель с круглыми коллайдерами</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f0f0f0;
+            font-family: Inter, sans-serif;
+        }
+        .Box {
+            position: relative;
+            background-color: white;
+        }
+        [class^="Answer"], [class^="Example"] {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-origin: center;
+            user-select: none;
+            box-sizing: border-box;
+            transition: opacity 0.5s ease, background-color 0.3s ease, border 0.3s ease;
+        }
+        .selected {
+            filter: brightness(1.2);
+            border: 4px solid #3316F2;
+        }
+        .fading {
+            opacity: 0;
+        }
+        #gameOver, #gameWon {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: rgba(19, 142, 224, 0.8);
+            color: white;
+            padding: 20px;
+            font-size: 24px;
+            border-radius: 10px;
+            display: none;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        #gameOver.show, #gameWon.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        #restartButton {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background: #0ace38;
+            color: rgb(2, 65, 26);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        #restartButton:hover {
+            background: #20c679;
+        }
+        #counter {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 18px;
+            color: #2DA5D0;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div data-layer="Box" class="Box" style="width: 600px; height: 600px; overflow: hidden; outline: 9px #2DA5D0 solid; outline-offset: -9px">
+        <div id="counter">Элементы: 20/20</div>
+        <div data-layer="answer6" class="Answer6" style="width: 100px; height: 100px; padding: 10px; left: 408px; top: 330px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">12</div>
+        </div>
+        <div data-layer="answer5" class="Answer5" style="width: 100px; height: 100px; padding: 10px; left: 274px; top: 272px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">27</div>
+        </div>
+        <div data-layer="answer4" class="Answer4" style="width: 100px; height: 100px; padding: 10px; left: 46px; top: 465px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">72</div>
+        </div>
+        <div data-layer="answer3" class="Answer3" style="width: 100px; height: 100px; padding: 10px; left: 16px; top: 335px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">32</div>
+        </div>
+        <div data-layer="answer7" class="Answer7" style="width: 100px; height: 100px; padding: 10px; left: 190px; top: 198px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">48</div>
+        </div>
+        <div data-layer="answer8" class="Answer8" style="width: 100px; height: 100px; padding: 10px; left: 356px; top: 195px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">63</div>
+        </div>
+        <div data-layer="answer9" class="Answer9" style="width: 100px; height: 100px; padding: 10px; left: 456px; top: 126px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">54</div>
+        </div>
+        <div data-layer="answer10" class="Answer10" style="width: 100px; height: 100px; padding: 10px; left: 26px; top: 26px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">45</div>
+        </div>
+        <div data-layer="answer2" class="Answer2" style="width: 100px; height: 100px; padding: 10px; left: 296px; top: 385px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">35</div>
+        </div>
+        <div data-layer="answer1" class="Answer1" style="width: 100px; height: 100px; padding: 10px; left: 198px; top: 451px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">56</div>
+        </div>
+        <div data-layer="example6" class="Example6" style="width: 100px; height: 100px; padding: 10px; left: 372px; top: 465px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">4×3</div>
+        </div>
+        <div data-layer="example5" class="Example5" style="width: 100px; height: 100px; padding: 10px; left: 156px; top: 344px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">9×3</div>
+        </div>
+        <div data-layer="example4" class="Example4" style="width: 100px; height: 100px; padding: 10px; left: 96px; top: 255px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">9×8</div>
+        </div>
+        <div data-layer="example3" class="Example3" style="width: 100px; height: 100px; padding: 10px; left: 24px; top: 161px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">4×8</div>
+        </div>
+        <div data-layer="example7" class="Example7" style="width: 100px; height: 100px; padding: 10px; left: 126px; top: 86px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">8×6</div>
+        </div>
+        <div data-layer="example8" class="Example8" style="width: 100px; height: 100px; padding: 10px; left: 246px; top: 106px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">9×7</div>
+        </div>
+        <div data-layer="example9" class="Example9" style="width: 100px; height: 100px; padding: 10px; left: 344px; top: 49px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">9×6</div>
+        </div>
+        <div data-layer="example10" class="Example10" style="width: 100px; height: 100px; padding: 10px; left: 472px; top: 17px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">9×5</div>
+        </div>
+        <div data-layer="example2" class="Example2" style="width: 100px; height: 100px; padding: 10px; left: 481px; top: 424px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">7×5</div>
+        </div>
+        <div data-layer="example1" class="Example1" style="width: 100px; height: 100px; padding: 10px; left: 483px; top: 235px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">7×8</div>
+        </div>
+    </div>
+    <div id="gameOver">
+        Game Over!
+        <button id="restartButton">Перезапустить</button>
+    </div>
+    <div id="gameWon">
+        Правильно, молодец!
+        <button id="restartButton">Перезапустить</button>
+    </div>
+    <audio id="correctSound" preload="auto" src="sounds/correct.mp3"></audio>
+<audio id="wrongSound" preload="auto" src="sounds/wrong.mp3"></audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const engine = Matter.Engine.create({
+                enableSleeping: false
+            });
+            const world = engine.world;
+            
+            engine.world.gravity.y = 1.2;
+            
+            const boxContainer = document.querySelector('.Box');
+            const boxWidth = parseInt(boxContainer.style.width);
+            const boxHeight = parseInt(boxContainer.style.height);
+            const gameOverDiv = document.querySelector('#gameOver');
+            const gameWonDiv = document.querySelector('#gameWon');
+            const counterDiv = document.querySelector('#counter');
+            const correctSound = document.querySelector('#correctSound');
+            const wrongSound = document.querySelector('#wrongSound');
+            const maxElements = 20;
+            
+            const wallOptions = {
+                isStatic: true,
+                render: { visible: false },
+                collisionFilter: { group: -1 }
+            };
+            
+            const walls = [
+                Matter.Bodies.rectangle(boxWidth / 2, 0, boxWidth, 1, wallOptions),
+                Matter.Bodies.rectangle(boxWidth / 2, boxHeight, boxWidth, 1, wallOptions),
+                Matter.Bodies.rectangle(0, boxHeight / 2, 1, boxHeight, wallOptions),
+                Matter.Bodies.rectangle(boxWidth, boxHeight / 2, 1, boxHeight, wallOptions)
+            ];
+            
+            Matter.Composite.add(world, walls);
+            
+            const bodies = [];
+            let elementCounter = 0;
+            
+            const initialPositions = [
+                { left: 408, top: 330 },
+                { left: 274, top: 272 },
+                { left: 46, top: 465 },
+                { left: 16, top: 335 },
+                { left: 190, top: 198 },
+                { left: 356, top: 195 },
+                { left: 456, top: 126 },
+                { left: 26, top: 26 },
+                { left: 296, top: 385 },
+                { left: 198, top: 451 },
+                { left: 372, top: 465 },
+                { left: 156, top: 344 },
+                { left: 96, top: 255 },
+                { left: 24, top: 161 },
+                { left: 126, top: 86 },
+                { left: 246, top: 106 },
+                { left: 344, top: 49 },
+                { left: 472, top: 17 },
+                { left: 481, top: 424 },
+                { left: 483, top: 235 }
+            ];
+            
+            const availablePairs = [
+                { answer: '12', example: '4×3' },
+                { answer: '27', example: '9×3' },
+                { answer: '72', example: '9×8' },
+                { answer: '32', example: '4×8' },
+                { answer: '35', example: '7×5' },
+                { answer: '56', example: '7×8' },
+                { answer: '48', example: '8×6' },
+                { answer: '63', example: '9×7' },
+                { answer: '54', example: '9×6' },
+                { answer: '45', example: '9×5' }
+            ];
+            
+            function getAllElements() {
+                return [...document.querySelectorAll('[class^="Answer"], [class^="Example"]')];
+            }
+            
+            function updateCounter() {
+                const count = getAllElements().length;
+                counterDiv.textContent = `Элементы: ${count}/${maxElements}`;
+            }
+            
+            function createElement(type, value, left, top) {
+                const isAnswer = type === 'Answer';
+                const className = `${type}${elementCounter}`;
+                const fontSize = isAnswer ? '64px' : '40px';
+                const lineHeight = isAnswer ? '96px' : '60px';
+                const background = isAnswer ? '#2DA5D0' : '#D02DC6';
+                
+                const element = document.createElement('div');
+                element.setAttribute('data-layer', `${type.toLowerCase()}${elementCounter}`);
+                element.className = className;
+                element.style.cssText = `
+                    width: 100px; height: 100px; padding: 10px; left: ${left}px; top: ${top}px;
+                    position: absolute; background: ${background}; border-radius: 50px;
+                    flex-direction: column; justify-content: center; align-items: center;
+                    gap: 10px; display: inline-flex;
+                `;
+                element.innerHTML = `
+                    <div style="width: 96px; text-align: center; color: #FAFAFA;
+                    font-size: ${fontSize}; font-family: Inter; font-weight: 500;
+                    line-height: ${lineHeight}; word-wrap: break-word">${value}</div>
+                `;
+                
+                boxContainer.appendChild(element);
+                
+                const diameter = 100;
+                const radius = diameter / 2;
+                const x = left + radius;
+                const y = top + radius;
+                
+                const body = Matter.Bodies.circle(x, y, radius, {
+                    restitution: 0.6,
+                    friction: 0.8,
+                    frictionAir: 0.05,
+                    density: 0.05,
+                    render: { visible: false }
+                });
+                
+                bodies.push(body);
+                element.body = body;
+                body.element = element;
+                
+                element.style.position = 'absolute';
+                element.style.left = '0';
+                element.style.top = '0';
+                element.style.transform = '';
+                
+                Matter.Body.setAngularVelocity(body, 0);
+                
+                return element;
+            }
+            
+            getAllElements().forEach(element => {
+                const diameter = parseInt(element.style.width);
+                const radius = diameter / 2;
+                const rect = element.getBoundingClientRect();
+                const containerRect = boxContainer.getBoundingClientRect();
+                const x = rect.left - containerRect.left + radius;
+                const y = rect.top - containerRect.top + radius;
+                
+                const body = Matter.Bodies.circle(x, y, radius, {
+                    restitution: 0.6,
+                    friction: 0.8,
+                    frictionAir: 0.05,
+                    density: 0.05,
+                    render: { visible: false }
+                });
+                
+                bodies.push(body);
+                element.body = body;
+                body.element = element;
+                
+                element.style.position = 'absolute';
+                element.style.left = '0';
+                element.style.top = '0';
+                element.style.transform = '';
+                
+                Matter.Body.setAngularVelocity(body, 0);
+            });
+            
+            bodies.forEach(body => {
+                const angle = Math.random() * 2 * Math.PI;
+                Matter.Body.applyForce(body, body.position, {
+                    x: 0.0005 * Math.cos(angle),
+                    y: 0.0005 * Math.sin(angle)
+                });
+            });
+            for (let i = 0; i < 3; i++) {
+                Matter.Engine.update(engine, 1000 / 60);
+            }
+            
+            Matter.Composite.add(world, bodies);
+            
+            function addNewPairs() {
+                const currentElements = getAllElements();
+                if (currentElements.length + 4 > maxElements) {
+                    gameOver();
+                    return;
+                }
+                
+                for (let i = 0; i < 2; i++) {
+                    const pair = availablePairs[Math.floor(Math.random() * availablePairs.length)];
+                    const pos1 = initialPositions[Math.floor(Math.random() * initialPositions.length)];
+                    const pos2 = initialPositions[Math.floor(Math.random() * initialPositions.length)];
+                    
+                    elementCounter++;
+                    const answerElement = createElement('Answer', pair.answer, pos1.left, pos1.top);
+                    elementCounter++;
+                    const exampleElement = createElement('Example', pair.example, pos2.left, pos2.top);
+                    
+                    Matter.World.add(world, [answerElement.body, exampleElement.body]);
+                    
+                    [answerElement, exampleElement].forEach(el => {
+                        el.addEventListener('click', handleClick);
+                    });
+                }
+                
+                world.bodies.forEach(body => {
+                    const angle = Math.random() * 2 * Math.PI;
+                    Matter.Body.applyForce(body, body.position, {
+                        x: 0.0005 * Math.cos(angle),
+                        y: 0.0005 * Math.sin(angle)
+                    });
+                    Matter.Body.setAngularVelocity(body, 0);
+                });
+                for (let i = 0; i < 3; i++) {
+                    Matter.Engine.update(engine, 1000 / 60);
+                }
+                
+                updateCounter();
+            }
+            
+            function gameOver() {
+                gameOverDiv.classList.add('show');
+                Matter.Runner.stop(runner);
+                getAllElements().forEach(el => el.removeEventListener('click', handleClick));
+            }
+            
+            function gameWon() {
+                gameWonDiv.classList.add('show');
+                Matter.Runner.stop(runner);
+                getAllElements().forEach(el => el.removeEventListener('click', handleClick));
+            }
+            
+            function handleClick() {
+                if (this.classList.contains('fading')) return;
+                
+                const value = this.querySelector('div').textContent;
+                const isAnswer = this.className.includes('Answer');
+                
+                if (selectedElement === this) {
+                    this.classList.remove('selected');
+                    selectedElement = null;
+                    return;
+                }
+                
+                if (selectedElement) {
+                    const prevValue = selectedElement.querySelector('div').textContent;
+                    const prevIsAnswer = selectedElement.className.includes('Answer');
+                    
+                    if ((isAnswer && !prevIsAnswer && pairs[value] === prevValue) ||
+                        (!isAnswer && prevIsAnswer && pairs[prevValue] === value)) {
+                        // Найдена пара
+                        correctSound.play().catch(() => {});
+                        this.classList.add('fading');
+                        selectedElement.classList.add('fading');
+                        
+                        const removedBodies = [this.body, selectedElement.body].filter(body => body && world.bodies.includes(body));
+                        const elementToRemove = this;
+                        const selectedElementToRemove = selectedElement;
+                        
+                        setTimeout(() => {
+                            if (removedBodies.length > 0) {
+                                Matter.World.remove(world, removedBodies);
+                            }
+                            if (elementToRemove && elementToRemove.parentNode) elementToRemove.remove();
+                            if (selectedElementToRemove && selectedElementToRemove.parentNode) selectedElementToRemove.remove();
+                            removedBodies.forEach(body => {
+                                const index = bodies.indexOf(body);
+                                if (index !== -1) bodies.splice(index, 1);
+                            });
+                            world.bodies.forEach(body => {
+                                const angle = Math.random() * 2 * Math.PI;
+                                Matter.Body.applyForce(body, body.position, {
+                                    x: 0.0005 * Math.cos(angle),
+                                    y: 0.0005 * Math.sin(angle)
+                                });
+                                Matter.Body.setAngularVelocity(body, 0);
+                            });
+                            for (let i = 0; i < 3; i++) {
+                                Matter.Engine.update(engine, 1000 / 60);
+                            }
+                            
+                            updateCounter();
+                            if (getAllElements().length === 0) {
+                                gameWon();
+                            }
+                        }, 500);
+                        
+                        selectedElement = null;
+                    } else {
+                        // Неправильная пара
+                        wrongSound.play().catch(() => {});
+                        selectedElement.classList.remove('selected');
+                        this.classList.remove('selected');
+                        selectedElement = null;
+                        addNewPairs();
+                    }
+                } else {
+                    // Первый выбор
+                    this.classList.add('selected');
+                    selectedElement = this;
+                }
+            }
+            
+            getAllElements().forEach(element => {
+                element.addEventListener('click', handleClick);
+            });
+            
+            const pairs = {
+                '12': '4×3',
+                '27': '9×3',
+                '72': '9×8',
+                '32': '4×8',
+                '35': '7×5',
+                '56': '7×8',
+                '48': '8×6',
+                '63': '9×7',
+                '54': '9×6',
+                '45': '9×5'
+            };
+            
+            let selectedElement = null;
+            
+            function updateElements() {
+                world.bodies.forEach(body => {
+                    const element = body.element;
+                    if (!element || element.classList.contains('fading')) return;
+                    const radius = parseInt(element.style.width) / 2;
+                    element.style.transform = `translate(${body.position.x - radius}px, ${body.position.y - radius}px) rotate(${body.angle}rad)`;
+                });
+            }
+            
+            document.querySelectorAll('#restartButton').forEach(button => {
+                button.addEventListener('click', () => {
+                    window.location.reload();
+                });
+            });
+            
+            const runner = Matter.Runner.create();
+            Matter.Runner.run(runner, engine);
+            
+            (function render() {
+                updateElements();
+                requestAnimationFrame(render);
+            })();
+            
+            updateCounter();
+        });
+    </script>
+</body>
+</html>
