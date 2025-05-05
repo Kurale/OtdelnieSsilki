@@ -300,10 +300,10 @@
                 const y = rect.top - containerRect.top + radius;
                 
                 const body = Matter.Bodies.circle(x, y, radius, {
-                    restitution: 0.6,
-                    friction: 0.8,
-                    frictionAir: 0.05,
-                    density: 0.05,
+                    restitution: 0.1,
+                    friction: 0.6,
+                    frictionAir: 0.02,
+                    density: 0.02,
                     render: { visible: false }
                 });
                 
