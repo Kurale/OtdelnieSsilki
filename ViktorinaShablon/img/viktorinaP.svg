@@ -1,0 +1,47 @@
+<svg id="victorinaShablon" data-name="Shablon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470.7 525.4">
+  <g id="shablon">
+    <rect id="fonovi" x=".4" y=".4" width="470" height="524.7" rx="19.8" ry="19.8" fill="#e4d6a3" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+    <rect id="titul" x="23.9" y="20.8" width="423" height="52" rx="9.5" ry="9.5" fill="#92a8b4" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+    <g id="gnezdoVopros">
+      <circle id="gnezdo" cx="148.5" cy="130.3" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+      <circle id="gnezdo" data-name="gnezdo" cx="148.5" cy="208.5" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+      <circle id="gnezdo" data-name="gnezdo" cx="148.5" cy="286.8" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+      <circle id="gnezdo" data-name="gnezdo" cx="148.5" cy="365" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+    </g>
+    <rect id="vopros_4" x="23.9" y="334.5" width="104" height="61" rx="10" ry="10" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+    <rect id="vopros_3" x="23.9" y="256.3" width="104" height="61" rx="10" ry="10" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+    <rect id="vopros_2" x="23.9" y="178" width="104" height="61" rx="10" ry="10" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+    <rect id="vopros_1" x="23.9" y="99.8" width="104" height="61" rx="10" ry="10" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+    <g id="connectorGgroop">
+      <circle id="connector_4g" cx="148.5" cy="365" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+      <circle id="connector_3g" cx="148.5" cy="286.8" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+      <circle id="connector_2g" cx="148.5" cy="208.5" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+      <circle id="connector_1g" cx="148.5" cy="130.3" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+    </g>
+    <circle id="gnezdo_1" cx="322.2" cy="130.3" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+    <circle id="gnezdo_2" cx="322.2" cy="208.5" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+    <circle id="gnezdo_3" cx="322.2" cy="286.8" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+    <circle id="gnezdo_4" cx="322.2" cy="365" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+    <rect id="otvet_4" x="342.9" y="334.5" width="104" height="61" rx="10" ry="10" transform="translate(789.7 730.1) rotate(180)" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+    <rect id="otvet_3" x="342.9" y="256.3" width="104" height="61" rx="10" ry="10" transform="translate(789.7 573.6) rotate(180)" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+    <rect id="otvet_2" x="342.9" y="178" width="104" height="61" rx="10" ry="10" transform="translate(789.7 417) rotate(180)" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+    <rect id="otvet_1" x="342.9" y="99.8" width="104" height="61" rx="10" ry="10" transform="translate(789.7 260.5) rotate(180)" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+    <circle id="connector_4" cx="148.5" cy="365" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+    <circle id="connector_3" cx="148.5" cy="286.8" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+    <circle id="connector_2" cx="148.5" cy="208.5" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+    <circle id="connector_1" cx="148.5" cy="130.3" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+    <text transform="translate(84.4 53.7)" fill="#f5f0e0" font-family="ArialMT, Arial" font-size="25.5"><tspan x="0" y="0">Вы</tspan><tspan x="35.4" y="0" letter-spacing="0em">б</tspan><tspan x="49.7" y="0">ери правильный </tspan><tspan x="251.3" y="0" letter-spacing="0em">о</tspan><tspan x="265" y="0" letter-spacing="0em">т</tspan><tspan x="276.6" y="0" letter-spacing="0em">в</tspan><tspan x="289.9" y="0" letter-spacing="0em">е</tspan><tspan x="303.3" y="0" letter-spacing="-.1em">т</tspan><tspan x="312.1" y="0">.</tspan></text>
+    <text transform="translate(73.5 502.7)" fill="#6f9974" font-family="ArialMT, Arial" font-size="22.7"><tspan x="0" y="0">Правильно:</tspan></text>
+    <text id="scoreCorrect" transform="translate(193.5 502.7)" fill="#6f9974" font-family="ArialMT, Arial" font-size="22.7"><tspan x="0" y="0" xml:space="preserve">    </tspan></text>
+    <text transform="translate(287.4 502.7)" fill="#c76758" font-family="ArialMT, Arial" font-size="22.7"><tspan x="0" y="0">Ошибок:</tspan></text>
+    <text id="scoreIncorrect" transform="translate(377.4 500.7)" fill="#c76758" font-family="ArialMT, Arial" font-size="22.7"><tspan x="0" y="0" xml:space="preserve">    </tspan></text>
+    <g id="buttonProverit">
+      <rect x="91.8" y="428.8" width="101" height="30.5" rx="11.5" ry="11.5" fill="#92a8b4" stroke="#567483" stroke-miterlimit="10" stroke-width="2.8"/>
+      <text transform="translate(101.8 447.6)" fill="#f0ebe2" font-family="ArialMT, Arial" font-size="17"><tspan x="0" y="0">про</tspan><tspan x="28.1" y="0" letter-spacing="0em">в</tspan><tspan x="37" y="0">ерить</tspan></text>
+    </g>
+    <g id="buttonDalshe">
+      <rect x="288.2" y="428.8" width="101" height="30.5" rx="11.5" ry="11.5" fill="#92a8b4" stroke="#567483" stroke-miterlimit="10" stroke-width="2.8"/>
+      <text transform="translate(311.5 447.6)" fill="#f0ebe2" font-family="ArialMT, Arial" font-size="17"><tspan x="0" y="0">дальше</tspan></text>
+    </g>
+  </g>
+</svg>

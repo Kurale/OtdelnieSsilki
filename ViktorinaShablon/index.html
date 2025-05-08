@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    * {
+        user-select: none;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #c7daec;
+    }
+
+    .vopros, .otvet {
+        position: absolute;
+        width: 156px;
+        height: 91.5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+    }
+    
+    .vopros { left: 35.85px; }
+    .otvet { left: 514.35px; }
+    
+    #vopros1 { top: 149.7px; }
+    #vopros2 { top: 267px; }
+    #vopros3 { top: 384.45px; }
+    #vopros4 { top: 501.75px; }
+    
+    #otvet1 { top: 149.7px; }
+    #otvet2 { top: 267px; }
+    #otvet3 { top: 384.45px; }
+    #otvet4 { top: 501.75px; }
+
+/* Базовые стили для интерактивных элементов */
+#connector_1, #connector_2, #connector_3, #connector_4, #gnezdo_1, #gnezdo_2, #gnezdo_3, #gnezdo_4, #buttonProverit {
+    transition: opacity 0.3s ease; /* Плавное изменение прозрачности */
+    cursor: pointer; /* Курсор указывает, что элемент можно кликать */
+}
+
+/* Эффект изменения прозрачности при наведении */
+#connector_1:hover, #connector_2:hover, #connector_3:hover, #connector_4:hover, #gnezdo_1:hover, #gnezdo_2:hover, #gnezdo_3:hover, #gnezdo_4:hover, #buttonProverit {
+    animation: fade 1.5s infinite;
+}
+
+/* Эффект при нажатии (уменьшение опачности) */
+#buttonProverit, #connector_1:active, #connector_2:active, #connector_3:active, #connector_4:active, #gnezdo_1:active, #gnezdo_2:active, #gnezdo_3:active, #gnezdo_4:active {
+    opacity: 0.7; /* Слегка прозрачнее при нажатии */
+}
+
+/* Ключевые кадры для анимации прозрачности */
+@keyframes fade {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Стиль для линии соединения */
+line {
+    transition: opacity 0.3s ease; /* Плавное изменение прозрачности линии */
+}
+
+line:hover {
+    opacity: 0.7; /* Слегка прозрачнее при наведении */
+}
+    </style>
+</head>
+<body>
+
+    <div id="quizContainer" style="position: relative; width: 706px; height: 788px;">
+        <svg id="victorinaShablon" data-name="Shablon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470.7 525.4">
+            <g id="shablon">
+              <rect id="fonovi" x=".4" y=".4" width="470" height="524.7" rx="19.8" ry="19.8" fill="#e4d6a3" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+              <rect id="titul" x="23.9" y="20.8" width="423" height="52" rx="9.5" ry="9.5" fill="#92a8b4" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+              <g id="gnezdoVopros">
+                <circle id="gnezdo" cx="148.5" cy="130.3" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+                <circle id="gnezdo" data-name="gnezdo" cx="148.5" cy="208.5" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+                <circle id="gnezdo" data-name="gnezdo" cx="148.5" cy="286.8" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+                <circle id="gnezdo" data-name="gnezdo" cx="148.5" cy="365" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+              </g>
+              <rect id="vopros_4" x="23.9" y="334.5" width="104" height="61" rx="10" ry="10" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+              <rect id="vopros_3" x="23.9" y="256.3" width="104" height="61" rx="10" ry="10" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+              <rect id="vopros_2" x="23.9" y="178" width="104" height="61" rx="10" ry="10" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+              <rect id="vopros_1" x="23.9" y="99.8" width="104" height="61" rx="10" ry="10" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+              <g id="connectorGgroop">
+                <circle id="connector_4g" cx="148.5" cy="365" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+                <circle id="connector_3g" cx="148.5" cy="286.8" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+                <circle id="connector_2g" cx="148.5" cy="208.5" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+                <circle id="connector_1g" cx="148.5" cy="130.3" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+              </g>
+              <circle id="gnezdo_1" cx="322.2" cy="130.3" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+              <circle id="gnezdo_2" cx="322.2" cy="208.5" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+              <circle id="gnezdo_3" cx="322.2" cy="286.8" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+              <circle id="gnezdo_4" cx="322.2" cy="365" r="11" fill="#e4d6a3" stroke="#9588af" stroke-miterlimit="10" stroke-width="4.3"/>
+              <rect id="otvet_4" x="342.9" y="334.5" width="104" height="61" rx="10" ry="10" transform="translate(789.7 730.1) rotate(180)" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+              <rect id="otvet_3" x="342.9" y="256.3" width="104" height="61" rx="10" ry="10" transform="translate(789.7 573.6) rotate(180)" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+              <rect id="otvet_2" x="342.9" y="178" width="104" height="61" rx="10" ry="10" transform="translate(789.7 417) rotate(180)" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+              <rect id="otvet_1" x="342.9" y="99.8" width="104" height="61" rx="10" ry="10" transform="translate(789.7 260.5) rotate(180)" fill="#f5f0e0" stroke="#514c62" stroke-miterlimit="10" stroke-width=".7"/>
+              <circle id="connector_4" cx="148.5" cy="365" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+              <circle id="connector_3" cx="148.5" cy="286.8" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+              <circle id="connector_2" cx="148.5" cy="208.5" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+              <circle id="connector_1" cx="148.5" cy="130.3" r="8.4" fill="#9aa8cf" stroke-width="0"/>
+              <text transform="translate(84.4 53.7)" fill="#f5f0e0" font-family="ArialMT, Arial" font-size="25.5"><tspan x="0" y="0">Вы</tspan><tspan x="35.4" y="0" letter-spacing="0em">б</tspan><tspan x="49.7" y="0">ери правильный </tspan><tspan x="251.3" y="0" letter-spacing="0em">о</tspan><tspan x="265" y="0" letter-spacing="0em">т</tspan><tspan x="276.6" y="0" letter-spacing="0em">в</tspan><tspan x="289.9" y="0" letter-spacing="0em">е</tspan><tspan x="303.3" y="0" letter-spacing="-.1em">т</tspan><tspan x="312.1" y="0">.</tspan></text>
+              <text transform="translate(73.5 502.7)" fill="#6f9974" font-family="ArialMT, Arial" font-size="22.7"><tspan x="0" y="0">Правильно:</tspan></text>
+              <text id="scoreCorrect" transform="translate(200.5 502.7)" fill="#6f9974" font-family="ArialMT, Arial" font-size="22.7"><tspan x="0" y="0" xml:space="preserve">    </tspan></text>
+              <text transform="translate(287.4 502.7)" fill="#c76758" font-family="ArialMT, Arial" font-size="22.7"><tspan x="0" y="0">Ошибок:</tspan></text>
+              <text id="scoreIncorrect" transform="translate(385.4 502.7)" fill="#c76758" font-family="ArialMT, Arial" font-size="22.7"><tspan x="0" y="0" xml:space="preserve">    </tspan></text>
+              <g id="buttonProverit">
+                <rect x="91.8" y="428.8" width="101" height="30.5" rx="11.5" ry="11.5" fill="#92a8b4" stroke="#567483" stroke-miterlimit="10" stroke-width="2.8"/>
+                <text transform="translate(101.8 447.6)" fill="#f0ebe2" font-family="ArialMT, Arial" font-size="17"><tspan x="0" y="0">про</tspan><tspan x="28.1" y="0" letter-spacing="0em">в</tspan><tspan x="37" y="0">ерить</tspan></text>
+              </g>
+              <g id="buttonDalshe">
+                <rect x="288.2" y="428.8" width="101" height="30.5" rx="11.5" ry="11.5" fill="#92a8b4" stroke="#567483" stroke-miterlimit="10" stroke-width="2.8"/>
+                <text transform="translate(311.5 447.6)" fill="#f0ebe2" font-family="ArialMT, Arial" font-size="17"><tspan x="0" y="0">дальше</tspan></text>
+              </g>
+            </g>
+          </svg>
+    
+        <!-- Div-области -->
+        <div class="vopros" id="vopros1"><img src="img\2x3.png" alt="2x3" height="90"></div>
+        <div class="vopros" id="vopros2"><img src="img\3x5.png" alt="3x5" height="90"></div>
+        <div class="vopros" id="vopros3"><img src="img\3x6.png" alt="3x6" height="90"></div>
+        <div class="vopros" id="vopros4"><img src="img\4x8.png" alt="4x8" height="90"></div>
+    
+        <div class="otvet" id="otvet1"><img src="img\3x6text.png" alt="3x6text" height="90"></div>
+        <div class="otvet" id="otvet2"><img src="img\2x3text.png" alt="2x3text" height="90"></div>
+        <div class="otvet" id="otvet3"><img src="img\4x8text.png" alt="4x8text" height="90"></div>
+        <div class="otvet" id="otvet4"><img src="img\3x5text.png" alt="3x5text" height="90"></div>
+    </div>
+
+<script src="script.js"></script>
+</body>
+</html>
