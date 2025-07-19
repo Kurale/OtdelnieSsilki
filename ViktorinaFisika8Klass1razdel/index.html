@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Физика 8 класс - Викторина: Тепловые явления</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .animate-pulse {
+      animation: pulse 0.3s ease-in-out;
+    }
+    .btn-gradient {
+      background: linear-gradient(to right, #3b82f6, #60a5fa);
+      transition: all 0.3s ease;
+    }
+    .btn-gradient:hover {
+      background: linear-gradient(to right, #2563eb, #3b82f6);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen px-4">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+    <div id="userPrompt" class="mb-4">
+      <h1 class="text-xl md:text-2xl font-bold mb-4 text-center animate-fadeIn">Викторина по физике</h1>
+      <p class="mb-2 text-sm md:text-base">Введите ваше имя:</p>
+      <input id="username" type="text" class="border p-2 w-full mb-2 text-sm md:text-base rounded" placeholder="Ваше имя">
+      <div class="mb-2">
+        <p class="text-sm md:text-base">Выберите уровень сложности:</p>
+        <select id="levelSelect" class="border p-2 w-full mb-2 text-sm md:text-base rounded">
+          <option value="beginner">Начальный</option>
+          <option value="intermediate">Средний</option>
+          <option value="advanced">Продвинутый</option>
+        </select>
+      </div>
+      <button id="startQuiz" class="btn-gradient text-white px-4 py-2 rounded w-full md:w-auto">Начать викторину</button>
+      <p id="errorMessage" class="text-red-600 text-sm md:text-base hidden mt-2"></p>
+    </div>
+    <div id="quizContainer" class="hidden">
+      <h1 id="quizTitle" class="text-xl md:text-2xl font-bold mb-4 text-center animate-fadeIn"></h1>
+      <div class="mb-4 text-sm md:text-base">
+        <p>Пользователь: <span id="displayUsername" class="font-semibold"></span></p>
+        <p>Прогресс: <span id="progress">0/10</span></p>
+        <p>Правильных ответов: <span id="score">0%</span></p>
+        <p>Время: <span id="timer">00:00</span></p>
+        <div class="w-full bg-gray-200 rounded-full h-4">
+          <div id="progressBar" class="bg-blue-500 h-4 rounded-full animate-pulse" style="width: 0%"></div>
+        </div>
+      </div>
+      <div id="questionContainer" class="mb-4 animate-fadeIn">
+        <p id="questionText" class="text-base md:text-lg font-semibold"></p>
+        <div id="options" class="space-y-2"></div>
+      </div>
+      <div id="feedback" class="mb-4 hidden text-sm md:text-base"></div>
+      <button id="nextQuestion" class="btn-gradient text-white px-4 py-2 rounded w-full md:w-auto hidden">Следующий вопрос</button>
+      <button id="restartQuiz" class="btn-gradient text-white px-4 py-2 rounded w-full md:w-auto hidden">Начать заново</button>
+      <div id="leaderboard" class="mt-4 hidden">
+        <h2 class="text-lg md:text-xl font-bold mb-2">Таблица лидеров</h2>
+        <table class="w-full text-sm md:text-base">
+          <thead>
+            <tr class="bg-gray-200">
+              <th class="p-2">Место</th>
+              <th class="p-2">Имя</th>
+              <th class="p-2">Правильных (%)</th>
+              <th class="p-2">Время</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Звуковые эффекты (заглушки, замените на реальные Base64 WAV или файлы)
+    const correctSound = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+    const incorrectSound = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+    const completeSound = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+
+    let currentQuestionIndex = 0;
+    let correctAnswers = 0;
+    let username = '';
+    let startTime = null;
+    let timerInterval = null;
+    let selectedLevel = 'beginner';
+    let currentQuestions = [];
+    let levelTitles = {
+      beginner: 'Начальный уровень',
+      intermediate: 'Средний уровень',
+      advanced: 'Продвинутый уровень'
+    };
+
+    const usernameInput = document.getElementById('username');
+    const levelSelect = document.getElementById('levelSelect');
+    const startQuizBtn = document.getElementById('startQuiz');
+    const userPrompt = document.getElementById('userPrompt');
+    const quizContainer = document.getElementById('quizContainer');
+    const quizTitle = document.getElementById('quizTitle');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('options');
+    const feedback = document.getElementById('feedback');
+    const nextQuestionBtn = document.getElementById('nextQuestion');
+    const restartQuizBtn = document.getElementById('restartQuiz');
+    const progressText = document.getElementById('progress');
+    const scoreText = document.getElementById('score');
+    const timerText = document.getElementById('timer');
+    const progressBar = document.getElementById('progressBar');
+    const displayUsername = document.getElementById('displayUsername');
+    const leaderboard = document.getElementById('leaderboard');
+    const leaderboardBody = document.getElementById('leaderboardBody');
+    const errorMessage = document.getElementById('errorMessage');
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function isLocalStorageAvailable() {
+      try {
+        return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function clearInvalidStorage() {
+      if (!isLocalStorageAvailable()) return;
+      try {
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+          if (key.startsWith('quiz_') || key.startsWith('leaderboard_')) {
+            try {
+              JSON.parse(localStorage.getItem(key));
+            } catch (e) {
+              localStorage.removeItem(key);
+            }
+          }
+        });
+      } catch (e) {
+        console.error('Error clearing invalid storage:', e);
+      }
+    }
+
+    function loadProgress() {
+      if (!isLocalStorageAvailable()) return;
+      clearInvalidStorage();
+      const savedProgress = localStorage.getItem(`quiz_${username}_${selectedLevel}`);
+      if (savedProgress) {
+        try {
+          const { index, score } = JSON.parse(savedProgress);
+          currentQuestionIndex = index;
+          correctAnswers = score;
+        } catch (e) {
+          console.error('Error parsing saved progress:', e);
+          localStorage.removeItem(`quiz_${username}_${selectedLevel}`);
+        }
+      }
+    }
+
+    function saveProgress() {
+      if (!isLocalStorageAvailable()) return;
+      try {
+        localStorage.setItem(`quiz_${username}_${selectedLevel}`, JSON.stringify({
+          index: currentQuestionIndex,
+          score: correctAnswers
+        }));
+      } catch (e) {
+        console.error('Error saving progress:', e);
+      }
+    }
+
+    function saveLeaderboard() {
+      if (!isLocalStorageAvailable()) return;
+      try {
+        const scorePercent = (correctAnswers / currentQuestions.length) * 100;
+        const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+        const leaderboardData = JSON.parse(localStorage.getItem(`leaderboard_${selectedLevel}`) || '[]');
+        leaderboardData.push({ username, score: scorePercent, time: timeTaken });
+        leaderboardData.sort((a, b) => b.score - a.score || a.time - b.time);
+        localStorage.setItem(`leaderboard_${selectedLevel}`, JSON.stringify(leaderboardData.slice(0, 5)));
+      } catch (e) {
+        console.error('Error saving leaderboard:', e);
+      }
+    }
+
+    function displayLeaderboard() {
+      if (!isLocalStorageAvailable()) return;
+      try {
+        const leaderboardData = JSON.parse(localStorage.getItem(`leaderboard_${selectedLevel}`) || '[]');
+        leaderboardBody.innerHTML = '';
+        leaderboardData.forEach((entry, index) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="p-2">${index + 1}</td>
+            <td class="p-2">${entry.username}</td>
+            <td class="p-2">${Math.round(entry.score)}%</td>
+            <td class="p-2">${formatTime(entry.time)}</td>
+          `;
+          leaderboardBody.appendChild(row);
+        });
+        leaderboard.classList.remove('hidden');
+      } catch (e) {
+        console.error('Error displaying leaderboard:', e);
+      }
+    }
+
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function updateTimer() {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      timerText.textContent = formatTime(elapsed);
+    }
+
+    function updateProgress() {
+      progressText.textContent = `${currentQuestionIndex + 1}/${currentQuestions.length}`;
+      const progressPercent = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+      const scorePercent = (correctAnswers / (currentQuestionIndex || 1)) * 100;
+      scoreText.textContent = `${Math.round(scorePercent)}%`;
+    }
+
+    function loadQuestion() {
+      if (currentQuestionIndex >= currentQuestions.length) {
+        clearInterval(timerInterval);
+        const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+        questionText.textContent = 'Викторина завершена!';
+        optionsContainer.innerHTML = '';
+        feedback.textContent = `Вы ответили правильно на ${correctAnswers} из ${currentQuestions.length} вопросов. Время: ${formatTime(timeTaken)}.`;
+        feedback.classList.remove('hidden');
+        nextQuestionBtn.classList.add('hidden');
+        restartQuizBtn.classList.remove('hidden');
+        saveLeaderboard();
+        displayLeaderboard();
+        completeSound.play();
+        return;
+      }
+
+      const question = currentQuestions[currentQuestionIndex];
+      questionText.textContent = question.text;
+      optionsContainer.innerHTML = '';
+      const optionsWithIndices = question.options.map((option, index) => ({ option, index }));
+      const shuffledOptions = shuffleArray(optionsWithIndices);
+      const correctIndex = shuffledOptions.findIndex(opt => opt.index === question.correct);
+      shuffledOptions.forEach(({ option }, index) => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.className = 'btn-gradient text-white p-2 rounded w-full text-left text-sm md:text-base';
+        button.addEventListener('click', () => checkAnswer(index, correctIndex));
+        optionsContainer.appendChild(button);
+      });
+      feedback.classList.add('hidden');
+      nextQuestionBtn.classList.add('hidden');
+      updateProgress();
+    }
+
+    function checkAnswer(selectedIndex, correctIndex) {
+      const question = currentQuestions[currentQuestionIndex];
+      if (selectedIndex === correctIndex) {
+        feedback.textContent = `Правильно! ${question.explanation}`;
+        feedback.className = 'mb-4 text-green-600 text-sm md:text-base animate-fadeIn';
+        correctAnswers++;
+        correctSound.play();
+      } else {
+        feedback.textContent = `Неправильно. ${question.explanation}`;
+        feedback.className = 'mb-4 text-red-600 text-sm md:text-base animate-fadeIn';
+        incorrectSound.play();
+      }
+      feedback.classList.remove('hidden');
+      nextQuestionBtn.classList.remove('hidden');
+      saveProgress();
+      updateProgress();
+    }
+
+    function initializeQuiz() {
+      startQuizBtn.addEventListener('click', () => {
+        username = usernameInput.value.trim();
+        selectedLevel = levelSelect.value;
+        if (!username) {
+          errorMessage.textContent = 'Пожалуйста, введите ваше имя!';
+          errorMessage.classList.remove('hidden');
+          return;
+        }
+        errorMessage.classList.add('hidden');
+        fetch(`questions/${selectedLevel}.json`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`Не удалось загрузить вопросы для уровня ${selectedLevel}. Проверьте файл questions/${selectedLevel}.json.`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            currentQuestions = data.questions;
+            quizTitle.textContent = `Викторина: Тепловые явления (${levelTitles[selectedLevel]})`;
+            displayUsername.textContent = username;
+            if (isLocalStorageAvailable()) {
+              localStorage.setItem('lastUsername', username);
+            }
+            userPrompt.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimer, 1000);
+            loadProgress();
+            loadQuestion();
+          })
+          .catch(error => {
+            errorMessage.textContent = error.message;
+            errorMessage.classList.remove('hidden');
+          });
+      });
+
+      nextQuestionBtn.addEventListener('click', () => {
+        currentQuestionIndex++;
+        loadQuestion();
+      });
+
+      restartQuizBtn.addEventListener('click', () => {
+        currentQuestionIndex = 0;
+        correctAnswers = 0;
+        clearInterval(timerInterval);
+        if (isLocalStorageAvailable()) {
+          localStorage.removeItem(`quiz_${username}_${selectedLevel}`);
+        }
+        quizContainer.classList.add('hidden');
+        userPrompt.classList.remove('hidden');
+        usernameInput.value = username;
+        leaderboard.classList.add('hidden');
+        restartQuizBtn.classList.add('hidden');
+      });
+
+      // Заполнение имени из localStorage, но без автоматического старта
+      if (isLocalStorageAvailable()) {
+        const savedUsername = localStorage.getItem('lastUsername');
+        if (savedUsername) {
+          usernameInput.value = savedUsername;
+        }
+      }
+    }
+
+    // Инициализация викторины
+    initializeQuiz();
+  </script>
+</body>
+</html>
