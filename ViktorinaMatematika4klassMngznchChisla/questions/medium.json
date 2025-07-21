@@ -20,7 +20,7 @@
     {
         "question": "Какое число удовлетворяет условию: 6 000 < X < 7 000 и сумма цифр равна 9?",
         "options": [
-            {"text": "6 030", "correct": false},
+            {"text": "6 040", "correct": false},
             {"text": "6 211", "correct": false},
             {"text": "6 201", "correct": true},
             {"text": "6 900", "correct": false}

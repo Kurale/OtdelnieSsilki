@@ -29,8 +29,8 @@
     {
         "question": "Какое число следует записать вместо ★ в неравенстве: 56 ★09 < 56 309?",
         "options": [
-            {"text": "0", "correct": false},
-            {"text": "1", "correct": false},
+            {"text": "5", "correct": false},
+            {"text": "4", "correct": false},
             {"text": "2", "correct": true},
             {"text": "3", "correct": false}
         ]
