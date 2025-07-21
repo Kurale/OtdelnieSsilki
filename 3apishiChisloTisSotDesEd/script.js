@@ -160,7 +160,7 @@ function backToQuestion() {
 
 function nextQuestion() {
     gameState.currentQuestion++;
-    if (gameState.currentQuestion < 10) { // Show 10 questions
+    if (gameState.currentQuestion < 5) { // Show 5 questions
         showTaskScreen();
         loadQuestion();
     } else {
