@@ -1,0 +1,149 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f4f8;
+}
+
+#game-container {
+  max-width: 800px;
+  width: 90%;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+}
+
+h1, h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.rules p {
+  font-size: 1.1em;
+  margin: 10px 0;
+  color: #555;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 1.1em;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+#digit-pool {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.digit {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  background-color: #28a745;
+  color: white;
+  font-size: 1.5em;
+  border-radius: 5px;
+  cursor: grab;
+  user-select: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.digit:hover {
+  transform: scale(1.1);
+}
+
+#drop-zones {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin: 20px 0;
+}
+
+.drop-zone {
+  width: 60px;
+  height: 60px;
+  border: 2px dashed #666;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  background-color: #f8f9fa;
+  transition: background-color 0.3s;
+}
+
+.drop-zone.filled {
+  border: 2px solid #28a745;
+  background-color: #e6f4ea;
+}
+
+.drop-zone .digit {
+  cursor: default;
+  box-shadow: none;
+}
+
+#statistics p {
+  font-size: 1.1em;
+  margin: 10px 0;
+  color: #555;
+}
+
+@media (max-width: 600px) {
+  #game-container {
+    width: 95%;
+    padding: 10px;
+  }
+
+  .digit, .drop-zone {
+    width: 45px;
+    height: 45px;
+    font-size: 1.2em;
+    line-height: 45px;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 1em;
+  }
+
+  #drop-zones {
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+}
