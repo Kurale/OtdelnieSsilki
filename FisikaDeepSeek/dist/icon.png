@@ -1,0 +1,10 @@
+<!-- Placeholder for app icon - you'll need to add actual icon files -->
+<!-- This is just a text file as placeholder -->
+Add your app icon here:
+- icon.png (256x256 for Linux)
+- icon.ico (for Windows)  
+- icon.icns (for macOS)
+
+You can create these from a single PNG using online converters or tools like:
+- https://convertio.co/png-ico/
+- https://cloudconvert.com/png-to-icns
