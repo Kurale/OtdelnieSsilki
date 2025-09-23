@@ -1,0 +1,565 @@
+<html lang="ru"><head>
+  <meta charset="UTF-8">
+  <title>Карточка ученика</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap 5 CSS -->
+  <style data-tippy-stylesheet="">.tippy-box[data-animation=fade][data-state=hidden]{opacity:0}[data-tippy-root]{max-width:calc(100vw - 10px)}.tippy-box{position:relative;background-color:#333;color:#fff;border-radius:4px;font-size:14px;line-height:1.4;white-space:normal;outline:0;transition-property:transform,visibility,opacity}.tippy-box[data-placement^=top]>.tippy-arrow{bottom:0}.tippy-box[data-placement^=top]>.tippy-arrow:before{bottom:-7px;left:0;border-width:8px 8px 0;border-top-color:initial;transform-origin:center top}.tippy-box[data-placement^=bottom]>.tippy-arrow{top:0}.tippy-box[data-placement^=bottom]>.tippy-arrow:before{top:-7px;left:0;border-width:0 8px 8px;border-bottom-color:initial;transform-origin:center bottom}.tippy-box[data-placement^=left]>.tippy-arrow{right:0}.tippy-box[data-placement^=left]>.tippy-arrow:before{border-width:8px 0 8px 8px;border-left-color:initial;right:-7px;transform-origin:center left}.tippy-box[data-placement^=right]>.tippy-arrow{left:0}.tippy-box[data-placement^=right]>.tippy-arrow:before{left:-7px;border-width:8px 8px 8px 0;border-right-color:initial;transform-origin:center right}.tippy-box[data-inertia][data-state=visible]{transition-timing-function:cubic-bezier(.54,1.5,.38,1.11)}.tippy-arrow{width:16px;height:16px;color:#333}.tippy-arrow:before{content:"";position:absolute;border-color:transparent;border-style:solid}.tippy-content{position:relative;padding:5px 9px;z-index:1}</style><style data-tippy-stylesheet="">.tippy-box[data-animation=fade][data-state=hidden]{opacity:0}[data-tippy-root]{max-width:calc(100vw - 10px)}.tippy-box{position:relative;background-color:#333;color:#fff;border-radius:4px;font-size:14px;line-height:1.4;white-space:normal;outline:0;transition-property:transform,visibility,opacity}.tippy-box[data-placement^=top]>.tippy-arrow{bottom:0}.tippy-box[data-placement^=top]>.tippy-arrow:before{bottom:-7px;left:0;border-width:8px 8px 0;border-top-color:initial;transform-origin:center top}.tippy-box[data-placement^=bottom]>.tippy-arrow{top:0}.tippy-box[data-placement^=bottom]>.tippy-arrow:before{top:-7px;left:0;border-width:0 8px 8px;border-bottom-color:initial;transform-origin:center bottom}.tippy-box[data-placement^=left]>.tippy-arrow{right:0}.tippy-box[data-placement^=left]>.tippy-arrow:before{border-width:8px 0 8px 8px;border-left-color:initial;right:-7px;transform-origin:center left}.tippy-box[data-placement^=right]>.tippy-arrow{left:0}.tippy-box[data-placement^=right]>.tippy-arrow:before{left:-7px;border-width:8px 8px 8px 0;border-right-color:initial;transform-origin:center right}.tippy-box[data-inertia][data-state=visible]{transition-timing-function:cubic-bezier(.54,1.5,.38,1.11)}.tippy-arrow{width:16px;height:16px;color:#333}.tippy-arrow:before{content:"";position:absolute;border-color:transparent;border-style:solid}.tippy-content{position:relative;padding:5px 9px;z-index:1}</style><style data-tippy-stylesheet="">.tippy-box[data-animation=fade][data-state=hidden]{opacity:0}[data-tippy-root]{max-width:calc(100vw - 10px)}.tippy-box{position:relative;background-color:#333;color:#fff;border-radius:4px;font-size:14px;line-height:1.4;white-space:normal;outline:0;transition-property:transform,visibility,opacity}.tippy-box[data-placement^=top]>.tippy-arrow{bottom:0}.tippy-box[data-placement^=top]>.tippy-arrow:before{bottom:-7px;left:0;border-width:8px 8px 0;border-top-color:initial;transform-origin:center top}.tippy-box[data-placement^=bottom]>.tippy-arrow{top:0}.tippy-box[data-placement^=bottom]>.tippy-arrow:before{top:-7px;left:0;border-width:0 8px 8px;border-bottom-color:initial;transform-origin:center bottom}.tippy-box[data-placement^=left]>.tippy-arrow{right:0}.tippy-box[data-placement^=left]>.tippy-arrow:before{border-width:8px 0 8px 8px;border-left-color:initial;right:-7px;transform-origin:center left}.tippy-box[data-placement^=right]>.tippy-arrow{left:0}.tippy-box[data-placement^=right]>.tippy-arrow:before{left:-7px;border-width:8px 8px 8px 0;border-right-color:initial;transform-origin:center right}.tippy-box[data-inertia][data-state=visible]{transition-timing-function:cubic-bezier(.54,1.5,.38,1.11)}.tippy-arrow{width:16px;height:16px;color:#333}.tippy-arrow:before{content:"";position:absolute;border-color:transparent;border-style:solid}.tippy-content{position:relative;padding:5px 9px;z-index:1}</style><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Tippy.js CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6.3.7/dist/tippy.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+    }
+    .student-card {
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .avatar-preview {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #dee2e6;
+    }
+    .checkbox-lesson {
+      cursor: pointer;
+    }
+    .stats div {
+      margin-bottom: 5px;
+    }
+    .lesson-checkbox {
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6c757d;
+    }
+    .empty-state h4 {
+      margin-bottom: 20px;
+    }
+    .btn-create {
+      background-color: #0d6efd;
+      color: white;
+    }
+    .btn-create:hover {
+      background-color: #0b5ed7;
+    }
+    .btn-save-as {
+      background-color: #28a745;
+      color: white;
+    }
+    .btn-save-as:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body class="" style="">
+
+<div class="container">
+  <div class="card student-card">
+    <div class="card-body">
+      <!-- Пустое состояние — только для первого запуска -->
+      <div id="empty-state" class="empty-state" style="display: none;">
+        <h4>Создайте карточку нового ученика</h4>
+        <button class="btn btn-create" data-bs-toggle="modal" data-bs-target="#createStudentModal">Создать нового ученика</button>
+      </div>
+
+      <!-- Основное содержимое карточки -->
+      <div id="student-content" style="display: block;">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <h4 class="card-title" id="student-name">Верка</h4>
+          <div>
+            <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#editModal">Редактировать</button>
+            <button class="btn btn-sm btn-save-as" id="saveAsBtn">Сохранить как файл</button>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-2 text-center">
+            <img id="avatar-img" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCg0KICA8IS0tINCa0YDRg9CzIC0tPg0KICA8Y2lyY2xlIGlkPSJjaXJjbGUiIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjUwIiBmaWxsPSJsaWdodGJsdWUiIHN0cm9rZT0iYmx1ZSIgc3Ryb2tlLXdpZHRoPSIyIi8+DQoNCiAgPCEtLSDQmtCy0LDQtNGA0LDRgiAtLT4NCiAgPHJlY3QgaWQ9InNxdWFyZSIgeD0iMjAwIiB5PSIxMDAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgZmlsbD0ibGlnaHRncmVlbiIgc3Ryb2tlPSJncmVlbiIgc3Ryb2tlLXdpZHRoPSIyIi8+DQoNCiAgPCEtLSDQotGA0LXRg9Cz0L7Qu9GM0L3QuNC6IC0tPg0KICA8cG9seWdvbiBpZD0idHJpYW5nbGUiIHBvaW50cz0iMzAwLDUwIDQwMCwxNTAgMzAwLDI1MCIgZmlsbD0ibGlnaHRjb3JhbCIgc3Ryb2tlPSJyZWQiIHN0cm9rZS13aWR0aD0iMiIvPg0KDQoNCiAgPCEtLSDQkNC90LjQvNCw0YbQuNGPINC/0L4g0L3QsNCy0LXQtNC10L3QuNGOINC60YPRgNGB0L7RgNCwICjQuNC30LzQtdC90LXQvdC40LUg0YDQsNC30LzQtdGA0LApIC0tPg0KICA8Y2lyY2xlIGlkPSJjaXJjbGUiIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjUwIiBmaWxsPSJsaWdodGJsdWUiIHN0cm9rZT0iYmx1ZSIgc3Ryb2tlLXdpZHRoPSIyIg0KICAgICAgICAgIG9ubW91c2VvdmVyPSJzdHlsZS50cmFuc2Zvcm09J3NjYWxlKDEuMiknIiBvbm1vdXNlb3V0PSJzdHlsZS50cmFuc2Zvcm09J3NjYWxlKDEpJyIvPg0KDQogIDxyZWN0IGlkPSJzcXVhcmUiIHg9IjIwMCIgeT0iMTAwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9ImxpZ2h0Z3JlZW4iIHN0cm9rZT0iZ3JlZW4iIHN0cm9rZS13aWR0aD0iMiINCiAgICAgICAgICBvbm1vdXNlb3Zlcj0ic3R5bGUudHJhbnNmb3JtPSdzY2FsZSgxLjIpJyIgb25tb3VzZW91dD0ic3R5bGUudHJhbnNmb3JtPSdzY2FsZSgxKSciLz4NCg0KICA8cG9seWdvbiBpZD0idHJpYW5nbGUiIHBvaW50cz0iMzAwLDUwIDQwMCwxNTAgMzAwLDI1MCIgZmlsbD0ibGlnaHRjb3JhbCIgc3Ryb2tlPSJyZWQiIHN0cm9rZS13aWR0aD0iMiINCiAgICAgICAgICBvbm1vdXNlb3Zlcj0ic3R5bGUudHJhbnNmb3JtPSdzY2FsZSgxLjIpJyIgb25tb3VzZW91dD0ic3R5bGUudHJhbnNmb3JtPSdzY2FsZSgxKSciLz4NCg0KPC9zdmc+DQo=" alt="Аватар" class="avatar-preview mb-2">
+            <div><strong>Класс:</strong> <span id="student-grade">3</span></div>
+          </div>
+          <div class="col-md-5">
+            <p><strong>Предмет:</strong> <span id="student-subject">Математика</span></p>
+            <p><strong>Контакты родителей:</strong> <span id="student-contacts"></span></p>
+            <p><strong>Цена одного занятия:</strong> <span id="lesson-price">40</span> руб.</p>
+          </div>
+          <div class="col-md-5 stats">
+            <p><strong>Общая сумма оплат:</strong> <span id="total-paid">275</span> руб.</p>
+            <p><strong>Всего оплаченных занятий:</strong> <span id="total-lessons">6</span></p>
+            <p><strong>Проведено занятий:</strong> <span id="completed-lessons">2</span></p>
+            <p><strong>Остаток занятий:</strong> <span id="remaining-lessons">4</span></p>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <h5>Оплаченные занятия</h5>
+          <div id="paid-lessons" class="d-flex flex-wrap"><div class="lesson-checkbox"><input type="checkbox" class="checkbox-lesson" data-index="0"> Занятие 1</div><div class="lesson-checkbox"><input type="checkbox" class="checkbox-lesson" data-index="1"> Занятие 2</div><div class="lesson-checkbox"><input type="checkbox" class="checkbox-lesson" data-index="2"> Занятие 3</div><div class="lesson-checkbox"><input type="checkbox" class="checkbox-lesson" data-index="3"> Занятие 4</div><div class="lesson-checkbox"><input type="checkbox" class="checkbox-lesson" data-index="4"> Занятие 5</div><div class="lesson-checkbox"><input type="checkbox" class="checkbox-lesson" data-index="5"> Занятие 6</div></div>
+          <button class="btn btn-sm btn-success mt-2" data-bs-toggle="modal" data-bs-target="#paymentModal">Добавить оплату</button>
+        </div>
+
+        <div class="mb-3">
+          <h5>Заметки</h5>
+          <textarea id="notes" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно создания нового ученика -->
+<div class="modal fade" id="createStudentModal" tabindex="-1" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Создать нового ученика</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Имя</label>
+          <input type="text" class="form-control" id="new-name" placeholder="Введите имя ученика">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Класс</label>
+          <input type="number" class="form-control" id="new-grade" placeholder="1-4">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Контакты родителей</label>
+          <input type="text" class="form-control" id="new-contacts" placeholder="+375 ...">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Аватар</label>
+          <input type="file" class="form-control" id="new-avatar">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Предмет</label>
+          <select class="form-select" id="new-subject">
+            <option value="Математика">Математика</option>
+            <option value="Русский">Русский</option>
+            <option value="Белорусский">Белорусский</option>
+            <option value="Другое">Другое</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Цена одного занятия (руб.)</label>
+          <input type="number" class="form-control" id="new-lesson-price" placeholder="Например: 20">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Заметки (необязательно)</label>
+          <textarea class="form-control" id="new-notes" rows="2" placeholder="Дополнительная информация"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-primary" id="create-student">Создать карточку</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно редактирования -->
+<div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Редактировать данные ученика</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Имя</label>
+          <input type="text" class="form-control" id="edit-name">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Класс</label>
+          <input type="number" class="form-control" id="edit-grade">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Контакты родителей</label>
+          <input type="text" class="form-control" id="edit-contacts">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Аватар</label>
+          <input type="file" class="form-control" id="edit-avatar">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Предмет</label>
+          <select class="form-select" id="edit-subject">
+            <option value="Математика">Математика</option>
+            <option value="Русский">Русский</option>
+            <option value="Белорусский">Белорусский</option>
+            <option value="Другое">Другое</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Цена одного занятия (руб.)</label>
+          <input type="number" class="form-control" id="edit-lesson-price">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Заметки</label>
+          <textarea class="form-control" id="edit-notes" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-primary" id="save-edit">Сохранить изменения</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно добавления оплаты -->
+<div class="modal fade" id="paymentModal" tabindex="-1" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Добавить оплату</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Сумма оплаты (руб.)</label>
+          <input type="number" class="form-control" id="payment-amount">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Дата оплаты</label>
+          <input type="date" class="form-control" id="payment-date">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Комментарий</label>
+          <textarea class="form-control" id="payment-comment" rows="2"></textarea>
+        </div>
+        <div class="mb-3">
+          <strong>Добавлено занятий:</strong> <span id="lessons-added">0</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button type="button" class="btn btn-success" id="add-payment">Добавить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Tippy.js -->
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6.3.7/dist/tippy-bundle.umd.js"></script>
+<!-- Moment.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+<script>
+  moment.locale('ru');
+
+  // Изначально пустой массив — начинаем с нуля!
+  let studentData = [
+  {
+    "name": "Верка",
+    "grade": 3,
+    "parentContacts": "",
+    "avatar": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCg0KICA8IS0tINCa0YDRg9CzIC0tPg0KICA8Y2lyY2xlIGlkPSJjaXJjbGUiIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjUwIiBmaWxsPSJsaWdodGJsdWUiIHN0cm9rZT0iYmx1ZSIgc3Ryb2tlLXdpZHRoPSIyIi8+DQoNCiAgPCEtLSDQmtCy0LDQtNGA0LDRgiAtLT4NCiAgPHJlY3QgaWQ9InNxdWFyZSIgeD0iMjAwIiB5PSIxMDAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgZmlsbD0ibGlnaHRncmVlbiIgc3Ryb2tlPSJncmVlbiIgc3Ryb2tlLXdpZHRoPSIyIi8+DQoNCiAgPCEtLSDQotGA0LXRg9Cz0L7Qu9GM0L3QuNC6IC0tPg0KICA8cG9seWdvbiBpZD0idHJpYW5nbGUiIHBvaW50cz0iMzAwLDUwIDQwMCwxNTAgMzAwLDI1MCIgZmlsbD0ibGlnaHRjb3JhbCIgc3Ryb2tlPSJyZWQiIHN0cm9rZS13aWR0aD0iMiIvPg0KDQoNCiAgPCEtLSDQkNC90LjQvNCw0YbQuNGPINC/0L4g0L3QsNCy0LXQtNC10L3QuNGOINC60YPRgNGB0L7RgNCwICjQuNC30LzQtdC90LXQvdC40LUg0YDQsNC30LzQtdGA0LApIC0tPg0KICA8Y2lyY2xlIGlkPSJjaXJjbGUiIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjUwIiBmaWxsPSJsaWdodGJsdWUiIHN0cm9rZT0iYmx1ZSIgc3Ryb2tlLXdpZHRoPSIyIg0KICAgICAgICAgIG9ubW91c2VvdmVyPSJzdHlsZS50cmFuc2Zvcm09J3NjYWxlKDEuMiknIiBvbm1vdXNlb3V0PSJzdHlsZS50cmFuc2Zvcm09J3NjYWxlKDEpJyIvPg0KDQogIDxyZWN0IGlkPSJzcXVhcmUiIHg9IjIwMCIgeT0iMTAwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9ImxpZ2h0Z3JlZW4iIHN0cm9rZT0iZ3JlZW4iIHN0cm9rZS13aWR0aD0iMiINCiAgICAgICAgICBvbm1vdXNlb3Zlcj0ic3R5bGUudHJhbnNmb3JtPSdzY2FsZSgxLjIpJyIgb25tb3VzZW91dD0ic3R5bGUudHJhbnNmb3JtPSdzY2FsZSgxKSciLz4NCg0KICA8cG9seWdvbiBpZD0idHJpYW5nbGUiIHBvaW50cz0iMzAwLDUwIDQwMCwxNTAgMzAwLDI1MCIgZmlsbD0ibGlnaHRjb3JhbCIgc3Ryb2tlPSJyZWQiIHN0cm9rZS13aWR0aD0iMiINCiAgICAgICAgICBvbm1vdXNlb3Zlcj0ic3R5bGUudHJhbnNmb3JtPSdzY2FsZSgxLjIpJyIgb25tb3VzZW91dD0ic3R5bGUudHJhbnNmb3JtPSdzY2FsZSgxKSciLz4NCg0KPC9zdmc+DQo=",
+    "subject": "Математика",
+    "lessonPrice": 40,
+    "payments": [
+      {
+        "amount": 150,
+        "date": "19.09.2025",
+        "comment": "Поговорим",
+        "lessonsAdded": 3
+      },
+      {
+        "amount": 125,
+        "date": "20.09.2025",
+        "comment": "",
+        "lessonsAdded": 3
+      }
+    ],
+    "completedLessons": [
+      {
+        "index": 0,
+        "timestamp": "23.09.2025 17:05:43"
+      },
+      {
+        "index": 1,
+        "timestamp": "23.09.2025 17:05:44"
+      }
+    ],
+    "notes": "Напиши что-нибудь"
+  }
+];
+
+  // Функция обновления отображения
+  const updateUI = () => {
+    // Если нет ученика — показываем экран создания
+    if (studentData.length === 0) {
+      document.getElementById('empty-state').style.display = 'block';
+      document.getElementById('student-content').style.display = 'none';
+      return;
+    }
+
+    const student = studentData[0];
+    document.getElementById('empty-state').style.display = 'none';
+    document.getElementById('student-content').style.display = 'block';
+
+    document.getElementById('student-name').textContent = student.name;
+    document.getElementById('student-grade').textContent = student.grade;
+    document.getElementById('student-subject').textContent = student.subject;
+    document.getElementById('student-contacts').textContent = student.parentContacts;
+    document.getElementById('lesson-price').textContent = student.lessonPrice;
+    document.getElementById('notes').value = student.notes;
+
+    const avatarImg = document.getElementById('avatar-img');
+    avatarImg.src = student.avatar || 'https://via.placeholder.com/100';
+
+    // Общее количество оплаченных занятий
+    const totalLessons = student.payments.reduce((sum, p) => sum + p.lessonsAdded, 0);
+    document.getElementById('total-lessons').textContent = totalLessons;
+
+    // Общая сумма оплат
+    const totalPaid = student.payments.reduce((sum, p) => sum + p.amount, 0);
+    document.getElementById('total-paid').textContent = totalPaid;
+
+    // Проведено занятий
+    const completedCount = student.completedLessons.length;
+    document.getElementById('completed-lessons').textContent = completedCount;
+
+    // Остаток занятий
+    const remaining = totalLessons - completedCount;
+    document.getElementById('remaining-lessons').textContent = remaining;
+
+    // Генерация чекбоксов
+    const paidLessonsDiv = document.getElementById('paid-lessons');
+    if (totalLessons === 0) {
+      paidLessonsDiv.innerHTML = 'Нет оплаченных занятий';
+    } else {
+      paidLessonsDiv.innerHTML = '';
+      for (let i = 0; i < totalLessons; i++) {
+        const lessonDiv = document.createElement('div');
+        lessonDiv.className = 'lesson-checkbox';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'checkbox-lesson';
+        checkbox.dataset.index = i;
+
+        const isCompleted = student.completedLessons.find(l => l.index === i);
+        if (isCompleted) {
+          checkbox.checked = true;
+        }
+
+        lessonDiv.appendChild(checkbox);
+        lessonDiv.appendChild(document.createTextNode(` Занятие ${i+1}`));
+        paidLessonsDiv.appendChild(lessonDiv);
+
+        // Добавляем тултип
+        tippy(checkbox, {
+          content: isCompleted ? isCompleted.timestamp : 'Занятие не проведено',
+          placement: 'top'
+        });
+
+        // Обработчик клика по чекбоксу
+        checkbox.addEventListener('change', () => {
+          const index = parseInt(checkbox.dataset.index);
+          if (checkbox.checked) {
+            const now = moment().format('DD.MM.YYYY HH:mm:ss');
+            student.completedLessons.push({ index, timestamp: now });
+            tippy(checkbox).setContent(now);
+          } else {
+            student.completedLessons = student.completedLessons.filter(l => l.index !== index);
+            tippy(checkbox).setContent('Занятие не проведено');
+          }
+          updateUI();
+        });
+      }
+    }
+  };
+
+  // Создание нового ученика
+  document.getElementById('create-student').addEventListener('click', () => {
+    const name = document.getElementById('new-name').value.trim();
+    if (!name) {
+      alert('Пожалуйста, введите имя ученика');
+      return;
+    }
+
+    const grade = parseInt(document.getElementById('new-grade').value) || 0;
+    const contacts = document.getElementById('new-contacts').value.trim();
+    const subject = document.getElementById('new-subject').value;
+    const lessonPrice = parseFloat(document.getElementById('new-lesson-price').value) || 0;
+    const notes = document.getElementById('new-notes').value.trim();
+
+    let avatar = "";
+    const fileInput = document.getElementById('new-avatar');
+    
+    // Если выбран аватар — читаем его
+    if (fileInput.files && fileInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        avatar = e.target.result;
+        finalizeStudentCreation(name, grade, contacts, subject, lessonPrice, notes, avatar);
+      };
+      reader.readAsDataURL(fileInput.files[0]);
+    } else {
+      finalizeStudentCreation(name, grade, contacts, subject, lessonPrice, notes, avatar);
+    }
+  });
+
+  // Финализация создания ученика
+  const finalizeStudentCreation = (name, grade, contacts, subject, lessonPrice, notes, avatar) => {
+    studentData = [{
+      name,
+      grade,
+      parentContacts: contacts,
+      avatar,
+      subject,
+      lessonPrice,
+      payments: [],
+      completedLessons: [],
+      notes
+    }];
+
+    bootstrap.Modal.getInstance(document.getElementById('createStudentModal')).hide();
+    updateUI();
+
+    // Очистка формы создания
+    document.getElementById('new-name').value = '';
+    document.getElementById('new-grade').value = '';
+    document.getElementById('new-contacts').value = '';
+    document.getElementById('new-lesson-price').value = '';
+    document.getElementById('new-notes').value = '';
+    document.getElementById('new-avatar').value = '';
+  };
+
+  // Открытие модального окна редактирования
+  document.getElementById('editModal').addEventListener('show.bs.modal', () => {
+    if (studentData.length === 0) return;
+    const student = studentData[0];
+    document.getElementById('edit-name').value = student.name;
+    document.getElementById('edit-grade').value = student.grade;
+    document.getElementById('edit-contacts').value = student.parentContacts;
+    document.getElementById('edit-subject').value = student.subject;
+    document.getElementById('edit-lesson-price').value = student.lessonPrice;
+    document.getElementById('edit-notes').value = student.notes;
+  });
+
+  // Сохранение редактирования
+  document.getElementById('save-edit').addEventListener('click', () => {
+    if (studentData.length === 0) return;
+    const student = studentData[0];
+    
+    student.name = document.getElementById('edit-name').value;
+    student.grade = parseInt(document.getElementById('edit-grade').value) || 0;
+    student.parentContacts = document.getElementById('edit-contacts').value;
+    student.subject = document.getElementById('edit-subject').value;
+    student.lessonPrice = parseFloat(document.getElementById('edit-lesson-price').value) || 0;
+    student.notes = document.getElementById('edit-notes').value;
+
+    const fileInput = document.getElementById('edit-avatar');
+    if (fileInput.files && fileInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        student.avatar = e.target.result;
+        updateUI();
+        bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+      };
+      reader.readAsDataURL(fileInput.files[0]);
+    } else {
+      updateUI();
+      bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+    }
+  });
+
+  // Расчет количества занятий при изменении суммы оплаты
+  document.getElementById('payment-amount').addEventListener('input', () => {
+    if (studentData.length === 0) return;
+    const student = studentData[0];
+    const amount = parseFloat(document.getElementById('payment-amount').value) || 0;
+    const price = student.lessonPrice || 1;
+    const lessons = Math.floor(amount / price);
+    document.getElementById('lessons-added').textContent = lessons;
+  });
+
+  // Добавление оплаты
+  document.getElementById('add-payment').addEventListener('click', () => {
+    if (studentData.length === 0) return;
+    const student = studentData[0];
+    
+    const amount = parseFloat(document.getElementById('payment-amount').value) || 0;
+    const dateInput = document.getElementById('payment-date').value;
+    const comment = document.getElementById('payment-comment').value;
+    const price = student.lessonPrice || 1;
+    const lessonsAdded = Math.floor(amount / price);
+
+    const date = dateInput ? moment(dateInput).format('DD.MM.YYYY') : moment().format('DD.MM.YYYY');
+
+    student.payments.push({
+      amount,
+      date,
+      comment,
+      lessonsAdded
+    });
+
+    updateUI();
+    bootstrap.Modal.getInstance(document.getElementById('paymentModal')).hide();
+
+    // Очистка формы
+    document.getElementById('payment-amount').value = '';
+    document.getElementById('payment-date').value = '';
+    document.getElementById('payment-comment').value = '';
+    document.getElementById('lessons-added').textContent = '0';
+  });
+
+  // Функция сохранения как нового файла
+  document.getElementById('saveAsBtn').addEventListener('click', () => {
+    if (studentData.length === 0) {
+      alert('Сначала создайте ученика!');
+      return;
+    }
+
+    // Получаем весь HTML-код текущей страницы
+    let htmlContent = document.documentElement.outerHTML;
+
+    // Находим позицию массива studentData в скрипте
+    const startIndex = htmlContent.indexOf('let studentData = [');
+    const endIndex = htmlContent.indexOf('];', startIndex) + 2;
+
+    if (startIndex === -1 || endIndex === -1) {
+      alert('Ошибка: не удалось найти массив studentData в коде');
+      return;
+    }
+
+    // Преобразуем текущие данные в строку JSON
+    const newStudentDataString = JSON.stringify(studentData, null, 2);
+
+    // Заменяем старый массив новым
+    const before = htmlContent.substring(0, startIndex);
+    const after = htmlContent.substring(endIndex);
+    const newHtmlContent = before + 'let studentData = ' + newStudentDataString + ';' + after;
+
+    // Создаем Blob с новым содержимым
+    const blob = new Blob([newHtmlContent], { type: 'text/html;charset=utf-8' });
+
+    // Создаем ссылку для скачивания
+    const link = document.createElement('a');
+    const safeName = studentData[0].name.replace(/\s+/g, '_').replace(/[^\wа-яА-ЯёЁ_]/g, '');
+    link.download = `${safeName}.html`;
+    link.href = URL.createObjectURL(blob);
+    link.click();
+
+    // Освобождаем память
+    URL.revokeObjectURL(link.href);
+
+    alert(`Файл сохранён как "${safeName}.html". Откройте его для продолжения работы.`);
+  });
+
+  // Инициализация — начинаем с пустой карточки
+  updateUI();
+</script>
+
+</body></html>
