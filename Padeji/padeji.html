@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Изучаем падежи русского языка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            color: #3498db;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
+
+        .modes {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .mode-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .mode-btn.active {
+            background: #2ecc71;
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
+        }
+
+        .mode-description {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #2c3e50;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 4px solid #3498db;
+        }
+
+        .game-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .cases-container, .items-container {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            font-size: 1.8rem;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .case-item, .draggable-item {
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: grab;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            user-select: none;
+        }
+
+        .case-item {
+            background: #f8f9fa;
+            border: 2px dashed #3498db;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .case-item:hover {
+            background: #e3f2fd;
+            transform: scale(1.02);
+        }
+
+        .case-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .case-name {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .case-content {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+        }
+
+        .draggable-item {
+            background: white;
+            border: 2px solid #ecf0f1;
+        }
+
+        .draggable-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .draggable-item.dragging {
+            opacity: 0.6;
+            transform: scale(0.98);
+        }
+
+        .draggable-item.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .draggable-item.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .feedback {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .feedback.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .feedback.correct {
+            background: #28a745;
+            color: white;
+        }
+
+        .feedback.incorrect {
+            background: #dc3545;
+            color: white;
+        }
+
+        .reset-btn {
+            display: block;
+            margin: 30px auto;
+            padding: 14px 35px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .reset-btn:hover {
+            background: #c0392b;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        /* Адаптивный дизайн для мобильных устройств */
+        @media (max-width: 768px) {
+            .game-area {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cases-container, .items-container {
+                width: 100%;
+                max-width: 500px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .mode-btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .case-item, .draggable-item {
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+            
+            .case-icon {
+                font-size: 2rem;
+            }
+            
+            .case-name {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Изучаем падежи русского языка</h1>
+            <p class="subtitle">Интерактивная игра для школьников</p>
+        </header>
+        
+        <div class="modes">
+            <button class="mode-btn active" data-mode="1">Режим 1</button>
+            <button class="mode-btn" data-mode="2">Режим 2</button>
+            <button class="mode-btn" data-mode="3">Режим 3</button>
+        </div>
+        
+        <div class="mode-description">
+            Перетаскивайте элементы, чтобы сопоставить падежи с вопросами и примерами
+        </div>
+        
+        <div class="game-area">
+            <div class="cases-container">
+                <h2 class="section-title">Падежи</h2>
+                <div id="cases-container"></div>
+            </div>
+            
+            <div class="items-container">
+                <h2 class="section-title" id="items-title">Вопросы и примеры</h2>
+                <div id="items-container"></div>
+            </div>
+        </div>
+        
+        <button class="reset-btn">Начать заново</button>
+        
+        <div class="feedback" id="feedback"></div>
+        
+        <footer>
+            <p>Интерактивное приложение для изучения падежей русского языка</p>
+        </footer>
+    </div>
+
+    <script>
+        // Обновлённые данные о падежах с объединёнными вопросами
+        const casesData = [
+            {
+                name: "Именительный",
+                questions: "кто? что?",
+                examples: "Мороженое вкусное.",
+                icon: "👤"
+            },
+            {
+                name: "Родительный",
+                questions: "кого? чего?",
+                examples: "У меня нет кота.",
+                icon: "📦"
+            },
+            {
+                name: "Дательный",
+                questions: "кому? чему?",
+                examples: "Я подарил книгу сестре.",
+                icon: "📤"
+            },
+            {
+                name: "Винительный",
+                questions: "кого? что?",
+                examples: "Я люблю мороженое.",
+                icon: "👀"
+            },
+            {
+                name: "Творительный",
+                questions: "кем? чем?",
+                examples: "Кот играет с мячиком.",
+                icon: "✏️"
+            },
+            {
+                name: "Предложный",
+                questions: "о ком? о чём? где?",
+                examples: "Давай поговорим о погоде.",
+                icon: "📍"
+            }
+        ];
+
+        // Глобальные переменные
+        let currentMode = 1;
+        let draggableItems = [];
+        let caseElements = [];
+        let feedbackElement = document.getElementById('feedback');
+        let itemsTitle = document.getElementById('items-title');
+
+        // Инициализация приложения
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+            renderGame();
+        });
+
+        // Настройка обработчиков событий
+        function setupEventListeners() {
+            // Обработчики для кнопок режимов
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentMode = parseInt(btn.dataset.mode);
+                    renderGame();
+                });
+            });
+            
+            // Обработчик для кнопки сброса
+            document.querySelector('.reset-btn').addEventListener('click', renderGame);
+        }
+
+        // Основная функция отрисовки игры
+        function renderGame() {
+            // Очистка контейнеров
+            document.getElementById('cases-container').innerHTML = '';
+            document.getElementById('items-container').innerHTML = '';
+            
+            // Обновление заголовка в зависимости от режима
+            if (currentMode === 1) {
+                itemsTitle.textContent = "Вопросы и примеры";
+            } else if (currentMode === 2) {
+                itemsTitle.textContent = "Вопросы";
+            } else {
+                itemsTitle.textContent = "Примеры";
+            }
+            
+            // Создание элементов падежей
+            createCaseElements();
+            
+            // Создание перетаскиваемых элементов в зависимости от режима
+            createDraggableItems();
+            
+            // Инициализация drag & drop
+            initDragAndDrop();
+        }
+
+        // Создание элементов падежей
+        function createCaseElements() {
+            const casesContainer = document.getElementById('cases-container');
+            caseElements = [];
+            
+            casesData.forEach((caseData, index) => {
+                const caseElement = document.createElement('div');
+                caseElement.className = 'case-item';
+                caseElement.dataset.caseIndex = index;
+                caseElement.innerHTML = `
+                    <div class="case-icon">${caseData.icon}</div>
+                    <div class="case-name">${caseData.name}</div>
+                    <div class="case-content" id="case-content-${index}"></div>
+                `;
+                casesContainer.appendChild(caseElement);
+                caseElements.push(caseElement);
+            });
+        }
+
+        // Создание перетаскиваемых элементов
+        function createDraggableItems() {
+            const itemsContainer = document.getElementById('items-container');
+            draggableItems = [];
+            
+            // Сбор всех элементов в зависимости от режима
+            let allItems = [];
+            
+            if (currentMode === 1) {
+                // Режим 1: все вопросы и примеры (по одному блоку на падеж)
+                casesData.forEach((caseData, index) => {
+                    allItems.push({ text: caseData.questions, caseIndex: index, type: 'question' });
+                    allItems.push({ text: caseData.examples, caseIndex: index, type: 'example' });
+                });
+            } else if (currentMode === 2) {
+                // Режим 2: только вопросы (по одному блоку на падеж)
+                casesData.forEach((caseData, index) => {
+                    allItems.push({ text: caseData.questions, caseIndex: index, type: 'question' });
+                });
+            } else {
+                // Режим 3: только примеры (по одному блоку на падеж)
+                casesData.forEach((caseData, index) => {
+                    allItems.push({ text: caseData.examples, caseIndex: index, type: 'example' });
+                });
+            }
+            
+            // Перемешивание элементов
+            shuffleArray(allItems);
+            
+            // Создание элементов
+            allItems.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'draggable-item';
+                itemElement.textContent = item.text;
+                itemElement.dataset.correctCase = item.caseIndex;
+                itemElement.dataset.itemType = item.type;
+                itemsContainer.appendChild(itemElement);
+                draggableItems.push(itemElement);
+            });
+        }
+
+        // Перемешивание массива (алгоритм Фишера-Йетса)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // Инициализация drag & drop
+        function initDragAndDrop() {
+            // Настройка перетаскиваемых элементов
+            draggableItems.forEach(item => {
+                item.setAttribute('draggable', true);
+                
+                // Событие начала перетаскивания
+                item.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', item.textContent);
+                    item.classList.add('dragging');
+                    // Сохраняем данные о правильном падеже
+                    e.dataTransfer.setData('correctCase', item.dataset.correctCase);
+                    e.dataTransfer.setData('itemType', item.dataset.itemType);
+                });
+                
+                // Событие окончания перетаскивания
+                item.addEventListener('dragend', () => {
+                    item.classList.remove('dragging');
+                });
+            });
+            
+            // Настройка контейнеров падежей
+            caseElements.forEach(caseElement => {
+                // Разрешаем сбрасывать элементы
+                caseElement.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                });
+                
+                // Обработка сброса элемента
+                caseElement.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    
+                    // Получаем данные о перетаскиваемом элементе
+                    const correctCase = e.dataTransfer.getData('correctCase');
+                    const itemType = e.dataTransfer.getData('itemType');
+                    const draggedText = e.dataTransfer.getData('text/plain');
+                    
+                    // Находим перетаскиваемый элемент
+                    const draggedElement = draggableItems.find(item => 
+                        item.textContent === draggedText && 
+                        item.dataset.correctCase === correctCase &&
+                        item.dataset.itemType === itemType
+                    );
+                    
+                    if (!draggedElement) return;
+                    
+                    // Проверяем соответствие
+                    const caseIndex = parseInt(caseElement.dataset.caseIndex);
+                    const isCorrect = caseIndex == correctCase;
+                    
+                    // Обновляем визуальное состояние
+                    if (isCorrect) {
+                        draggedElement.classList.add('correct');
+                        draggedElement.classList.remove('incorrect');
+                        
+                        // Отображаем содержимое в контейнере падежа
+                        const contentElement = document.getElementById(`case-content-${caseIndex}`);
+                        if (itemType === 'question') {
+                            contentElement.innerHTML += `<div>❓ ${draggedText}</div>`;
+                        } else {
+                            contentElement.innerHTML += `<div>📖 ${draggedText}</div>`;
+                        }
+                        
+                        // Убираем элемент из списка перетаскиваемых
+                        draggedElement.style.display = 'none';
+                    } else {
+                        draggedElement.classList.add('incorrect');
+                        draggedElement.classList.remove('correct');
+                    }
+                    
+                    // Показываем обратную связь
+                    showFeedback(isCorrect);
+                });
+            });
+        }
+
+        // Показ обратной связи
+        function showFeedback(isCorrect) {
+            feedbackElement.textContent = isCorrect ? 'Правильно!' : 'Ошибка!';
+            feedbackElement.className = `feedback ${isCorrect ? 'correct' : 'incorrect'} show`;
+            
+            // Скрытие через 2 секунды
+            setTimeout(() => {
+                feedbackElement.classList.remove('show');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
