@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВИКТОРИНА</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+</head>
+<style>
+    /* Основные стили */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Montserrat', cursive, sans-serif;
+    background-color: #f0f8ff;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.app-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    min-height: 500px;
+}
+
+.screen {
+    padding: 30px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.screen.active {
+    display: flex;
+
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1, h2, h3 {
+    color: #ff6b6b;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+p {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Кнопки */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 50px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Montserrat', cursive;
+    margin: 10px;
+    outline: none;
+}
+
+.btn:focus {
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.4);
+}
+
+.btn.primary {
+    background-color: #4d96ff;
+    color: white;
+}
+
+.btn.primary:hover {
+    background-color: #3a7bd5;
+    transform: scale(1.05);
+}
+
+.btn.secondary {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+.btn.secondary:hover {
+    background-color: #e05555;
+    transform: scale(1.05);
+}
+
+/* Начальный экран */
+.theme-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.theme-btn {
+    padding: 15px 25px;
+    background-color: #6bcb77;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-btn:hover, .theme-btn:focus {
+    background-color: #4caf50;
+    transform: scale(1.05);
+    outline: none;
+}
+
+.theme-btn.selected {
+    background-color: #ffd166;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 209, 102, 0.7);
+}
+
+/* Экран викторины */
+.progress-container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    display: block;
+    height: 100%;
+    width: 0;
+    background-color: #6bcb77;
+    transition: width 0.5s ease;
+}
+
+.question-text {
+    font-size: 24px;
+    margin: 20px 0;
+    text-align: center;
+    color: #4a4a4a;
+}
+
+.options-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .options-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.option {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 18px;
+    text-align: center;
+}
+
+.option:hover, .option:focus {
+    background-color: #e9ecef;
+    transform: scale(1.02);
+    outline: none;
+}
+
+.option.selected {
+    border-color: #4d96ff;
+    background-color: #e7f1ff;
+}
+
+.option.correct {
+    border-color: #6bcb77;
+    background-color: #d4edda;
+    animation: pulseCorrect 0.5s;
+}
+
+.option.incorrect {
+    border-color: #ff6b6b;
+    background-color: #f8d7da;
+    animation: shake 0.5s;
+}
+
+@keyframes pulseCorrect {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+.next-button {
+    align-self: flex-end;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Финальный экран */
+.result-message {
+    font-size: 24px;
+    margin: 20px 0;
+    text-align: center;
+    color: #4a4a4a;
+}
+
+.result-stats {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 400px;
+}
+
+.result-stats p {
+    margin: 10px 0;
+    text-align: left;
+}
+
+.result-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Режим редактирования */
+/* Контейнер редактора теперь занимает всё доступное пространство */
+.editor-container {
+    flex: 1;
+    min-height: 0; /* Критически важно для вложенных flex-контейнеров! */
+    gap: 20px;
+}
+
+@media (min-width: 900px) {
+    .editor-container {
+        flex-direction: row;
+    }
+}
+
+.editor-form, .editor-actions {
+    flex: 1;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #dee2e6;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: 'Montserrat', cursive;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.option-input {
+    margin-bottom: 10px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.import-export {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+/* .questions-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 2px solid #dee2e6;
+    border-radius: 5px;
+    padding: 10px;
+} */
+
+/* Обёртка для списка вопросов — теперь с прокруткой внутри */
+.questions-list-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0; /* Позволяет правильно работать max-height */
+}
+
+.questions-list-container h3 {
+    margin-bottom: 10px;
+}
+
+/* Список вопросов теперь ограничен по высоте и прокручивается */
+#questionsList {
+    flex: 1;
+    min-height: 0; /* Ключевое правило для flex-дочерних элементов с прокруткой */
+    overflow-y: auto;
+    border: 2px solid #dee2e6;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: white;
+}
+
+/* Кнопка "Вернуться к викторине" прижата к низу */
+#backToQuiz {
+    margin-top: 20px;
+    align-self: center;
+    width: auto;
+}
+
+.question-item {
+    padding: 10px;
+    border-bottom: 1px solid #dee2e6;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.question-item:hover {
+    background-color: #e9ecef;
+}
+
+.question-item:last-child {
+    border-bottom: none;
+}
+
+.question-theme {
+    font-weight: bold;
+    color: #4d96ff;
+}
+
+.question-text-preview {
+    font-size: 14px;
+    margin: 5px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.question-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6c757d;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.action-btn:hover {
+    color: #4d96ff;
+}
+
+/* Кнопка переключения режима */
+.mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ffd166;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.mode-toggle:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Анимации */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+    40% {transform: translateY(-20px);}
+    60% {transform: translateY(-10px);}
+}
+
+.bounce {
+    animation: bounce 1s;
+}
+
+</style>    
+<body>
+    <div class="app-container">
+        <!-- Кнопка переключения режима -->
+        <button id="modeToggle" class="mode-toggle" aria-label="Режим редактирования">
+            <i class="fas fa-pencil-alt"></i>
+        </button>
+
+        <!-- Начальный экран -->
+        <div id="startScreen" class="screen active">
+            <h1>Русский язык. Легко!</h1>
+            <p>Выбери тему и проверь свои знания!</p>
+            <div id="themeButtons" class="theme-buttons"></div>
+            <button id="startQuiz" class="btn primary" disabled>Начать викторину</button>
+        </div>
+
+        <!-- Экран викторины -->
+        <div id="quizScreen" class="screen">
+            <div class="progress-container">
+                <div id="progressBar" class="progress-bar"></div>
+                <span id="progressText">Вопрос 1 из 5</span>
+            </div>
+            <h2 id="questionText" class="question-text"></h2>
+            <div id="optionsContainer" class="options-container"></div>
+            <button id="nextButton" class="btn primary hidden">Далее</button>
+        </div>
+
+        <!-- Финальный экран -->
+        <div id="resultScreen" class="screen">
+            <h1>Результаты</h1>
+            <div id="resultMessage" class="result-message"></div>
+            <div class="result-stats">
+                <p>Правильных ответов: <span id="correctAnswers">0</span> из <span id="totalQuestions">0</span></p>
+                <p>Процент правильных: <span id="percentage">0</span>%</p>
+            </div>
+            <div class="result-buttons">
+                <button id="restartQuiz" class="btn primary">Выбрать другую тему</button>
+                <button id="exitQuiz" class="btn secondary">Выйти</button>
+            </div>
+        </div>
+
+        <!-- Экран редактора -->
+        <div id="editScreen" class="screen">
+            <h1>Редактор вопросов</h1>
+            
+            <div class="editor-container">
+                <div class="editor-form">
+                    <h2>Добавить/изменить вопрос</h2>
+                    <div class="form-group">
+                        <label for="editTheme">Тема:</label>
+                        <input type="text" id="editTheme" placeholder="Введите тему">
+                    </div>
+                    <div class="form-group">
+                        <label for="editQuestion">Вопрос:</label>
+                        <textarea id="editQuestion" placeholder="Введите текст вопроса"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Варианты ответов:</label>
+                        <input type="text" id="editOption1" placeholder="Вариант 1" class="option-input">
+                        <input type="text" id="editOption2" placeholder="Вариант 2" class="option-input">
+                        <input type="text" id="editOption3" placeholder="Вариант 3" class="option-input">
+                        <input type="text" id="editOption4" placeholder="Вариант 4" class="option-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="editCorrect">Правильный ответ:</label>
+                        <select id="editCorrect">
+                            <option value="0">Вариант 1</option>
+                            <option value="1">Вариант 2</option>
+                            <option value="2">Вариант 3</option>
+                            <option value="3">Вариант 4</option>
+                        </select>
+                    </div>
+                    <div class="form-buttons">
+                        <button id="saveQuestion" class="btn primary">Сохранить</button>
+                        <button id="clearForm" class="btn secondary">Очистить</button>
+                    </div>
+                </div>
+
+                <div class="editor-actions">
+                    <h2>Управление вопросами</h2>
+                    <div class="import-export">
+                        <label for="importFile" class="btn secondary">
+                            <i class="fas fa-file-import"></i> Импорт
+                            <input type="file" id="importFile" accept=".json" multiple style="display: none;">
+                        </label>
+                        <button id="exportQuestions" class="btn primary">
+                            <i class="fas fa-file-export"></i> Экспорт
+                        </button>
+                    </div>
+                    
+                    <div class="questions-list-container">
+                        <h3>Список вопросов:</h3>
+                        <div id="questionsList" class="questions-list"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="backToQuiz" class="btn primary">Вернуться к викторине</button>
+        </div>
+    </div>
+
+<script>
+    // Инициализация приложения
+document.addEventListener('DOMContentLoaded', function() {
+    // Основные элементы DOM
+    const startScreen = document.getElementById('startScreen');
+    const quizScreen = document.getElementById('quizScreen');
+    const resultScreen = document.getElementById('resultScreen');
+    const editScreen = document.getElementById('editScreen');
+    const modeToggle = document.getElementById('modeToggle');
+    const themeButtons = document.getElementById('themeButtons');
+    const startQuiz = document.getElementById('startQuiz');
+    const questionText = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const nextButton = document.getElementById('nextButton');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const correctAnswers = document.getElementById('correctAnswers');
+    const totalQuestions = document.getElementById('totalQuestions');
+    const percentage = document.getElementById('percentage');
+    const resultMessage = document.getElementById('resultMessage');
+    const restartQuiz = document.getElementById('restartQuiz');
+    const exitQuiz = document.getElementById('exitQuiz');
+    const backToQuiz = document.getElementById('backToQuiz');
+    const editTheme = document.getElementById('editTheme');
+    const editQuestion = document.getElementById('editQuestion');
+    const editOption1 = document.getElementById('editOption1');
+    const editOption2 = document.getElementById('editOption2');
+    const editOption3 = document.getElementById('editOption3');
+    const editOption4 = document.getElementById('editOption4');
+    const editCorrect = document.getElementById('editCorrect');
+    const saveQuestion = document.getElementById('saveQuestion');
+    const clearForm = document.getElementById('clearForm');
+    const exportQuestions = document.getElementById('exportQuestions');
+    const importFile = document.getElementById('importFile');
+    const questionsList = document.getElementById('questionsList');
+    
+    // Состояние приложения
+    let appState = {
+        currentScreen: 'start',
+        quizMode: 'quiz',
+        currentTheme: null,
+        currentQuestionIndex: 0,
+        score: 0,
+        selectedOption: null,
+        questions: [
+  {
+    "theme": "Изменение имён существительных по падежам",
+    "question": "Как называется изменение имён существительных по падежам?",
+    "options": [
+      "Склонение",
+      "Спряжение",
+      "Изменение по числам",
+      "Изменение по родам"
+    ],
+    "correct": 0
+  },
+  {
+    "theme": "Изменение имён существительных по падежам",
+    "question": "На какие вопросы отвечают имена существительные в именительном падеже?",
+    "options": [
+      "Кому? Чему?",
+      "Кого? Чего?",
+      "Кто? Что?",
+      "Кем? Чем?"
+    ],
+    "correct": 2
+  },
+  {
+    "theme": "Изменение имён существительных по падежам",
+    "question": "Каким членом предложения является имя существительное в именительном падеже?",
+    "options": [
+      "Второстепенным",
+      "Подлежащим",
+      "Дополнением",
+      "Не является членом предложения"
+    ],
+    "correct": 1
+  },
+  {
+    "theme": "Изменение имён существительных по падежам",
+    "question": "На какие вопросы отвечают имена существительные в родительном падеже?",
+    "options": [
+      "Кого? Чего?",
+      "Кому? Чему?",
+      "О ком? О чём?",
+      "Кем? Чем?"
+    ],
+    "correct": 0
+  },
+  {
+    "theme": "Изменение имён существительных по падежам",
+    "question": "С какими предлогами употребляются имена существительные в родительном падеже?",
+    "options": [
+      "По, о",
+      "Под, над",
+      "Из, без, у, до, от",
+      "В, на, за, про"
+    ],
+    "correct": 2
+  },
+  {
+    "theme": "Изменение имён существительных по падежам",
+    "question": "На какие вопросы отвечают имена существительные в дательном падеже?",
+    "options": [
+      "О ком? О чём?",
+      "Кому? Чему?",
+      "Кем? Чем?",
+      "Кого? Что?"
+    ],
+    "correct": 1
+  },
+  {
+    "theme": "Изменение имён существительных по падежам",
+    "question": "В каком словосочетании имя существительное стоит в дательном падеже?",
+    "options": [
+      "Приплыть к берегу",
+      "Писать о природе",
+      "Гулять около дома",
+      "Смотреть на небо"
+    ],
+    "correct": 0
+  },
+  {
+    "theme": "Изменение имён существительных по падежам",
+    "question": "В каком падеже имена существительные отвечают на вопросы «кого? что?»?",
+    "options": [
+      "В именительном",
+      "В дательном",
+      "В винительном",
+      "В родительном"
+    ],
+    "correct": 2
+  },
+  {
+    "theme": "Изменение имён существительных по падежам",
+    "question": "В каком словосочетании имя существительное стоит в творительном падеже?",
+    "options": [
+      "Растёт на клумбе",
+      "Рисую карандашом",
+      "Вижу море",
+      "Иду по дороге"
+    ],
+    "correct": 1
+  },
+  {
+    "theme": "Изменение имён существительных по падежам",
+    "question": "В каком падеже имена существительные не употребляются без предлогов?",
+    "options": [
+      "В предложном",
+      "В дательном",
+      "В винительном",
+      "В творительном"
+    ],
+    "correct": 0
+  },
+  {
+    "theme": "Изменение имён существительных по падежам",
+    "question": "В каком падеже имена существительные отвечают на вопросы «о ком? о чём?»?",
+    "options": [
+      "В именительном",
+      "В творительном",
+      "В предложном",
+      "В родительном"
+    ],
+    "correct": 2
+  },
+  {
+    "theme": "Изменение имён существительных по падежам",
+    "question": "В каком словосочетании имя существительное стоит в предложном падеже?",
+    "options": [
+      "Рассказать о друге",
+      "Писать ручкой",
+      "Нарисовать дерево",
+      "Читать книгу"
+    ],
+    "correct": 0
+  }
+],
+        editingQuestionId: null
+    };
+    
+    // Инициализация приложения
+    function init() {
+        renderThemeButtons();
+        setupEventListeners();
+        updateUI();
+    }
+    
+    // Рендер кнопок тем
+    function renderThemeButtons() {
+        themeButtons.innerHTML = '';
+        
+        // Получаем уникальные темы из вопросов
+        const themes = [...new Set(appState.questions.map(q => q.theme))];
+        
+        if (themes.length === 0) {
+            themeButtons.innerHTML = '<p>Нет доступных тем. Добавьте вопросы в режиме редактирования.</p>';
+            return;
+        }
+        
+        themes.forEach(theme => {
+            const button = document.createElement('button');
+            button.className = 'theme-btn';
+            button.textContent = theme;
+            button.addEventListener('click', () => selectTheme(theme));
+            themeButtons.appendChild(button);
+        });
+    }
+    
+    // Выбор темы
+    function selectTheme(theme) {
+        appState.currentTheme = theme;
+        
+        // Удаляем выделение со всех кнопок
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        
+        // Добавляем выделение выбранной кнопке
+        const selectedBtn = Array.from(document.querySelectorAll('.theme-btn')).find(
+            btn => btn.textContent === theme
+        );
+        if (selectedBtn) {
+            selectedBtn.classList.add('selected');
+            playSound('click');
+        }
+        
+        // Активируем кнопку "Начать викторину"
+        startQuiz.disabled = false;
+    }
+    
+    // Начало викторины
+    function startQuizHandler() {
+        appState.currentScreen = 'quiz';
+        appState.currentQuestionIndex = 0;
+        appState.score = 0;
+        appState.selectedOption = null;
+        
+        playSound('start');
+        updateUI();
+        showQuestion();
+    }
+    
+    // Показать вопрос
+    function showQuestion() {
+        const questions = getQuestionsByTheme(appState.currentTheme);
+        
+        if (appState.currentQuestionIndex >= questions.length) {
+            showResults();
+            return;
+        }
+        
+        const question = questions[appState.currentQuestionIndex];
+        questionText.textContent = question.question;
+        
+        // Обновляем прогресс
+        progressText.textContent = `Вопрос ${appState.currentQuestionIndex + 1} из ${questions.length}`;
+        progressBar.style.width = `${(appState.currentQuestionIndex / questions.length) * 100}%`;
+        
+        // Очищаем контейнер с вариантами
+        optionsContainer.innerHTML = '';
+        
+        // Добавляем варианты ответов
+        question.options.forEach((option, index) => {
+            const optionElement = document.createElement('div');
+            optionElement.className = 'option';
+            optionElement.textContent = option;
+            optionElement.tabIndex = 0;
+            optionElement.setAttribute('role', 'radio');
+            optionElement.setAttribute('aria-checked', 'false');
+            
+            // Обработчик выбора варианта
+            optionElement.addEventListener('click', () => selectOption(index));
+            optionElement.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    selectOption(index);
+                }
+            });
+            
+            optionsContainer.appendChild(optionElement);
+        });
+        
+        // Скрываем кнопку "Далее"
+        nextButton.classList.add('hidden');
+    }
+    
+    // Получить вопросы по теме
+    function getQuestionsByTheme(theme) {
+        return appState.questions.filter(q => q.theme === theme);
+    }
+    
+    // Выбор варианта ответа
+    function selectOption(optionIndex) {
+        if (appState.selectedOption !== null) return;
+        
+        appState.selectedOption = optionIndex;
+        playSound('click');
+        
+        const questions = getQuestionsByTheme(appState.currentTheme);
+        const currentQuestion = questions[appState.currentQuestionIndex];
+        const isCorrect = optionIndex === currentQuestion.correct;
+        
+        // Обновляем UI
+        const optionElements = document.querySelectorAll('.option');
+        optionElements.forEach((el, idx) => {
+            el.setAttribute('aria-checked', idx === optionIndex ? 'true' : 'false');
+            
+            if (idx === optionIndex) {
+                el.classList.add('selected');
+            }
+            
+            // Отключаем клики после выбора
+            el.style.pointerEvents = 'none';
+        });
+        
+        // Подсвечиваем правильный ответ
+        setTimeout(() => {
+            optionElements[currentQuestion.correct].classList.add('correct');
+            
+            if (!isCorrect) {
+                optionElements[optionIndex].classList.add('incorrect');
+            }
+            
+            // Обновляем счет
+            if (isCorrect) {
+                appState.score++;
+                playSound('correct');
+            } else {
+                playSound('incorrect');
+            }
+            
+            // Показываем кнопку "Далее"
+            nextButton.classList.remove('hidden');
+        }, 500);
+    }
+    
+    // Следующий вопрос
+    function nextQuestion() {
+        appState.currentQuestionIndex++;
+        appState.selectedOption = null;
+        showQuestion();
+    }
+    
+    // Показать результаты
+    function showResults() {
+        appState.currentScreen = 'result';
+        
+        const questions = getQuestionsByTheme(appState.currentTheme);
+        const percent = Math.round((appState.score / questions.length) * 100);
+        
+        // Обновляем статистику
+        correctAnswers.textContent = appState.score;
+        totalQuestions.textContent = questions.length;
+        percentage.textContent = percent;
+        
+        // Формируем сообщение
+        let message = '';
+        if (percent === 100) {
+            message = `Поздравляем! Ты эксперт по теме "${appState.currentTheme}"!`;
+        } else if (percent >= 80) {
+            message = `Отлично! Ты знаешь "${appState.currentTheme}" на ${percent}%!`;
+        } else if (percent >= 50) {
+            message = `Хорошо! Ты знаешь "${appState.currentTheme}" на ${percent}%. Попробуй еще раз!`;
+        } else {
+            message = `Попробуй еще раз! Ты знаешь "${appState.currentTheme}" только на ${percent}%.`;
+        }
+        
+        resultMessage.textContent = message;
+        playSound('complete');
+        updateUI();
+    }
+    
+    // Перезапуск викторины
+    function restartQuizHandler() {
+        appState.currentScreen = 'start';
+        appState.currentTheme = null;
+        updateUI();
+        renderThemeButtons();
+        
+        // Снимаем выделение с кнопок тем
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+    }
+    
+    // Выход из викторины
+    function exitQuizHandler() {
+        // В данном случае просто возвращаем на начальный экран
+        restartQuizHandler();
+    }
+    
+    // Переключение режима
+    function toggleMode() {
+        if (appState.quizMode === 'quiz') {
+            appState.quizMode = 'edit';
+            // Сохраняем текущий экран, чтобы вернуться назад
+            appState.previousScreen = appState.currentScreen;
+            appState.currentScreen = 'edit';
+            renderQuestionsList();
+        } else {
+            appState.quizMode = 'quiz';
+            appState.currentScreen = appState.previousScreen || 'start';
+        }
+        
+        updateUI();
+        playSound('mode');
+    }
+    
+    // Обновление UI в зависимости от состояния
+    function updateUI() {
+        // Скрываем все экраны
+        startScreen.classList.remove('active');
+        quizScreen.classList.remove('active');
+        resultScreen.classList.remove('active');
+        editScreen.classList.remove('active');
+        
+        // Показываем нужный экран
+        switch (appState.currentScreen) {
+            case 'start':
+                startScreen.classList.add('active');
+                break;
+            case 'quiz':
+                quizScreen.classList.add('active');
+                break;
+            case 'result':
+                resultScreen.classList.add('active');
+                break;
+            case 'edit':
+                editScreen.classList.add('active');
+                break;
+        }
+        
+        // Обновляем кнопку режима
+        if (appState.quizMode === 'quiz') {
+            modeToggle.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+            modeToggle.style.opacity = '0.7';
+            modeToggle.setAttribute('aria-label', 'Режим редактирования');
+        } else {
+            modeToggle.innerHTML = '<i class="fas fa-question-circle"></i>';
+            modeToggle.style.opacity = '1';
+            modeToggle.setAttribute('aria-label', 'Режим викторины');
+        }
+    }
+    
+    // Редактор вопросов
+    
+    // Рендер списка вопросов
+    function renderQuestionsList() {
+        questionsList.innerHTML = '';
+        
+        if (appState.questions.length === 0) {
+            questionsList.innerHTML = '<p>Нет добавленных вопросов.</p>';
+            return;
+        }
+        
+        appState.questions.forEach((question, index) => {
+            const questionItem = document.createElement('div');
+            questionItem.className = 'question-item';
+            
+            const theme = document.createElement('div');
+            theme.className = 'question-theme';
+            theme.textContent = question.theme;
+            
+            const text = document.createElement('div');
+            text.className = 'question-text-preview';
+            text.textContent = question.question;
+            
+            const actions = document.createElement('div');
+            actions.className = 'question-actions';
+            
+            const editBtn = document.createElement('button');
+            editBtn.className = 'action-btn';
+            editBtn.innerHTML = '<i class="fas fa-edit"></i> Редактировать';
+            editBtn.addEventListener('click', () => editQuestionHandler(index));
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'action-btn';
+            deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Удалить';
+            deleteBtn.addEventListener('click', () => deleteQuestionHandler(index));
+            
+            actions.appendChild(editBtn);
+            actions.appendChild(deleteBtn);
+            
+            questionItem.appendChild(theme);
+            questionItem.appendChild(text);
+            questionItem.appendChild(actions);
+            
+            questionsList.appendChild(questionItem);
+        });
+    }
+    
+    // Очистка формы редактирования
+    function clearEditForm() {
+        editTheme.value = '';
+        editQuestion.value = '';
+        editOption1.value = '';
+        editOption2.value = '';
+        editOption3.value = '';
+        editOption4.value = '';
+        editCorrect.value = '0';
+        appState.editingQuestionId = null;
+        playSound('click');
+    }
+    
+    // Сохранение вопроса
+    function saveQuestionHandler() {
+        const theme = editTheme.value.trim();
+        const questionText = editQuestion.value.trim();
+        const options = [
+            editOption1.value.trim(),
+            editOption2.value.trim(),
+            editOption3.value.trim(),
+            editOption4.value.trim()
+        ];
+        const correct = parseInt(editCorrect.value);
+        
+        // Валидация
+        if (!theme || !questionText || options.some(opt => !opt)) {
+            alert('Пожалуйста, заполните все поля!');
+            return;
+        }
+        
+        if (options.some(opt => !opt.trim())) {
+            alert('Все варианты ответов должны быть заполнены!');
+            return;
+        }
+        
+        const question = {
+            theme,
+            question: questionText,
+            options,
+            correct
+        };
+        
+        if (appState.editingQuestionId !== null) {
+            // Редактирование существующего вопроса
+            appState.questions[appState.editingQuestionId] = question;
+            playSound('save');
+        } else {
+            // Добавление нового вопроса
+            appState.questions.push(question);
+            playSound('add');
+        }
+        
+        // Обновляем UI
+        clearEditForm();
+        renderQuestionsList();
+        renderThemeButtons();
+    }
+    
+    // Редактирование вопроса
+    function editQuestionHandler(index) {
+        const question = appState.questions[index];
+        
+        editTheme.value = question.theme;
+        editQuestion.value = question.question;
+        editOption1.value = question.options[0];
+        editOption2.value = question.options[1];
+        editOption3.value = question.options[2];
+        editOption4.value = question.options[3];
+        editCorrect.value = question.correct;
+        
+        appState.editingQuestionId = index;
+        playSound('click');
+        
+        // Прокручиваем к форме
+        document.querySelector('.editor-form').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Удаление вопроса
+    function deleteQuestionHandler(index) {
+        if (confirm('Вы уверены, что хотите удалить этот вопрос?')) {
+            appState.questions.splice(index, 1);
+            renderQuestionsList();
+            renderThemeButtons();
+            playSound('delete');
+        }
+    }
+    
+    // Экспорт вопросов в JSON
+    function exportQuestionsHandler() {
+        const dataStr = JSON.stringify(appState.questions, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+        
+        const exportFileDefaultName = 'викторина_вопросы.json';
+        
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+        
+        playSound('export');
+    }
+    
+    // Импорт вопросов из JSON
+    // Импорт вопросов из одного или нескольких JSON-файлов
+function importQuestionsHandler(event) {
+    const files = Array.from(event.target.files);
+    if (files.length === 0) return;
+
+    let totalImported = 0;
+    let errors = [];
+
+    const processFile = (file) => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedQuestions = JSON.parse(e.target.result);
+
+                    if (!Array.isArray(importedQuestions)) {
+                        throw new Error('Файл должен содержать массив вопросов');
+                    }
+
+                    // Проверяем структуру каждого вопроса
+                    const validQuestions = [];
+                    for (const q of importedQuestions) {
+                        if (q.theme && q.question && Array.isArray(q.options) && q.options.length === 4 && q.correct !== undefined) {
+                            validQuestions.push(q);
+                        }
+                    }
+
+                    if (validQuestions.length === 0) {
+                        throw new Error('Нет корректных вопросов в файле');
+                    }
+
+                    // Добавляем в основной массив
+                    appState.questions = appState.questions.concat(validQuestions);
+                    totalImported += validQuestions.length;
+                    resolve({ success: true, count: validQuestions.length, filename: file.name });
+                } catch (error) {
+                    errors.push({ filename: file.name, error: error.message });
+                    resolve({ success: false, filename: file.name, error: error.message });
+                }
+            };
+            reader.onerror = () => {
+                errors.push({ filename: file.name, error: 'Ошибка чтения файла' });
+                resolve({ success: false, filename: file.name, error: 'Ошибка чтения файла' });
+            };
+            reader.readAsText(file);
+        });
+    };
+
+    // Обрабатываем все файлы параллельно
+    Promise.all(files.map(processFile)).then(results => {
+        // Обновляем UI
+        renderQuestionsList();
+        renderThemeButtons();
+
+        // Формируем сообщение
+        let message = `Импорт завершён!\n`;
+        if (totalImported > 0) {
+            message += `✅ Добавлено вопросов: ${totalImported}\n`;
+        }
+        if (errors.length > 0) {
+            message += `❌ Ошибки в файлах:\n`;
+            errors.forEach(err => {
+                message += `- ${err.filename}: ${err.error}\n`;
+            });
+        }
+
+        alert(message);
+        playSound('import');
+
+        // Сбрасываем input
+        event.target.value = '';
+    });
+}
+    
+    // Звуковые эффекты (заглушки)
+    function playSound(event) {
+        console.log(`Playing sound: ${event}`);
+        // В реальном приложении здесь было бы воспроизведение звука
+        // Например: new Audio(`sounds/${event}.mp3`).play();
+    }
+    
+    // Настройка обработчиков событий
+    function setupEventListeners() {
+        // Основные кнопки
+        startQuiz.addEventListener('click', startQuizHandler);
+        nextButton.addEventListener('click', nextQuestion);
+        restartQuiz.addEventListener('click', restartQuizHandler);
+        exitQuiz.addEventListener('click', exitQuizHandler);
+        modeToggle.addEventListener('click', toggleMode);
+        backToQuiz.addEventListener('click', toggleMode);
+        
+        // Редактор
+        saveQuestion.addEventListener('click', saveQuestionHandler);
+        clearForm.addEventListener('click', clearEditForm);
+        exportQuestions.addEventListener('click', exportQuestionsHandler);
+        importFile.addEventListener('change', importQuestionsHandler);
+        
+        // Обработка клавиатуры
+        document.addEventListener('keydown', function(e) {
+            // Переключение режимов по Ctrl+E
+            if (e.ctrlKey && e.key === 'e') {
+                e.preventDefault();
+                toggleMode();
+            }
+            
+            // Навигация по вариантам ответов в викторине
+            if (appState.currentScreen === 'quiz' && appState.selectedOption === null) {
+                const options = document.querySelectorAll('.option');
+                
+                if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    const current = document.activeElement;
+                    if (current.classList.contains('option')) {
+                        const next = current.nextElementSibling || options[0];
+                        next.focus();
+                    } else {
+                        options[0].focus();
+                    }
+                } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    const current = document.activeElement;
+                    if (current.classList.contains('option')) {
+                        const prev = current.previousElementSibling || options[options.length - 1];
+                        prev.focus();
+                    } else {
+                        options[options.length - 1].focus();
+                    }
+                }
+            }
+        });
+    }
+    
+    // Запуск приложения
+    init();
+});
+</script>
+</body>
+</html>
