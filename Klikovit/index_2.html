@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кликовит - интерактивное приложение</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: auto;
+        }
+        
+        .Apparea {
+            width: 1700px;
+            height: 1100px;
+            background: #BFE6F7;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .Canvaspavnelement {
+            width: 1500px;
+            height: 600px;
+            left: 100px;
+            top: 400px;
+            position: absolute;
+            background: #326287;
+            overflow: hidden;
+            border-radius: 22px;
+            outline: 7px white solid;
+            outline-offset: -7px;
+        }
+        
+        .Imgzone {
+            width: 400px;
+            height: 400px;
+            left: 48px;
+            top: 94px;
+            position: absolute;
+            border-radius: 36px;
+            border: 5px white solid;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .Imgzone img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .Imgzone-text {
+            width: 90%;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+            font-family: Roboto;
+            font-weight: 400;
+            word-wrap: break-word;
+        }
+        
+        .Letter {
+            width: 100px;
+            height: 100px;
+            padding: 10px;
+            position: absolute;
+            background: #244C6A;
+            border-radius: 13px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            display: inline-flex;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 10;
+        }
+        
+        .Letter:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .Letter.selected {
+            background: #4A7C9F;
+            transform: scale(0.95);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+            opacity: 0.7;
+        }
+        
+        .Letter div {
+            align-self: stretch;
+            text-align: center;
+            color: white;
+            font-size: 96px;
+            font-family: Roboto;
+            font-weight: 400;
+            word-wrap: break-word;
+        }
+        
+        .Buttoncheck {
+            left: 1100px;
+            top: 400px;
+            position: absolute;
+            cursor: pointer;
+            z-index: 20;
+        }
+        
+        .Checkimg {
+            width: 72px;
+            height: 70.50px;
+            left: 1114px;
+            top: 415px;
+            position: absolute;
+            pointer-events: none;
+            z-index: 21;
+        }
+        
+        .Buttonbackspace {
+            width: 100px;
+            height: 100px;
+            padding: 10px;
+            left: 1200px;
+            top: 400px;
+            position: absolute;
+            background: #FFB158;
+            border-radius: 13px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            display: inline-flex;
+            cursor: pointer;
+            user-select: none;
+            z-index: 20;
+        }
+        
+        .Buttondel {
+            width: 100px;
+            height: 100px;
+            padding: 10px;
+            left: 1300px;
+            top: 400px;
+            position: absolute;
+            background: #DA3737;
+            border-radius: 13px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            display: inline-flex;
+            cursor: pointer;
+            user-select: none;
+            z-index: 20;
+        }
+        
+        .Buttonbackspace div, .Buttondel div {
+            align-self: stretch;
+            text-align: center;
+            color: white;
+            font-size: 96px;
+            font-family: Roboto;
+            font-weight: 400;
+            line-height: 5px;
+            letter-spacing: 24px;
+            word-wrap: break-word;
+        }
+        
+        .Canvainputdrop {
+            left: 100px;
+            top: 100px;
+            position: absolute;
+            z-index: 5;
+        }
+        
+        .drop-zone {
+            position: absolute;
+            width: 1500px;
+            height: 300px;
+            left: 100px;
+            top: 100px;
+            border-radius: 22px;
+            display: grid;
+            grid-template-columns: repeat(15, 100px);
+            grid-template-rows: repeat(3, 100px);
+            z-index: 8;
+        }
+        
+        .drop-cell {
+            position: relative;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+        
+        .drop-cell:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .dropped-letter {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            padding: 10px;
+            background: #244C6A;
+            border-radius: 13px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 15;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .dropped-letter:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .dropped-letter div {
+            color: white;
+            font-size: 96px;
+            font-family: Roboto;
+            font-weight: 400;
+        }
+        
+        .cursor-letter {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            padding: 10px;
+            background: #4A7C9F;
+            border-radius: 13px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 1000;
+            transform: translate(-50%, -50%);
+            opacity: 0.9;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cursor-letter div {
+            color: white;
+            font-size: 96px;
+            font-family: Roboto;
+            font-weight: 400;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .notification.show {
+            opacity: 1;
+        }
+        
+        .notification.error {
+            background: #f44336;
+        }
+        
+        .notification.success {
+            background: #4CAF50;
+        }
+        
+        .progress-bar {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            z-index: 100;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #4CAF50;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .hint-button {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background: #FFC107;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            z-index: 100;
+            transition: background 0.3s;
+        }
+        
+        .hint-button:hover {
+            background: #FFA000;
+        }
+        
+        .hint-text {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+            max-width: 600px;
+            text-align: center;
+        }
+        
+        .hint-text.show {
+            opacity: 1;
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+        
+        .success-animation {
+            animation: success 0.5s;
+        }
+        
+        @keyframes success {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .completion-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+        
+        .completion-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+        }
+        
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #326287;
+        }
+        
+        .modal-content p {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        
+        .modal-button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .modal-button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div data-layer="appArea" class="Apparea">
+        <!-- Прогресс-бар -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill">1/10</div>
+        </div>
+        
+        <!-- Кнопка подсказки -->
+        <button class="hint-button" id="hintButton">Показать подсказку</button>
+        
+        <!-- Текст подсказки -->
+        <div class="hint-text" id="hintText"></div>
+        
+        <div data-layer="CanvaSpavnElement" class="Canvaspavnelement">
+            <div data-layer="imgZone" class="Imgzone" id="imgZone">
+                <!-- Сюда будет загружаться изображение или текст -->
+            </div>
+            
+            <!-- Буквы алфавита -->
+            <div data-layer="Letter33" class="Letter" style="left: 500px; top: 100px;" data-letter="А">
+                <div>А</div>
+            </div>
+            <div data-layer="Letter32" class="Letter" style="left: 500px; top: 200px;" data-letter="И">
+                <div>И</div>
+            </div>
+            <div data-layer="Letter31" class="Letter" style="left: 500px; top: 300px;" data-letter="С">
+                <div>С</div>
+            </div>
+            <div data-layer="Letter30" class="Letter" style="left: 500px; top: 400px;" data-letter="Ъ">
+                <div>Ъ</div>
+            </div>
+            <div data-layer="Letter29" class="Letter" style="left: 900px; top: 100px;" data-letter="Д">
+                <div>Д</div>
+            </div>
+            <div data-layer="Letter28" class="Letter" style="left: 1000px; top: 200px;" data-letter="Н">
+                <div>Н</div>
+            </div>
+            <div data-layer="Letter27" class="Letter" style="left: 900px; top: 300px;" data-letter="Х">
+                <div>Х</div>
+            </div>
+            <div data-layer="Letter26" class="Letter" style="left: 900px; top: 400px;" data-letter="Ю">
+                <div>Ю</div>
+            </div>
+            <div data-layer="Letter25" class="Letter" style="left: 700px; top: 100px;" data-letter="В">
+                <div>В</div>
+            </div>
+            <div data-layer="Letter24" class="Letter" style="left: 800px; top: 200px;" data-letter="Л">
+                <div>Л</div>
+            </div>
+            <div data-layer="Letter23" class="Letter" style="left: 700px; top: 300px;" data-letter="У">
+                <div>У</div>
+            </div>
+            <div data-layer="Letter22" class="Letter" style="left: 700px; top: 400px;" data-letter="Ь">
+                <div>Ь</div>
+            </div>
+            <div data-layer="Letter21" class="Letter" style="left: 1100px; top: 100px;" data-letter="Ё">
+                <div>Ё</div>
+            </div>
+            <div data-layer="Letter20" class="Letter" style="left: 1200px; top: 200px;" data-letter="П">
+                <div>П</div>
+            </div>
+            <div data-layer="Letter19" class="Letter" style="left: 1100px; top: 300px;" data-letter="Ч">
+                <div>Ч</div>
+            </div>
+            <div data-layer="Letter18" class="Letter" style="left: 600px; top: 100px;" data-letter="Б">
+                <div>Б</div>
+            </div>
+            <div data-layer="Letter17" class="Letter" style="left: 700px; top: 200px;" data-letter="К">
+                <div>К</div>
+            </div>
+            <div data-layer="Letter16" class="Letter" style="left: 600px; top: 300px;" data-letter="Т">
+                <div>Т</div>
+            </div>
+            <div data-layer="Letter15" class="Letter" style="left: 600px; top: 400px;" data-letter="Ы">
+                <div>Ы</div>
+            </div>
+            <div data-layer="Letter14" class="Letter" style="left: 1000px; top: 100px;" data-letter="Е">
+                <div>Е</div>
+            </div>
+            <div data-layer="Letter13" class="Letter" style="left: 1100px; top: 200px;" data-letter="О">
+                <div>О</div>
+            </div>
+            <div data-layer="Letter12" class="Letter" style="left: 1000px; top: 300px;" data-letter="Ц">
+                <div>Ц</div>
+            </div>
+            <div data-layer="Letter11" class="Letter" style="left: 1000px; top: 400px;" data-letter="Я">
+                <div>Я</div>
+            </div>
+            <div data-layer="Letter10" class="Letter" style="left: 800px; top: 100px;" data-letter="Г">
+                <div>Г</div>
+            </div>
+            <div data-layer="Letter9" class="Letter" style="left: 900px; top: 200px;" data-letter="М">
+                <div>М</div>
+            </div>
+            <div data-layer="Letter8" class="Letter" style="left: 800px; top: 300px;" data-letter="Ф">
+                <div>Ф</div>
+            </div>
+            <div data-layer="Letter7" class="Letter" style="left: 800px; top: 400px;" data-letter="Э">
+                <div>Э</div>
+            </div>
+            <div data-layer="Letter6" class="Letter" style="left: 1200px; top: 100px;" data-letter="Ж">
+                <div>Ж</div>
+            </div>
+            <div data-layer="Letter5" class="Letter" style="left: 1300px; top: 200px;" data-letter="Р">
+                <div>Р</div>
+            </div>
+            <div data-layer="Letter4" class="Letter" style="left: 1200px; top: 300px;" data-letter="Ш">
+                <div>Ш</div>
+            </div>
+            <div data-layer="Letter3" class="Letter" style="left: 1300px; top: 100px;" data-letter="З">
+                <div>З</div>
+            </div>
+            <div data-layer="Letter2" class="Letter" style="left: 600px; top: 200px;" data-letter="Й">
+                <div>Й</div>
+            </div>
+            <div data-layer="Letter1" class="Letter" style="left: 1300px; top: 300px;" data-letter="Щ">
+                <div>Щ</div>
+            </div>
+            
+            <!-- Кнопки -->
+<div data-layer="ButtonCheck" class="Buttoncheck" style="width: 100px; height: 100px; background: #4DBE45; border-radius: 13px">
+  <div data-layer="Ellipse 19" class="Ellipse19" style="width: 52px; height: 52px; left: 14px; top: 15px; position: absolute; background: #4DBE45; border-radius: 9999px; border: 5px white solid"></div>
+  <div data-svg-wrapper data-layer="Vector 292" class="Vector292" style="left: 56.50px; top: 57.50px; position: absolute">
+    <svg width="35" height="33" viewBox="0 0 35 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2.5 2.5L32 30.5" stroke="white" stroke-width="5" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div data-svg-wrapper data-layer="Vector 291" class="Vector291" style="left: 28px; top: 31px; position: absolute">
+    <svg width="30" height="28" viewBox="0 0 30 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2.5 9.50049L13.0818 24.6831C13.5052 25.2906 14.4189 25.2433 14.7773 24.5954L27 2.50049" stroke="white" stroke-width="5" stroke-linecap="round"/>
+    </svg>
+  </div>
+</div>
+            
+<div data-layer="ButtonBackspace" class="Buttonbackspace" style="width: 100px; height: 100px; padding: 10px; background: #FFB158; border-radius: 13px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+  <div data-layer="×" style="width: 22px; height: 22px; left: 43px; top: 39px; position: absolute; text-align: center; justify-content: center; display: flex; flex-direction: column; color: white; font-size: 40px; font-family: Roboto; font-weight: 400; line-height: 79.13px; letter-spacing: 10px; word-wrap: break-word">×</div>
+  <div data-svg-wrapper data-layer="Rectangle 37" class="Rectangle37" style="left: 22px; top: 30px; position: absolute">
+    <svg width="56" height="30" viewBox="0 0 56 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M54 2V28H12.876L2.55371 15L12.876 2H54Z" stroke="white" stroke-width="4"/>
+    </svg>
+  </div>
+</div>
+            
+<div data-layer="ButtonDel" class="Buttondel" style="width: 100px; height: 100px; padding-left: 24px; padding-right: 24px; padding-top: 10px; padding-bottom: 10px; background: #DA3737; border-radius: 13px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+  <div data-layer="×" style="align-self: stretch; text-align: center; color: white; font-size: 96px; font-family: Roboto; font-weight: 400; line-height: 189.92px; letter-spacing: 24px; word-wrap: break-word">×</div>
+</div>
+        </div>
+        
+        <div data-svg-wrapper data-layer="CanvaInputDrop" class="Canvainputdrop">
+            <svg width="1500" height="300" viewBox="0 0 1500 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3.5" y="3.5" width="1493" height="293" rx="18.5" fill="#326287"/>
+                <rect x="3.5" y="3.5" width="1493" height="293" rx="18.5" stroke="white" stroke-width="7"/>
+                <path d="M54 200L1450 200" stroke="white" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+        </div>
+        
+        <!-- Зона для сброса букв (сетка 15x3) -->
+        <div class="drop-zone" id="dropZone"></div>
+    </div>
+    
+    <!-- Элемент для буквы, следующей за курсором -->
+    <div class="cursor-letter" id="cursorLetter" style="display: none;">
+        <div></div>
+    </div>
+    
+    <!-- Уведомление -->
+    <div class="notification" id="notification"></div>
+    
+    <!-- Модальное окно завершения -->
+    <div class="completion-modal" id="completionModal">
+        <div class="modal-content">
+            <h2>Поздравляем!</h2>
+            <p>Вы успешно завершили все задания!</p>
+            <button class="modal-button" id="restartButton">Начать заново</button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация переменных
+            const letters = document.querySelectorAll('.Letter');
+            const cursorLetter = document.getElementById('cursorLetter');
+            const cursorLetterContent = cursorLetter.querySelector('div');
+            const dropZone = document.getElementById('dropZone');
+            const buttonCheck = document.querySelector('.Buttoncheck');
+            const buttonBackspace = document.querySelector('.Buttonbackspace');
+            const buttonDel = document.querySelector('.Buttondel');
+            const notification = document.getElementById('notification');
+            const imgZone = document.getElementById('imgZone');
+            const progressFill = document.getElementById('progressFill');
+            const hintButton = document.getElementById('hintButton');
+            const hintText = document.getElementById('hintText');
+            const completionModal = document.getElementById('completionModal');
+            const restartButton = document.getElementById('restartButton');
+            
+            let selectedLetter = null;
+            let isDragging = false;
+            let droppedLetters = [];
+            let currentMouseX = 0;
+            let currentMouseY = 0;
+            let currentTaskIndex = 0;
+            let tasks = [];
+            let currentTask = null;
+            
+            // Загружаем задания из JSON файла
+            async function loadQuestions() {
+                try {
+                    const response = await fetch('questions.json');
+                    if (!response.ok) {
+                        throw new Error('Ошибка загрузки файла');
+                    }
+                    tasks = await response.json();
+                    loadTask();
+                } catch (error) {
+                    console.error('Ошибка при загрузке questions.json:', error);
+                    showNotification('Ошибка загрузки заданий', true);
+                }
+            }
+            
+            // Создаем ячейки для сброса букв
+            for (let i = 0; i < 45; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'drop-cell';
+                cell.dataset.index = i;
+                dropZone.appendChild(cell);
+            }
+            
+            // Функция для показа уведомлений
+            function showNotification(message, isError = false, duration = 2000) {
+                notification.textContent = message;
+                notification.classList.toggle('error', isError);
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, duration);
+            }
+            
+            // Функция для загрузки текущего задания
+            function loadTask() {
+                if (currentTaskIndex >= tasks.length) {
+                    showCompletionModal();
+                    return;
+                }
+                
+                currentTask = tasks[currentTaskIndex];
+                
+                // Очищаем зону изображения
+                imgZone.innerHTML = '';
+                
+                // Загружаем контент задания
+                if (currentTask.type === 'image') {
+                    const img = document.createElement('img');
+                    img.src = currentTask.content;
+                    img.alt = 'Загадка';
+                    imgZone.appendChild(img);
+                } else if (currentTask.type === 'text') {
+                    const textDiv = document.createElement('div');
+                    textDiv.className = 'Imgzone-text';
+                    textDiv.textContent = currentTask.content;
+                    imgZone.appendChild(textDiv);
+                }
+                
+                // Обновляем прогресс-бар
+                updateProgressBar();
+                
+                // Скрываем подсказку
+                hintText.classList.remove('show');
+            }
+            
+            // Функция для обновления прогресс-бара
+            function updateProgressBar() {
+                const progress = ((currentTaskIndex + 1) / tasks.length) * 100;
+                progressFill.style.width = `${progress}%`;
+                progressFill.textContent = `${currentTaskIndex + 1}/${tasks.length}`;
+            }
+            
+            // Функция для проверки ответа
+            function checkAnswer() {
+                if (droppedLetters.length === 0) {
+                    showNotification('Введите ответ', true);
+                    return;
+                }
+                
+                // Собираем все буквы в строку
+                let answer = '';
+                // Сортируем по индексу ячейки
+                const sortedLetters = [...droppedLetters].sort((a, b) => 
+                    parseInt(a.cellIndex) - parseInt(b.cellIndex)
+                );
+                
+                sortedLetters.forEach(item => {
+                    answer += item.letter;
+                });
+
+                // Нормализуем ответ и эталон для нечувствительного к регистру сравнения
+                const normalizedAnswer = answer.toString().trim().toUpperCase();
+                const normalizedExpected = (currentTask.answer || '').toString().trim().toUpperCase();
+
+                // Проверяем ответ
+                if (normalizedAnswer === normalizedExpected) {
+                    // Правильный ответ
+                    showNotification('Правильно!', false);
+                    dropZone.classList.add('success-animation');
+                    
+                    setTimeout(() => {
+                        dropZone.classList.remove('success-animation');
+                        clearDropZone();
+                        currentTaskIndex++;
+                        loadTask();
+                    }, 1000);
+                } else {
+                    // Неправильный ответ
+                    showNotification('Попробуйте еще раз', true);
+                    dropZone.classList.add('shake');
+                    
+                    setTimeout(() => {
+                        dropZone.classList.remove('shake');
+                    }, 500);
+                }
+            }
+            
+            // Функция для очистки зоны сброса
+            function clearDropZone() {
+                droppedLetters.forEach(item => {
+                    item.element.remove();
+                });
+                droppedLetters = [];
+            }
+            
+            // Функция для показа модального окна завершения
+            function showCompletionModal() {
+                completionModal.classList.add('show');
+            }
+            
+            // Функция для перезапуска игры
+            function restartGame() {
+                currentTaskIndex = 0;
+                clearDropZone();
+                loadTask();
+                completionModal.classList.remove('show');
+            }
+            
+            // Обработчики событий для букв
+            letters.forEach(letter => {
+                letter.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    if (isDragging) {
+                        // Если уже перетаскиваем букву, игнорируем клик
+                        return;
+                    } else {
+                        // Начинаем перетаскивание буквы
+                        startDragging(this, e.clientX, e.clientY);
+                    }
+                });
+            });
+            
+            // Функция для начала перетаскивания буквы
+            function startDragging(letterElement, mouseX, mouseY) {
+                selectedLetter = letterElement.dataset.letter;
+                cursorLetterContent.textContent = selectedLetter;
+                
+                // Сразу устанавливаем позицию курсорной буквы в место клика
+                cursorLetter.style.left = mouseX + 'px';
+                cursorLetter.style.top = mouseY + 'px';
+                cursorLetter.style.display = 'flex';
+                
+                isDragging = true;
+                currentMouseX = mouseX;
+                currentMouseY = mouseY;
+                
+                // Добавляем визуальный эффект для выбранной буквы
+                letterElement.classList.add('selected');
+            }
+            
+            // Функция для сброса буквы
+            function dropLetter(e) {
+                if (!isDragging) return;
+                
+                // Сразу скрываем курсорную букву, чтобы избежать фантома
+                cursorLetter.style.display = 'none';
+                
+                // Определяем, находится ли курсор в зоне сброса
+                const dropZoneRect = dropZone.getBoundingClientRect();
+                const isInDropZone = e.clientX >= dropZoneRect.left && 
+                                     e.clientX <= dropZoneRect.right && 
+                                     e.clientY >= dropZoneRect.top && 
+                                     e.clientY <= dropZoneRect.bottom;
+                
+                if (isInDropZone) {
+                    // Вычисляем индекс ячейки
+                    const cellX = Math.floor((e.clientX - dropZoneRect.left) / 100);
+                    const cellY = Math.floor((e.clientY - dropZoneRect.top) / 100);
+                    const cellIndex = cellY * 15 + cellX;
+                    
+                    // Проверяем, не занята ли ячейка
+                    const targetCell = dropZone.children[cellIndex];
+                    if (targetCell && !targetCell.querySelector('.dropped-letter')) {
+                        // Создаем элемент для сброшенной буквы с небольшой задержкой
+                        setTimeout(() => {
+                            const droppedLetter = document.createElement('div');
+                            droppedLetter.className = 'dropped-letter';
+                            droppedLetter.innerHTML = `<div>${selectedLetter}</div>`;
+                            droppedLetter.dataset.letter = selectedLetter;
+                            droppedLetter.dataset.cellIndex = cellIndex;
+                            
+                            // Добавляем обработчик для удаления буквы при клике
+                            droppedLetter.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                removeDroppedLetter(this);
+                            });
+                            
+                            targetCell.appendChild(droppedLetter);
+                            droppedLetters.push({
+                                letter: selectedLetter,
+                                element: droppedLetter,
+                                cellIndex: cellIndex
+                            });
+                        }, 50); // Небольшая задержка для анимации
+                    }
+                }
+                
+                // Завершаем перетаскивание
+                finishDragging();
+            }
+            
+            // Функция для завершения перетаскивания
+            function finishDragging() {
+                isDragging = false;
+                
+                // Убираем визуальный эффект с выбранной буквы
+                letters.forEach(letter => {
+                    letter.classList.remove('selected');
+                });
+            }
+            
+            // Функция для удаления сброшенной буквы
+            function removeDroppedLetter(letterElement) {
+                const cellIndex = parseInt(letterElement.dataset.cellIndex, 10);
+                const letter = letterElement.dataset.letter;
+
+                // Удаляем элемент из DOM
+                letterElement.remove();
+
+                // Удаляем из массива — приводим индексы к числу для корректного сравнения
+                droppedLetters = droppedLetters.filter(item => 
+                    !(parseInt(item.cellIndex, 10) === cellIndex && item.letter === letter)
+                );
+            }
+            
+            // Обработчик движения мыши для буквы, следующей за курсором
+            document.addEventListener('mousemove', function(e) {
+                currentMouseX = e.clientX;
+                currentMouseY = e.clientY;
+                
+                if (isDragging) {
+                    cursorLetter.style.left = e.clientX + 'px';
+                    cursorLetter.style.top = e.clientY + 'px';
+                }
+            });
+            
+            // Обработчик клика по документу для сброса буквы
+            document.addEventListener('click', function(e) {
+                if (isDragging) {
+                    // Проверяем, не кликнули ли мы на кнопку или другую букву
+                    if (!e.target.closest('.Letter') && 
+                        !e.target.closest('.Buttoncheck') && 
+                        !e.target.closest('.Buttonbackspace') && 
+                        !e.target.closest('.Buttondel')) {
+                        dropLetter(e);
+                    }
+                }
+            });
+            
+            // Обработчик клика по ячейкам в зоне сброса
+            dropZone.addEventListener('click', function(e) {
+                if (isDragging) {
+                    dropLetter(e);
+                }
+            });
+            
+            // Обработчик для кнопки "Проверка"
+            buttonCheck.addEventListener('click', function(e) {
+                e.stopPropagation();
+                checkAnswer();
+            });
+            
+            // Обработчик для кнопки "Backspace" (удаление последней буквы)
+            buttonBackspace.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
+                if (droppedLetters.length === 0) {
+                    return;
+                }
+                
+                // Находим последнюю добавленную букву
+                const lastLetter = droppedLetters[droppedLetters.length - 1];
+                removeDroppedLetter(lastLetter.element);
+            });
+            
+            // Обработчик для кнопки "Del" (удаление всех букв)
+            buttonDel.addEventListener('click', function(e) {
+                e.stopPropagation();
+                clearDropZone();
+            });
+            
+            // Обработчик для кнопки подсказки
+            hintButton.addEventListener('click', function() {
+                hintText.textContent = currentTask.hint;
+                hintText.classList.add('show');
+            });
+            
+            // Обработчик для кнопки перезапуска
+            restartButton.addEventListener('click', restartGame);
+            
+            // Предотвращаем контекстное меню при правом клике
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+            
+            // Загружаем задания из JSON файла
+            loadQuestions();
+        });
+    </script>
+</body>
+</html>
