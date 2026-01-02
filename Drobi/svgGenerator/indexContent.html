@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор SVG Дробей</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .generator-app {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 50px;
+            align-items: flex-start;
+        }
+
+        /* Панель управления (Слева) */
+        .controls {
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        h2 { margin: 0 0 10px 0; font-size: 20px; }
+        label { font-size: 14px; font-weight: bold; margin-bottom: 5px; display: block; }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box; /* Чтобы padding не ломал ширину */
+        }
+
+        input[type="color"] {
+            width: 100%;
+            height: 50px;
+            border: none;
+            cursor: pointer;
+            background: none;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-update { background: #333; color: white; }
+        .btn-download { background: #1EB159; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
+        button:hover { opacity: 0.9; }
+
+        /* Область предпросмотра (Справа) */
+        .preview-area {
+            display: flex;
+            gap: 30px;
+            background: #E8E8E8;
+            padding: 30px;
+            border-radius: 16px;
+            align-items: center;
+        }
+
+        .svg-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .label-tag {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        svg {
+            background: transparent; /* Важно для экспорта без фона */
+            display: block;
+        }
+
+        /* Тень только для превью на сайте, в файле её не будет */
+        .preview-shadow {
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1)); 
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="generator-app">
+    
+    <div class="controls">
+        <h2>Настройки</h2>
+        
+        <div>
+            <label>Числитель (Части)</label>
+            <input type="number" id="inp-num" value="3" min="0">
+        </div>
+
+        <div>
+            <label>Знаменатель (Всего)</label>
+            <input type="number" id="inp-denom" value="5" min="1">
+        </div>
+
+        <div>
+            <label>Цвет заливки</label>
+            <input type="color" id="inp-color" value="#FF5555">
+        </div>
+
+        <button class="btn-update" onclick="updateVisuals()">Обновить вид</button>
+
+        <div class="btn-group">
+            <button class="btn-download" onclick="downloadSVG('svg-circle', 'pie_chart')">
+                💾 Скачать Круг
+            </button>
+            <button class="btn-download" onclick="downloadSVG('svg-fraction', 'fraction_text')">
+                💾 Скачать Цифры
+            </button>
+        </div>
+    </div>
+
+    <div class="preview-area">
+        
+        <div class="svg-container">
+            <span class="label-tag">Круг</span>
+            <svg id="svg-circle" width="200" height="200" viewBox="0 0 200 200" class="preview-shadow" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+
+        <div class="svg-container">
+            <span class="label-tag">Дробь</span>
+            <svg id="svg-fraction" width="100" height="160" viewBox="0 0 100 160" class="preview-shadow" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // --- ЭЛЕМЕНТЫ ---
+    const inpNum = document.getElementById('inp-num');
+    const inpDenom = document.getElementById('inp-denom');
+    const inpColor = document.getElementById('inp-color');
+    const svgCircle = document.getElementById('svg-circle');
+    const svgFraction = document.getElementById('svg-fraction');
+
+    // --- ОСНОВНАЯ ЛОГИКА ---
+
+    function updateVisuals() {
+        const num = parseInt(inpNum.value) || 0;
+        const total = parseInt(inpDenom.value) || 1;
+        const color = inpColor.value;
+
+        // Рисуем оба элемента
+        drawPieChart(num, total, color);
+        drawFractionText(num, total);
+    }
+
+    // 1. Рисуем Круг (Пирог)
+    function drawPieChart(num, total, fillColor) {
+        svgCircle.innerHTML = ''; // Очистка
+
+        const cx = 100;
+        const cy = 100;
+        const radius = 90;
+        const strokeColor = "#000000";
+
+        for (let i = 0; i < total; i++) {
+            // Математика углов (начало сверху, -90deg)
+            const startAngle = (i * 2 * Math.PI) / total - Math.PI / 2;
+            const endAngle = ((i + 1) * 2 * Math.PI) / total - Math.PI / 2;
+
+            const x1 = cx + radius * Math.cos(startAngle);
+            const y1 = cy + radius * Math.sin(startAngle);
+            const x2 = cx + radius * Math.cos(endAngle);
+            const y2 = cy + radius * Math.sin(endAngle);
+
+            // Path для сегмента
+            const d = `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 0 1 ${x2} ${y2} Z`;
+
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", d);
+            path.setAttribute("stroke", strokeColor);
+            path.setAttribute("stroke-width", "2");
+
+            // Заливка подряд
+            if (i < num) {
+                path.setAttribute("fill", fillColor);
+            } else {
+                path.setAttribute("fill", "#FFFFFF"); // Белый фон для пустых (или transparent)
+            }
+
+            svgCircle.appendChild(path);
+        }
+    }
+
+    // 2. Рисуем Дробь (Цифры и линия)
+    function drawFractionText(num, total) {
+        svgFraction.innerHTML = ''; // Очистка
+
+        // Настройки шрифта
+        const fontSize = "60";
+        const fontFamily = "sans-serif"; // Используем стандартный шрифт для совместимости
+        const fontWeight = "bold";
+        const color = "#000000";
+
+        // 1. Числитель (сверху)
+        const textNum = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        textNum.setAttribute("x", "50"); // Центр по горизонтали (половина от 100)
+        textNum.setAttribute("y", "55"); // Позиция по вертикали
+        textNum.setAttribute("text-anchor", "middle"); // Выравнивание текста по центру
+        textNum.setAttribute("font-family", fontFamily);
+        textNum.setAttribute("font-size", fontSize);
+        textNum.setAttribute("font-weight", fontWeight);
+        textNum.setAttribute("fill", color);
+        textNum.textContent = num;
+
+        // 2. Линия дроби (посередине)
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", "10");
+        line.setAttribute("y1", "80"); // Середина высоты (160/2)
+        line.setAttribute("x2", "90");
+        line.setAttribute("y2", "80");
+        line.setAttribute("stroke", color);
+        line.setAttribute("stroke-width", "4");
+        line.setAttribute("stroke-linecap", "round"); // Скругленные края линии
+
+        // 3. Знаменатель (снизу)
+        const textDenom = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        textDenom.setAttribute("x", "50");
+        textDenom.setAttribute("y", "145");
+        textDenom.setAttribute("text-anchor", "middle");
+        textDenom.setAttribute("font-family", fontFamily);
+        textDenom.setAttribute("font-size", fontSize);
+        textDenom.setAttribute("font-weight", fontWeight);
+        textDenom.setAttribute("fill", color);
+        textDenom.textContent = total;
+
+        // Добавляем в SVG
+        svgFraction.appendChild(textNum);
+        svgFraction.appendChild(line);
+        svgFraction.appendChild(textDenom);
+    }
+
+    // --- ФУНКЦИЯ СКАЧИВАНИЯ ---
+    function downloadSVG(elementId, fileNameBase) {
+        const svgElement = document.getElementById(elementId);
+        
+        // Сериализуем DOM элемента в строку
+        const serializer = new XMLSerializer();
+        let source = serializer.serializeToString(svgElement);
+
+        // Добавляем namespace, если вдруг браузер не добавил (нужно для валидности файла)
+        if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+            source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+        }
+
+        // Убираем тень (класс preview-shadow), чтобы её не было в файле
+        // (хотя SVG стили classes могут не экспортироваться, лучше быть уверенным)
+        source = source.replace('class="preview-shadow"', '');
+
+        // Создаем Blob (файл в памяти)
+        const blob = new Blob([source], {type: "image/svg+xml;charset=utf-8"});
+        const url = URL.createObjectURL(blob);
+
+        // Создаем временную ссылку для скачивания
+        const link = document.createElement("a");
+        link.href = url;
+        
+        // Генерируем имя файла: например pie_chart_3_5.svg
+        const num = inpNum.value;
+        const den = inpDenom.value;
+        link.download = `${fileNameBase}_${num}_${den}.svg`;
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Слушатели событий (чтобы обновлялось при вводе)
+    inpNum.addEventListener('input', updateVisuals);
+    inpDenom.addEventListener('input', updateVisuals);
+    inpColor.addEventListener('input', updateVisuals);
+
+    // Первый запуск
+    updateVisuals();
+
+</script>
+
+</body>
+</html>
