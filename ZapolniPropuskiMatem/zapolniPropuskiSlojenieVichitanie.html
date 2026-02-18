@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор примеров (заполнение пропусков)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cell-size: 45px; /* Чуть уменьшил, чтобы 5 знаков влезали комфортно */
+            --font-size: 32px;
+        }
+
+        body {
+            font-family: 'Roboto Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f4f8;
+            padding: 20px;
+        }
+
+        h1 { font-size: 1.5rem; color: #333; margin-bottom: 20px;}
+
+        .controls {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: #4a90e2;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+        }
+
+        button:hover { background-color: #357abd; transform: translateY(-1px); }
+        button.check-btn { background-color: #2ecc71; }
+        button.download-btn { background-color: #9b59b6; }
+        button.download-btn:hover { background-color: #8e44ad; }
+
+        select {
+            padding: 8px 12px;
+            font-size: 16px;
+            border: 2px solid #4a90e2;
+            border-radius: 6px;
+            background-color: white;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        #problems-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 1200px;
+        }
+
+        .math-problem {
+            display: grid;
+            grid-template-columns: repeat(var(--cols), var(--cell-size));
+            row-gap: 5px;
+            font-size: var(--font-size);
+            background: white;
+            padding: 20px 20px 20px 50px; /* Отступ слева под знак */
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .cell {
+            width: var(--cell-size);
+            height: var(--cell-size);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-box {
+            width: 100%;
+            height: 100%;
+            font-family: inherit;
+            font-size: inherit;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            outline: none;
+            background: #fff;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .input-box:focus { border-color: #4a90e2; }
+        .input-box.correct { border-color: #2ecc71; background-color: #e8f8f5; color: #2ecc71; }
+        .input-box.wrong { border-color: #e74c3c; background-color: #fdedec; }
+
+        .operator-sign {
+            position: absolute;
+            left: 15px;
+            top: 52px; /* Подбираем визуально под вторую строку */
+            font-size: 40px;
+            font-weight: bold;
+            color: #333;
+            line-height: 1;
+        }
+        
+        .divider {
+            grid-column: 1 / -1;
+            height: 3px;
+            background-color: #333;
+            margin-top: -2px;
+            margin-bottom: 2px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Математика: заполнение пропусков</h1>
+
+    <div class="controls">
+        <label>
+            Количество знаков:
+            <select id="digits-select" onchange="generateSet()">
+                <option value="3">3 знака</option>
+                <option value="4">4 знака</option>
+                <option value="5" selected>5 знаков</option>
+            </select>
+        </label>
+        <button onclick="generateSet()">Новые примеры</button>
+        <button class="check-btn" onclick="checkAnswers()">Проверить</button>
+        <button class="download-btn" onclick="downloadSVG()">Скачать SVG</button>
+    </div>
+
+    <div id="problems-container"></div>
+
+    <script>
+        // Глобальная переменная для хранения текущих данных примеров
+        // Это нужно, чтобы SVG генерировался на основе тех же данных, что и HTML
+        let currentProblemsData = [];
+
+        // --- УТИЛИТЫ ---
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function padNumberToArray(number, totalLength) {
+            let str = number.toString();
+            while (str.length < totalLength) {
+                str = " " + str;
+            }
+            return str.split('');
+        }
+
+        // --- ЛОГИКА ГЕНЕРАЦИИ ДАННЫХ ---
+
+        /**
+         * Создает объект данных для одного примера (без создания HTML)
+         */
+        function generateProblemData() {
+            const isAddition = Math.random() > 0.5;
+
+            // Получаем выбранное количество знаков
+            const digits = parseInt(document.getElementById('digits-select').value);
+
+            // Вычисляем минимальное и максимальное значение для указанного количества знаков
+            const min = Math.pow(10, digits - 1);
+            const max = Math.pow(10, digits) - 1;
+
+            // Генерируем числа в соответствии с выбранным количеством знаков
+            let num1 = getRandomInt(min, max);
+            let num2 = getRandomInt(Math.min(min, Math.max(10, min / 10)), max);
+
+            let result;
+            let operatorSymbol;
+
+            if (isAddition) {
+                result = num1 + num2;
+                operatorSymbol = '+';
+            } else {
+                if (num2 > num1) [num1, num2] = [num2, num1];
+                result = num1 - num2;
+                operatorSymbol = '−';
+            }
+
+            // Определяем ширину сетки (максимальная длина числа)
+            const maxLength = Math.max(num1.toString().length, num2.toString().length, result.toString().length);
+            
+            const row1 = padNumberToArray(num1, maxLength);
+            const row2 = padNumberToArray(num2, maxLength);
+            const row3 = padNumberToArray(result, maxLength);
+
+            // Структура для хранения состояния каждой ячейки
+            // grid[row][col] = { value: '5', isInput: true/false }
+            let grid = [[], [], []]; 
+
+            // Логика выбора пропусков (1 пропуск на колонку)
+            for (let col = 0; col < maxLength; col++) {
+                const val1 = row1[col];
+                const val2 = row2[col];
+                const val3 = row3[col];
+
+                let validRows = [];
+                if (val1 !== ' ') validRows.push(0);
+                if (val2 !== ' ') validRows.push(1);
+                if (val3 !== ' ') validRows.push(2);
+
+                let hiddenRowIndex = -1;
+                if (validRows.length > 0) {
+                    const randomIdx = Math.floor(Math.random() * validRows.length);
+                    hiddenRowIndex = validRows[randomIdx];
+                }
+
+                grid[0].push({ value: val1, isInput: (hiddenRowIndex === 0) });
+                grid[1].push({ value: val2, isInput: (hiddenRowIndex === 1) });
+                grid[2].push({ value: val3, isInput: (hiddenRowIndex === 2) });
+            }
+
+            return {
+                operator: operatorSymbol,
+                grid: grid,
+                cols: maxLength
+            };
+        }
+
+        // --- РЕНДЕР HTML ---
+
+        function renderProblemsToHTML() {
+            const container = document.getElementById('problems-container');
+            container.innerHTML = ''; // Очистка
+
+            currentProblemsData.forEach(problem => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'math-problem';
+                wrapper.style.setProperty('--cols', problem.cols);
+
+                // Знак
+                const signEl = document.createElement('div');
+                signEl.className = 'operator-sign';
+                signEl.textContent = problem.operator;
+                wrapper.appendChild(signEl);
+
+                // Отрисовка сетки
+                for (let r = 0; r < 3; r++) {
+                    if (r === 2) {
+                        const div = document.createElement('div');
+                        div.className = 'divider';
+                        wrapper.appendChild(div);
+                    }
+
+                    for (let c = 0; c < problem.cols; c++) {
+                        const cellData = problem.grid[r][c];
+                        const cellDiv = document.createElement('div');
+                        cellDiv.className = 'cell';
+
+                        if (cellData.value === ' ') {
+                            cellDiv.innerHTML = '';
+                        } else if (cellData.isInput) {
+                            const input = document.createElement('input');
+                            input.type = 'text';
+                            input.className = 'input-box';
+                            input.maxLength = 1;
+                            input.dataset.correctValue = cellData.value;
+                            input.addEventListener('input', function(e) {
+                                this.value = this.value.replace(/[^0-9]/g, '');
+                                this.classList.remove('correct', 'wrong');
+                            });
+                            cellDiv.appendChild(input);
+                        } else {
+                            cellDiv.textContent = cellData.value;
+                        }
+                        wrapper.appendChild(cellDiv);
+                    }
+                }
+                container.appendChild(wrapper);
+            });
+        }
+
+        // --- УПРАВЛЕНИЕ ---
+
+        function generateSet() {
+            currentProblemsData = [];
+            // Генерируем 4 примера
+            for (let i = 0; i < 4; i++) {
+                currentProblemsData.push(generateProblemData());
+            }
+            renderProblemsToHTML();
+        }
+
+        function checkAnswers() {
+            const inputs = document.querySelectorAll('.input-box');
+            inputs.forEach(input => {
+                if (input.value === input.dataset.correctValue) {
+                    input.classList.add('correct');
+                    input.classList.remove('wrong');
+                } else {
+                    input.classList.add('wrong');
+                    input.classList.remove('correct');
+                }
+            });
+        }
+
+        // --- SVG ЭКСПОРТ ---
+
+        function downloadSVG() {
+            // Константы для отрисовки SVG (должны совпадать или быть пропорциональны CSS)
+            const CELL_W = 50; 
+            const CELL_H = 60;
+            const FONT_SIZE = 40;
+            const PROBLEM_GAP = 100; // Отступ между примерами
+            const SIGN_OFFSET_X = -40; // Смещение знака влево
+
+            // Вычисляем общую ширину и высоту холста
+            // Допустим, мы располагаем их в одну строку для простоты печати
+            let totalWidth = 0;
+            let maxHeight = CELL_H * 3 + 20; // 3 строки + отступы
+            
+            // Предварительный расчет ширины
+            currentProblemsData.forEach(p => {
+                totalWidth += (p.cols * CELL_W) + PROBLEM_GAP;
+            });
+
+            // Начало SVG строки
+            let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${totalWidth}" height="${maxHeight}" viewBox="0 0 ${totalWidth} ${maxHeight}">`;
+            
+            // Добавляем стиль шрифта внутрь SVG
+            svgContent += `
+                <style>
+                    text { font-family: 'Courier New', monospace; font-size: ${FONT_SIZE}px; text-anchor: middle; dominant-baseline: middle; }
+                    .sign { font-weight: bold; font-size: 50px; text-anchor: end;}
+                    .box { fill: none; stroke: black; stroke-width: 2; }
+                    .line { stroke: black; stroke-width: 3; }
+                </style>
+                <rect width="100%" height="100%" fill="white"/>
+            `;
+
+            let currentX = 100; // Начальный отступ слева
+
+            currentProblemsData.forEach(problem => {
+                const problemWidth = problem.cols * CELL_W;
+                
+                // Группа для одного примера
+                svgContent += `<g transform="translate(${currentX}, 20)">`;
+
+                // Рисуем знак (+ или -)
+                // Координаты: x = левее начала, y = середина второй строки
+                svgContent += `<text x="${SIGN_OFFSET_X}" y="${CELL_H * 1.5 + 5}" class="sign" font-size="50" font-family="'Courier New', monospace" font-weight="bold">${problem.operator}</text>`;
+
+                // Рисуем сетку
+                for (let r = 0; r < 3; r++) {
+                    // Добавляем линию между 2-й и 3-й строкой
+                    if (r === 2) {
+                        const lineY = CELL_H * 2;
+                        svgContent += `<line x1="0" y1="${lineY}" x2="${problemWidth}" y2="${lineY}" class="line" />`;
+                    }
+                    for (let c = 0; c < problem.cols; c++) {
+                        const cellData = problem.grid[r][c];
+                        const x = c * CELL_W;
+                        const y = r * CELL_H;
+
+                        // Центр ячейки для текста
+                        const cx = x + CELL_W / 2;
+                        const cy = y + CELL_H / 2;
+
+                        if (cellData.value !== ' ') {
+                            if (cellData.isInput) {
+                                // Рисуем квадратик (поле ввода)
+                                // Немного отступаем от краев ячейки
+                                svgContent += `<rect x="${x + 5}" y="${y + 5}" width="${CELL_W - 10}" height="${CELL_H - 10}" class="box" rx="5" />`;
+                            } else {
+                                // Рисуем цифру
+                                svgContent += `<text x="${cx}" y="${cy + 5}" font-size="${FONT_SIZE}" font-family="'Courier New', monospace">${cellData.value}</text>`;
+                            }
+                        }
+                    }
+                }
+
+                svgContent += `</g>`;
+                
+                // Сдвигаем X для следующего примера
+                currentX += problemWidth + PROBLEM_GAP;
+            });
+
+            svgContent += `</svg>`;
+
+            // Создаем файл и скачиваем
+            const blob = new Blob([svgContent], {type: 'image/svg+xml'});
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'math-problems.svg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Запуск
+        generateSet();
+
+    </script>
+</body>
+</html>
