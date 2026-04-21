@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Собери Слово - Физическая Игра</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Базовые стили для предотвращения прокрутки и выделения текста */
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #0f172a; touch-action: none; user-select: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        canvas { display: block; }
+        .glow-text { text-shadow: 0 0 10px rgba(45, 212, 191, 0.8); }
+    </style>
+</head>
+<body class="text-white">
+
+    <div id="ui-layer" class="absolute inset-0 pointer-events-none flex flex-col justify-between p-4 z-10">
+        
+        <div class="flex flex-col items-center mt-4">
+            <h1 id="level-title" class="text-2xl md:text-3xl font-bold text-gray-400 mb-2 uppercase tracking-widest">Загрузка...</h1>
+            <div id="progress-container" class="text-4xl md:text-5xl font-mono font-bold tracking-[0.3em] glow-text text-teal-300">
+                </div>
+        </div>
+
+        <div class="flex justify-between items-end pb-4 px-4 pointer-events-auto">
+            <button id="btn-restart" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded shadow-lg transition-colors border border-slate-600">
+                Заново
+            </button>
+            <button id="btn-next" class="hidden bg-teal-600 hover:bg-teal-500 text-white font-bold py-2 px-6 rounded shadow-[0_0_15px_rgba(13,148,136,0.5)] transition-all border border-teal-400">
+                Следующий уровень
+            </button>
+        </div>
+    </div>
+
+    <div id="victory-modal" class="absolute inset-0 z-20 flex items-center justify-center bg-slate-900/80 backdrop-blur-sm hidden transition-opacity duration-500 opacity-0 pointer-events-auto">
+        <div class="bg-slate-800 p-8 rounded-2xl shadow-[0_0_50px_rgba(45,212,191,0.3)] text-center transform scale-90 transition-transform duration-500" id="victory-box">
+            <h2 class="text-5xl font-bold text-teal-400 mb-4 glow-text">Отлично!</h2>
+            <p class="text-xl text-gray-300 mb-8">Слово собрано верно.</p>
+            <button id="btn-modal-next" class="bg-teal-500 hover:bg-teal-400 text-slate-900 font-bold py-3 px-8 rounded-full text-lg shadow-lg transition-transform hover:scale-105">
+                Продолжить
+            </button>
+        </div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script>
+        // --- ШАГ 1: ДАННЫЕ И НАСТРОЙКИ ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Ссылки на элементы DOM
+        const uiProgress = document.getElementById('progress-container');
+        const uiTitle = document.getElementById('level-title');
+        const btnRestart = document.getElementById('btn-restart');
+        const btnNext = document.getElementById('btn-next');
+        const victoryModal = document.getElementById('victory-modal');
+        const victoryBox = document.getElementById('victory-box');
+        const btnModalNext = document.getElementById('btn-modal-next');
+
+        // Глобальные переменные состояния
+        let levelsData = null;
+        let currentLevelIndex = 0;
+        let targetString = "";
+        let particles = [];
+        let chain = [];
+        let mouse = { x: -1000, y: -1000, active: false };
+        let animationFrameId;
+        let confettiParticles = [];
+        let isVictory = false;
+        let hintImage = null;
+
+        // Звуковой контекст (создается при первом клике для обхода автоплея браузеров)
+        let audioCtx;
+        function playBeep(freq, type, duration) {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + duration);
+        }
+
+        // Подгоняем Canvas под размер окна
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // --- ШАГ 2: КЛАСС ЧАСТИЦЫ ---
+        class Particle {
+            constructor(x, y, symbol) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 4; // Начальная случайная скорость
+                this.vy = (Math.random() - 0.5) * 4;
+                this.radius = Math.random() * 5 + 35; // Радиус 35-40px
+                this.symbol = symbol;
+                this.mass = this.radius / 10;
+                this.captured = false; // Поймана ли в цепочку?
+                this.wanderAngle = Math.random() * Math.PI * 2;
+            }
+
+            update() {
+                if (!this.captured) {
+                    // Случайное блуждание (Wander force)
+                    this.wanderAngle += (Math.random() - 0.5) * 0.5;
+                    this.vx += Math.cos(this.wanderAngle) * 0.1;
+                    this.vy += Math.sin(this.wanderAngle) * 0.1;
+
+                    // Демпфирование (Трение)
+                    this.vx *= 0.98;
+                    this.vy *= 0.98;
+                } else {
+                    // Трение для цепочки (более сильное, чтобы не болтались как сумасшедшие)
+                    this.vx *= 0.85;
+                    this.vy *= 0.85;
+                }
+
+                // Интеграция Эйлера
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Отскок от стен
+                const pad = this.radius;
+                if (this.x < pad) { this.x = pad; this.vx *= -0.8; }
+                if (this.x > canvas.width - pad) { this.x = canvas.width - pad; this.vx *= -0.8; }
+                if (this.y < pad) { this.y = pad; this.vy *= -0.8; }
+                if (this.y > canvas.height - pad) { this.y = canvas.height - pad; this.vy *= -0.8; }
+            }
+
+            draw(isTarget) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+
+                if (this.captured) {
+                    // Стилизация для собранных в цепочку
+                    ctx.fillStyle = '#0d9488'; // teal-600
+                    ctx.strokeStyle = '#2dd4bf'; // teal-400
+                    ctx.lineWidth = 3;
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#2dd4bf';
+                } else {
+                    ctx.fillStyle = '#1e293b';
+                    ctx.strokeStyle = '#475569';
+                    ctx.lineWidth = 2;
+                    ctx.shadowBlur = 0;
+                }
+
+                ctx.fill();
+                ctx.stroke();
+
+                // Отрисовка символа
+                ctx.fillStyle = this.captured ? '#ffffff' : '#94a3b8';
+                ctx.shadowBlur = 0;
+                ctx.font = `bold ${this.radius}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(this.symbol, this.x, this.y + 2); // +2 для визуальной центровки
+            }
+        }
+
+        // --- ШАГ 3: ЛОГИКА ИГРЫ ---
+
+        function initLevel(index) {
+            if (index >= levelsData.levels.length) {
+                alert("Поздравляем! Вы прошли все уровни!");
+                index = 0;
+            }
+            currentLevelIndex = index;
+            const level = levelsData.levels[index];
+            targetString = level.target;
+            uiTitle.innerText = level.title;
+
+            particles = [];
+            chain = [];
+            isVictory = false;
+            confettiParticles = [];
+
+            // Подгружаем картинку-подсказку
+            hintImage = null;
+            if (level.hint) {
+                const img = new Image();
+                img.onload = () => { hintImage = img; };
+                img.src = level.hint;
+            }
+
+            // Скрываем победные UI элементы
+            victoryModal.classList.add('hidden');
+            victoryModal.classList.remove('opacity-100');
+            victoryModal.classList.add('opacity-0');
+            victoryBox.classList.remove('scale-100');
+            btnNext.classList.add('hidden');
+
+            updateUIProgress();
+
+            // Создаем массив всех нужных символов + мусор
+            let symbolsToSpawn = targetString.split('').concat(level.extraSymbols);
+            
+            // Перемешиваем массив символов (алгоритм Фишера-Йетса)
+            for (let i = symbolsToSpawn.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [symbolsToSpawn[i], symbolsToSpawn[j]] = [symbolsToSpawn[j], symbolsToSpawn[i]];
+            }
+
+            // Создаем частицы, распределяя их по экрану
+            symbolsToSpawn.forEach(sym => {
+                const x = 50 + Math.random() * (canvas.width - 100);
+                const y = 150 + Math.random() * (canvas.height - 200);
+                particles.push(new Particle(x, y, sym));
+            });
+        }
+
+        function updateUIProgress() {
+            let displayStr = "";
+            for (let i = 0; i < targetString.length; i++) {
+                if (i < chain.length) {
+                    displayStr += targetString[i] + " ";
+                } else {
+                    displayStr += "_ ";
+                }
+            }
+            uiProgress.innerText = displayStr.trim();
+        }
+
+        // Применяем силы взаимодействия между частицами и курсором
+        function applyPhysics() {
+            const nextSymbol = targetString[chain.length];
+
+            // 1. Отталкивание частиц друг от друга
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p1 = particles[i];
+                    const p2 = particles[j];
+                    const dx = p2.x - p1.x;
+                    const dy = p2.y - p1.y;
+                    const dist = Math.hypot(dx, dy);
+                    const minDist = p1.radius + p2.radius + 5; // 5px padding
+
+                    if (dist < minDist && dist > 0) {
+                        const force = (minDist - dist) * 0.05; // Мягкое расталкивание
+                        const nx = dx / dist;
+                        const ny = dy / dist;
+                        
+                        // Если частица в цепочке, она тяжелее, ее труднее сдвинуть
+                        const m1 = p1.captured ? 10 : 1;
+                        const m2 = p2.captured ? 10 : 1;
+
+                        p1.vx -= (nx * force) / m1;
+                        p1.vy -= (ny * force) / m1;
+                        p2.vx += (nx * force) / m2;
+                        p2.vy += (ny * force) / m2;
+                    }
+                }
+            }
+
+            // 2. Взаимодействие с курсором и логика захвата
+            if (mouse.active && !isVictory) {
+                for (let p of particles) {
+                    if (p.captured) continue;
+
+                    const dx = p.x - mouse.x;
+                    const dy = p.y - mouse.y;
+                    const dist = Math.hypot(dx, dy);
+                    const isTarget = p.symbol === nextSymbol;
+
+                    if (isTarget) {
+                        // Магнитное притягивание (захват) искомой буквы
+                        if (dist < 60) {
+                            p.captured = true;
+                            chain.push(p);
+                            updateUIProgress();
+                            playBeep(440 + chain.length * 50, 'sine', 0.1); // Звук прилипания (повышается тон)
+                            
+                            // Проверка на победу
+                            if (chain.length === targetString.length) {
+                                triggerVictory();
+                            }
+                        }
+                    } else {
+                        // Отталкивание "мусора" от курсора
+                        if (dist < 200) {
+                            const force = (200 - dist) * 0.005;
+                            p.vx += (dx / dist) * force;
+                            p.vy += (dy / dist) * force;
+                        }
+                    }
+                }
+
+                // Отталкивание мусора от уже собранной цепочки
+                for (let p of particles) {
+                    if (p.captured) continue;
+                    for (let c of chain) {
+                        const dx = p.x - c.x;
+                        const dy = p.y - c.y;
+                        const dist = Math.hypot(dx, dy);
+                        if (dist < 150) {
+                            const force = (150 - dist) * 0.002;
+                            p.vx += (dx / dist) * force;
+                            p.vy += (dy / dist) * force;
+                        }
+                    }
+                }
+            }
+
+            // 3. Пружины для цепочки (Hooke's Law)
+            for (let i = 0; i < chain.length; i++) {
+                const c = chain[i];
+                let targetX, targetY;
+
+                if (i === 0) {
+                    // Первая частица тянется к курсору (если мышь на экране)
+                    if (mouse.active) {
+                        targetX = mouse.x;
+                        targetY = mouse.y;
+                    } else {
+                        targetX = c.x; // Остается на месте
+                        targetY = c.y;
+                    }
+                } else {
+                    // Остальные тянутся к предыдущей частице в цепочке
+                    const prev = chain[i - 1];
+                    targetX = prev.x;
+                    targetY = prev.y;
+                }
+
+                const dx = targetX - c.x;
+                const dy = targetY - c.y;
+                const dist = Math.hypot(dx, dy);
+                
+                // Целевое расстояние (чтобы они не сливались в одну точку)
+                const restLength = (i === 0) ? 0 : c.radius * 1.8;
+
+                if (dist > 0) {
+                    // Жесткость пружины
+                    const k = 0.08; 
+                    const force = (dist - restLength) * k;
+                    c.vx += (dx / dist) * force;
+                    c.vy += (dy / dist) * force;
+                }
+            }
+        }
+
+        // --- ШАГ 4: ВИЗУАЛЬНЫЕ ЭФФЕКТЫ (ПОБЕДА И КОНФЕТТИ) ---
+
+        function triggerVictory() {
+            isVictory = true;
+            playBeep(600, 'square', 0.1);
+            setTimeout(() => playBeep(800, 'square', 0.1), 100);
+            setTimeout(() => playBeep(1000, 'square', 0.2), 200);
+
+            // Генерируем конфетти
+            for (let i = 0; i < 100; i++) {
+                confettiParticles.push({
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 20,
+                    vy: (Math.random() - 0.5) * 20 - 5,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    size: Math.random() * 8 + 4,
+                    life: 1.0
+                });
+            }
+
+            // Показываем UI через небольшую задержку
+            setTimeout(() => {
+                btnNext.classList.remove('hidden');
+                victoryModal.classList.remove('hidden');
+                // Даем браузеру отрендерить снятие hidden, затем запускаем анимацию opacity
+                requestAnimationFrame(() => {
+                    victoryModal.classList.remove('opacity-0');
+                    victoryModal.classList.add('opacity-100');
+                    victoryBox.classList.add('scale-100');
+                });
+            }, 1000);
+        }
+
+        function updateAndDrawConfetti() {
+            for (let i = confettiParticles.length - 1; i >= 0; i--) {
+                let c = confettiParticles[i];
+                c.vy += 0.5; // Гравитация
+                c.x += c.vx;
+                c.y += c.vy;
+                c.life -= 0.01;
+
+                if (c.life <= 0) {
+                    confettiParticles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.fillStyle = c.color;
+                ctx.globalAlpha = c.life;
+                ctx.fillRect(c.x, c.y, c.size, c.size);
+            }
+            ctx.globalAlpha = 1.0;
+        }
+
+        // Главный игровой цикл
+        function loop() {
+            // Очистка экрана
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Полупрозрачная подсказка на фоне
+            if (hintImage) {
+                const scale = Math.min(canvas.width * 0.7 / hintImage.width, canvas.height * 0.7 / hintImage.height);
+                const w = hintImage.width * scale;
+                const h = hintImage.height * scale;
+                ctx.globalAlpha = 0.08;
+                ctx.drawImage(hintImage, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
+                ctx.globalAlpha = 1.0;
+            }
+
+            applyPhysics();
+
+            const nextSymbol = targetString[chain.length];
+
+            // Отрисовка линий пружин (до частиц, чтобы они были под ними)
+            ctx.lineWidth = 4;
+            for (let i = 1; i < chain.length; i++) {
+                ctx.beginPath();
+                ctx.moveTo(chain[i-1].x, chain[i-1].y);
+                ctx.lineTo(chain[i].x, chain[i].y);
+                // Градиент для цепочки
+                const grad = ctx.createLinearGradient(chain[i-1].x, chain[i-1].y, chain[i].x, chain[i].y);
+                grad.addColorStop(0, '#0f766e'); // teal-700
+                grad.addColorStop(1, '#2dd4bf'); // teal-400
+                ctx.strokeStyle = grad;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#0d9488';
+                ctx.stroke();
+            }
+
+            // Обновление и отрисовка частиц
+            particles.forEach(p => {
+                p.update();
+                // Проверяем, является ли частица текущей искомой (и еще не поймана)
+                const isTarget = p.symbol === nextSymbol && !p.captured;
+                p.draw(isTarget);
+            });
+
+            if (isVictory) {
+                updateAndDrawConfetti();
+            }
+
+            animationFrameId = requestAnimationFrame(loop);
+        }
+
+        // --- УПРАВЛЕНИЕ И СОБЫТИЯ ---
+
+        function updateMouse(e) {
+            const rect = canvas.getBoundingClientRect();
+            // Поддержка мыши и тач-событий
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            mouse.x = clientX - rect.left;
+            mouse.y = clientY - rect.top;
+            mouse.active = true;
+            
+            // Активируем аудиоконтекст при первом взаимодействии пользователя
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        // События мыши
+        window.addEventListener('mousemove', updateMouse);
+        window.addEventListener('mouseout', () => mouse.active = false);
+        
+        // События Touch (для мобильных и планшетов)
+        window.addEventListener('touchstart', updateMouse, {passive: false});
+        window.addEventListener('touchmove', (e) => {
+            // Предотвращаем скролл экрана при вождении пальцем по канвасу
+            if (e.target === canvas) e.preventDefault();
+            updateMouse(e);
+        }, {passive: false});
+        window.addEventListener('touchend', () => mouse.active = false);
+
+        // Кнопки интерфейса
+        btnRestart.addEventListener('click', () => initLevel(currentLevelIndex));
+        btnNext.addEventListener('click', () => initLevel(currentLevelIndex + 1));
+        btnModalNext.addEventListener('click', () => initLevel(currentLevelIndex + 1));
+
+        // Запуск: загружаем уровни из JSON, затем стартуем
+        fetch('levels.json')
+            .then(r => r.json())
+            .then(data => {
+                levelsData = data;
+                initLevel(0);
+                loop();
+            })
+            .catch(err => {
+                uiTitle.innerText = 'Ошибка загрузки levels.json';
+                console.error(err);
+            });
+
+    </script>
+</body>
+</html>
