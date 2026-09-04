@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,6 +28,7 @@
             user-select: none;
             box-sizing: border-box;
             transition: opacity 0.5s ease, background-color 0.3s ease, border 0.3s ease;
+            cursor: pointer;
         }
         .selected {
             filter: brightness(1.2);
@@ -56,8 +57,13 @@
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
         }
-        #restartButton {
-            margin-top: 10px;
+        .modal-buttons {
+            margin-top: 12px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .modal-button {
             padding: 10px 20px;
             font-size: 18px;
             background: #0ace38;
@@ -67,8 +73,15 @@
             cursor: pointer;
             transition: background 0.2s ease;
         }
-        #restartButton:hover {
+        .modal-button:hover {
             background: #20c679;
+        }
+        .modal-button.secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #138ee0;
+        }
+        .modal-button.secondary:hover {
+            background: #ffffff;
         }
         #counter {
             position: absolute;
@@ -79,122 +92,367 @@
             background: rgba(255, 255, 255, 0.8);
             padding: 5px 10px;
             border-radius: 5px;
+            z-index: 5;
+        }
+        #modeLabel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #D02DC6;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 5;
+        }
+        #menuButton {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 5px 12px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #2DA5D0;
+            border: 2px solid #2DA5D0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            z-index: 5;
+        }
+        #menuButton:hover {
+            background: #e8f4fa;
+        }
+        #menu {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(240, 240, 240, 0.96);
+            z-index: 10;
+        }
+        #menu.open {
+            display: flex;
+        }
+        .menu-card {
+            width: 520px;
+            max-width: 92vw;
+            max-height: 92vh;
+            overflow: auto;
+            box-sizing: border-box;
+            background: white;
+            border-radius: 20px;
+            outline: 9px solid #2DA5D0;
+            padding: 24px;
+            text-align: center;
+        }
+        .menu-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2DA5D0;
+            margin: 4px 0 12px;
+        }
+        .menu-section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #666;
+            margin: 16px 0 8px;
+        }
+        .option-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .option {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 8px;
+            background: #F1F6FA;
+            border: 3px solid #E1E8EE;
+            border-radius: 14px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+        .option:hover {
+            border-color: #9cc4dd;
+        }
+        .option.selected {
+            border-color: #3316F2;
+            background: #E8F1F8;
+        }
+        .option-sign {
+            font-size: 30px;
+            font-weight: 600;
+            font-family: Roboto, sans-serif;
+            color: #2DA5D0;
+            line-height: 1.1;
+        }
+        .option-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+        }
+        .difficulty-hint {
+            margin-top: 10px;
+            min-height: 18px;
+            font-size: 13px;
+            color: #888;
+        }
+        #playButton {
+            margin-top: 18px;
+            padding: 14px 48px;
+            font-size: 22px;
+            font-weight: 600;
+            background: #0ace38;
+            color: rgb(2, 65, 26);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        #playButton:hover {
+            background: #20c679;
         }
     </style>
 </head>
 <body>
     <div data-layer="Box" class="Box" style="width: 600px; height: 600px; overflow: hidden; outline: 9px #2DA5D0 solid; outline-offset: 0px">
-        <div id="counter">Элементы: 20/20</div>
-        <div data-layer="answer6" class="Answer6" style="width: 100px; height: 100px; padding: 10px; left: 408px; top: 330px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">12</div>
-        </div>
-        <div data-layer="answer5" class="Answer5" style="width: 100px; height: 100px; padding: 10px; left: 274px; top: 272px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">27</div>
-        </div>
-        <div data-layer="answer4" class="Answer4" style="width: 100px; height: 100px; padding: 10px; left: 46px; top: 465px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">72</div>
-        </div>
-        <div data-layer="answer3" class="Answer3" style="width: 100px; height: 100px; padding: 10px; left: 16px; top: 335px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">32</div>
-        </div>
-        <div data-layer="answer7" class="Answer7" style="width: 100px; height: 100px; padding: 10px; left: 190px; top: 198px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">48</div>
-        </div>
-        <div data-layer="answer8" class="Answer8" style="width: 100px; height: 100px; padding: 10px; left: 356px; top: 195px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">63</div>
-        </div>
-        <div data-layer="answer9" class="Answer9" style="width: 100px; height: 100px; padding: 10px; left: 456px; top: 126px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">54</div>
-        </div>
-        <div data-layer="answer10" class="Answer10" style="width: 100px; height: 100px; padding: 10px; left: 26px; top: 26px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">45</div>
-        </div>
-        <div data-layer="answer2" class="Answer2" style="width: 100px; height: 100px; padding: 10px; left: 296px; top: 385px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">35</div>
-        </div>
-        <div data-layer="answer1" class="Answer1" style="width: 100px; height: 100px; padding: 10px; left: 198px; top: 451px; position: absolute; background: #2DA5D0; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 64px; font-family: Roboto; font-weight: 500; line-height: 96px; word-wrap: break-word">56</div>
-        </div>
-        <div data-layer="example6" class="Example6" style="width: 100px; height: 100px; padding: 10px; left: 372px; top: 465px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">4×3</div>
-        </div>
-        <div data-layer="example5" class="Example5" style="width: 100px; height: 100px; padding: 10px; left: 156px; top: 344px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">9×3</div>
-        </div>
-        <div data-layer="example4" class="Example4" style="width: 100px; height: 100px; padding: 10px; left: 96px; top: 255px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">9×8</div>
-        </div>
-        <div data-layer="example3" class="Example3" style="width: 100px; height: 100px; padding: 10px; left: 24px; top: 161px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">4×8</div>
-        </div>
-        <div data-layer="example7" class="Example7" style="width: 100px; height: 100px; padding: 10px; left: 126px; top: 86px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">8×6</div>
-        </div>
-        <div data-layer="example8" class="Example8" style="width: 100px; height: 100px; padding: 10px; left: 246px; top: 106px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">9×7</div>
-        </div>
-        <div data-layer="example9" class="Example9" style="width: 100px; height: 100px; padding: 10px; left: 344px; top: 49px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">9×6</div>
-        </div>
-        <div data-layer="example10" class="Example10" style="width: 100px; height: 100px; padding: 10px; left: 472px; top: 17px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">9×5</div>
-        </div>
-        <div data-layer="example2" class="Example2" style="width: 100px; height: 100px; padding: 10px; left: 481px; top: 424px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">7×5</div>
-        </div>
-        <div data-layer="example1" class="Example1" style="width: 100px; height: 100px; padding: 10px; left: 483px; top: 235px; position: absolute; background: #D02DC6; border-radius: 50px; flex-direction: column; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
-            <div style="width: 96px; text-align: center; color: #FAFAFA; font-size: 40px; font-family: Roboto; font-weight: 500; line-height: 60px; word-wrap: break-word">7×8</div>
-        </div>
+        <div id="counter">Элементы: 0/20</div>
+        <div id="modeLabel"></div>
+        <button id="menuButton" type="button">Меню</button>
     </div>
     <div id="gameOver">
         Старайся, у тебя получится!
-        <button id="restartButton">Начать!</button>
+        <div class="modal-buttons">
+            <button class="modal-button restart" type="button">Ещё раз</button>
+            <button class="modal-button secondary tomenu" type="button">В меню</button>
+        </div>
     </div>
     <div id="gameWon">
         Правильно, молодец!
-        <button id="restartButton">Ещё!</button>
+        <div class="modal-buttons">
+            <button class="modal-button restart" type="button">Ещё раз</button>
+            <button class="modal-button secondary tomenu" type="button">В меню</button>
+        </div>
+    </div>
+    <div id="menu" class="open">
+        <div class="menu-card">
+            <div class="menu-title">Изучаем таблицу весело!</div>
+            <div class="menu-section-title">Тип заданий</div>
+            <div class="option-row" id="typeRow">
+                <button class="option selected" type="button" data-type="multiply">
+                    <span class="option-sign">×</span>
+                    <span class="option-name">Умножение</span>
+                </button>
+                <button class="option" type="button" data-type="divide">
+                    <span class="option-sign">:</span>
+                    <span class="option-name">Деление</span>
+                </button>
+                <button class="option" type="button" data-type="mixed">
+                    <span class="option-sign">× :</span>
+                    <span class="option-name">Смешанный</span>
+                </button>
+            </div>
+            <div class="menu-section-title">Сложность</div>
+            <div class="option-row" id="difficultyRow">
+                <button class="option" type="button" data-difficulty="easy">
+                    <span class="option-name">Легкий</span>
+                </button>
+                <button class="option selected" type="button" data-difficulty="medium">
+                    <span class="option-name">Средний</span>
+                </button>
+                <button class="option" type="button" data-difficulty="hard">
+                    <span class="option-name">Сложный</span>
+                </button>
+            </div>
+            <div class="difficulty-hint" id="difficultyHint"></div>
+            <button id="playButton" type="button">Играть!</button>
+        </div>
     </div>
     <audio id="correctSound" preload="auto" src="sounds/correct.mp3"></audio>
-<audio id="wrongSound" preload="auto" src="sounds/wrong.mp3"></audio>
+    <audio id="wrongSound" preload="auto" src="sounds/wrong.mp3"></audio>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const engine = Matter.Engine.create({
-                enableSleeping: false
+                enableSleeping: true
             });
             const world = engine.world;
-            
+
             engine.world.gravity.y = 1.2;
-            
+
             const boxContainer = document.querySelector('.Box');
             const boxWidth = parseInt(boxContainer.style.width);
             const boxHeight = parseInt(boxContainer.style.height);
             const gameOverDiv = document.querySelector('#gameOver');
             const gameWonDiv = document.querySelector('#gameWon');
             const counterDiv = document.querySelector('#counter');
+            const modeLabel = document.querySelector('#modeLabel');
+            const menuDiv = document.querySelector('#menu');
+            const difficultyHint = document.querySelector('#difficultyHint');
             const correctSound = document.querySelector('#correctSound');
             const wrongSound = document.querySelector('#wrongSound');
             const maxElements = 20;
-            
+
+            // ---------- Настройки, выбранные в меню ----------
+            const settings = { type: 'multiply', difficulty: 'medium' };
+
+            const TYPE_LABELS = { multiply: 'Умножение', divide: 'Деление', mixed: 'Смешанный' };
+            const DIFFICULTY_LABELS = { easy: 'Легкий', medium: 'Средний', hard: 'Сложный' };
+            const DIFFICULTY_HINTS = {
+                easy: 'Почти все примеры простые, лишь пара посложнее',
+                medium: 'Простые и трудные примеры вперемешку',
+                hard: 'В основном трудные примеры: 6×8, 7×8, 9×6…'
+            };
+
+            // Состав стартовых 10 пар: сколько примеров каждого уровня сложности
+            const INITIAL_COUNTS = {
+                easy: { easy: 6, medium: 2, hard: 2 },
+                medium: { easy: 3, medium: 3, hard: 4 },
+                hard: { easy: 1, medium: 2, hard: 7 }
+            };
+
+            // Вероятности уровней для пар, добавляемых за неправильный ответ
+            const DIFFICULTY_MIX = {
+                easy: { easy: 0.6, medium: 0.2, hard: 0.2 },
+                medium: { easy: 0.3, medium: 0.3, hard: 0.4 },
+                hard: { easy: 0.1, medium: 0.2, hard: 0.7 }
+            };
+
+            // ---------- Примеры таблицы умножения ----------
+            // Сочетания, которые запоминаются труднее всего
+            const HARD_FACTS = new Set(['3×7', '3×8', '4×9', '6×6', '6×7', '6×8', '6×9', '7×7', '7×8', '7×9', '8×8', '8×9', '9×9']);
+
+            function factKey(a, b) {
+                return a <= b ? a + '×' + b : b + '×' + a;
+            }
+
+            function factLevel(a, b) {
+                const key = factKey(a, b);
+                if (HARD_FACTS.has(key)) return 'hard';
+                if (a === 2 || b === 2 || a === 5 || b === 5 || key === '3×3' || key === '3×4') return 'easy';
+                return 'medium';
+            }
+
+            const FACT_POOLS = { easy: [], medium: [], hard: [] };
+            for (let a = 2; a <= 9; a++) {
+                for (let b = a; b <= 9; b++) {
+                    FACT_POOLS[factLevel(a, b)].push({ a: a, b: b });
+                }
+            }
+
+            function shuffle(arr) {
+                for (let i = arr.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [arr[i], arr[j]] = [arr[j], arr[i]];
+                }
+                return arr;
+            }
+
+            function getAllElements() {
+                return [...document.querySelectorAll('[class^="Answer"], [class^="Example"]')];
+            }
+
+            // Сочетания и ответы, уже лежащие на поле, — чтобы не дублировать шарики
+            function usedFactKeys() {
+                return new Set(getAllElements().map(el => el.dataset.fact));
+            }
+
+            function usedAnswerValues() {
+                return new Set(getAllElements().filter(el => el.dataset.kind === 'answer').map(el => el.dataset.value));
+            }
+
+            function makePair(fact) {
+                const op = settings.type === 'mixed'
+                    ? (Math.random() < 0.5 ? '×' : ':')
+                    : (settings.type === 'multiply' ? '×' : ':');
+                if (op === '×') {
+                    const first = Math.random() < 0.5 ? fact.a : fact.b;
+                    const second = first === fact.a ? fact.b : fact.a;
+                    return { expression: first + '×' + second, answer: String(first * second), value: first * second };
+                }
+                const product = fact.a * fact.b;
+                const divisor = Math.random() < 0.5 ? fact.a : fact.b;
+                return { expression: product + ':' + divisor, answer: String(product / divisor), value: product / divisor };
+            }
+
+            // Ищем пару заданного уровня: без повтора сочетания, а по возможности и без повтора ответа
+            function tryMakePair(level, used, answers, strict) {
+                for (const fact of shuffle(FACT_POOLS[level].slice())) {
+                    const key = factKey(fact.a, fact.b);
+                    if (used.has(key)) continue;
+                    const pair = makePair(fact);
+                    if (strict && answers.has(pair.answer)) continue;
+                    used.add(key);
+                    answers.add(pair.answer);
+                    pair.fact = key;
+                    return pair;
+                }
+                return null;
+            }
+
+            function drawPairs(levelCounts) {
+                const used = usedFactKeys();
+                const answers = usedAnswerValues();
+                const pairs = [];
+                Object.keys(levelCounts).forEach(level => {
+                    for (let i = 0; i < levelCounts[level]; i++) {
+                        let pair = tryMakePair(level, used, answers, true);
+                        if (!pair) pair = tryMakePair(level, used, answers, false);
+                        if (pair) pairs.push(pair);
+                    }
+                });
+                return pairs;
+            }
+
+            function pickWeightedLevel() {
+                const mix = DIFFICULTY_MIX[settings.difficulty];
+                const roll = Math.random();
+                let acc = 0;
+                for (const name of ['easy', 'medium', 'hard']) {
+                    acc += mix[name];
+                    if (roll < acc) return name;
+                }
+                return 'hard';
+            }
+
+            function drawAddedPairs(count) {
+                const counts = {};
+                for (let i = 0; i < count; i++) {
+                    const level = pickWeightedLevel();
+                    counts[level] = (counts[level] || 0) + 1;
+                }
+                return drawPairs(counts);
+            }
+
+            // ---------- Физика ----------
             const wallOptions = {
                 isStatic: true,
                 render: { visible: false },
                 collisionFilter: { group: -1 }
             };
-            
+
             const walls = [
                 Matter.Bodies.rectangle(boxWidth / 2, 0, boxWidth, 1, wallOptions),
                 Matter.Bodies.rectangle(boxWidth / 2, boxHeight, boxWidth, 1, wallOptions),
                 Matter.Bodies.rectangle(0, boxHeight / 2, 1, boxHeight, wallOptions),
                 Matter.Bodies.rectangle(boxWidth, boxHeight / 2, 1, boxHeight, wallOptions)
             ];
-            
+
             Matter.Composite.add(world, walls);
-            
+
             const bodies = [];
             let elementCounter = 0;
-            
+            let selectedElement = null;
+            let runner = null;
+
             const initialPositions = [
                 { left: 408, top: 330 },
                 { left: 274, top: 272 },
@@ -217,39 +475,26 @@
                 { left: 481, top: 424 },
                 { left: 483, top: 235 }
             ];
-            
-            const availablePairs = [
-                { answer: '12', example: '4×3' },
-                { answer: '27', example: '9×3' },
-                { answer: '72', example: '9×8' },
-                { answer: '32', example: '4×8' },
-                { answer: '35', example: '7×5' },
-                { answer: '56', example: '7×8' },
-                { answer: '48', example: '8×6' },
-                { answer: '63', example: '9×7' },
-                { answer: '54', example: '9×6' },
-                { answer: '45', example: '9×5' }
-            ];
-            
-            function getAllElements() {
-                return [...document.querySelectorAll('[class^="Answer"], [class^="Example"]')];
-            }
-            
+
             function updateCounter() {
                 const count = getAllElements().length;
                 counterDiv.textContent = `Элементы: ${count}/${maxElements}`;
             }
-            
-            function createElement(type, value, left, top) {
-                const isAnswer = type === 'Answer';
-                const className = `${type}${elementCounter}`;
-                const fontSize = isAnswer ? '64px' : '40px';
-                const lineHeight = isAnswer ? '96px' : '60px';
+
+            function createBall(kind, pair, left, top) {
+                const isAnswer = kind === 'Answer';
+                const text = isAnswer ? pair.answer : pair.expression;
+                const long = text.length > 3;
+                const fontSize = isAnswer ? '64px' : (long ? '32px' : '40px');
+                const lineHeight = isAnswer ? '96px' : (long ? '44px' : '60px');
                 const background = isAnswer ? '#2DA5D0' : '#D02DC6';
-                
+
                 const element = document.createElement('div');
-                element.setAttribute('data-layer', `${type.toLowerCase()}${elementCounter}`);
-                element.className = className;
+                element.setAttribute('data-layer', `${kind.toLowerCase()}${elementCounter}`);
+                element.className = `${kind}${elementCounter}`;
+                element.dataset.kind = isAnswer ? 'answer' : 'example';
+                element.dataset.value = String(pair.value);
+                element.dataset.fact = pair.fact;
                 element.style.cssText = `
                     width: 100px; height: 100px; padding: 10px; left: ${left}px; top: ${top}px;
                     position: absolute; background: ${background}; border-radius: 50px;
@@ -259,157 +504,147 @@
                 element.innerHTML = `
                     <div style="width: 96px; text-align: center; color: #FAFAFA;
                     font-size: ${fontSize}; font-family: Roboto; font-weight: 500;
-                    line-height: ${lineHeight}; word-wrap: break-word">${value}</div>
+                    line-height: ${lineHeight}; word-wrap: break-word">${text}</div>
                 `;
-                
+                element.addEventListener('click', handleClick);
+
                 boxContainer.appendChild(element);
-                
-                const diameter = 100;
-                const radius = diameter / 2;
-                const x = left + radius;
-                const y = top + radius;
-                
-                const body = Matter.Bodies.circle(x, y, radius, {
+
+                const radius = 50;
+                const body = Matter.Bodies.circle(left + radius, top + radius, radius, {
                     restitution: 0.1,
                     friction: 0.6,
                     frictionAir: 0.02,
                     density: 0.02,
+                    inertia: Infinity, // шарики не вращаются — текст всегда читается
                     render: { visible: false }
                 });
-                
+
                 bodies.push(body);
                 element.body = body;
                 body.element = element;
-                
-                element.style.position = 'absolute';
+
+                Matter.World.add(world, body);
+
                 element.style.left = '0';
                 element.style.top = '0';
-                element.style.transform = '';
-                
-                Matter.Body.setAngularVelocity(body, 0);
-                
+                element.style.transform = `translate(${left}px, ${top}px)`;
+
                 return element;
             }
-            
-            getAllElements().forEach(element => {
-                const diameter = parseInt(element.style.width);
-                const radius = diameter / 2;
-                const rect = element.getBoundingClientRect();
-                const containerRect = boxContainer.getBoundingClientRect();
-                const x = rect.left - containerRect.left + radius;
-                const y = rect.top - containerRect.top + radius;
-                
-                const body = Matter.Bodies.circle(x, y, radius, {
-                    restitution: 0.6,
-                    friction: 0.8,
-                    frictionAir: 0.05,
-                    density: 0.05,
-                    render: { visible: false }
-                });
-                
-                bodies.push(body);
-                element.body = body;
-                body.element = element;
-                
-                element.style.position = 'absolute';
-                element.style.left = '0';
-                element.style.top = '0';
-                element.style.transform = '';
-                
-                Matter.Body.setAngularVelocity(body, 0);
-            });
-            
-            bodies.forEach(body => {
-                const angle = Math.random() * 2 * Math.PI;
-                Matter.Body.applyForce(body, body.position, {
-                    x: 0.0005 * Math.cos(angle),
-                    y: 0.0005 * Math.sin(angle)
-                });
-            });
-            for (let i = 0; i < 3; i++) {
-                Matter.Engine.update(engine, 1000 / 60);
+
+            function spawnPair(pair, posAnswer, posExample) {
+                elementCounter++;
+                createBall('Answer', pair, posAnswer.left, posAnswer.top);
+                elementCounter++;
+                createBall('Example', pair, posExample.left, posExample.top);
             }
-            
-            Matter.Composite.add(world, bodies);
-            
+
+            function jiggle() {
+                world.bodies.forEach(body => {
+                    // будим уснувшие тела, иначе куча не осыплется после удаления пары
+                    Matter.Sleeping.set(body, false);
+                    const angle = Math.random() * 2 * Math.PI;
+                    Matter.Body.applyForce(body, body.position, {
+                        x: 0.0005 * Math.cos(angle),
+                        y: 0.0005 * Math.sin(angle)
+                    });
+                });
+            }
+
+            function startRunner() {
+                if (!runner) {
+                    runner = Matter.Runner.create();
+                    Matter.Runner.run(runner, engine);
+                }
+            }
+
+            function stopRunner() {
+                if (runner) {
+                    Matter.Runner.stop(runner);
+                    runner = null;
+                }
+            }
+
+            function resetGame() {
+                stopRunner();
+                getAllElements().forEach(el => el.remove());
+                bodies.slice().forEach(body => Matter.World.remove(world, body));
+                bodies.length = 0;
+                elementCounter = 0;
+                selectedElement = null;
+                gameOverDiv.classList.remove('show');
+                gameWonDiv.classList.remove('show');
+            }
+
+            function startGame() {
+                resetGame();
+                modeLabel.textContent = `${TYPE_LABELS[settings.type]} · ${DIFFICULTY_LABELS[settings.difficulty]}`;
+                const positions = shuffle(initialPositions.slice());
+                drawPairs(INITIAL_COUNTS[settings.difficulty]).forEach(pair => {
+                    spawnPair(pair, positions.pop(), positions.pop());
+                });
+                jiggle();
+                startRunner();
+                updateCounter();
+            }
+
             function addNewPairs() {
                 const currentElements = getAllElements();
                 if (currentElements.length + 4 > maxElements) {
                     gameOver();
                     return;
                 }
-                
-                for (let i = 0; i < 2; i++) {
-                    const pair = availablePairs[Math.floor(Math.random() * availablePairs.length)];
+
+                drawAddedPairs(2).forEach(pair => {
                     const pos1 = initialPositions[Math.floor(Math.random() * initialPositions.length)];
                     const pos2 = initialPositions[Math.floor(Math.random() * initialPositions.length)];
-                    
-                    elementCounter++;
-                    const answerElement = createElement('Answer', pair.answer, pos1.left, pos1.top);
-                    elementCounter++;
-                    const exampleElement = createElement('Example', pair.example, pos2.left, pos2.top);
-                    
-                    Matter.World.add(world, [answerElement.body, exampleElement.body]);
-                    
-                    [answerElement, exampleElement].forEach(el => {
-                        el.addEventListener('click', handleClick);
-                    });
-                }
-                
-                world.bodies.forEach(body => {
-                    const angle = Math.random() * 2 * Math.PI;
-                    Matter.Body.applyForce(body, body.position, {
-                        x: 0.0005 * Math.cos(angle),
-                        y: 0.0005 * Math.sin(angle)
-                    });
-                    Matter.Body.setAngularVelocity(body, 0);
+                    spawnPair(pair, pos1, pos2);
                 });
-                for (let i = 0; i < 3; i++) {
-                    Matter.Engine.update(engine, 1000 / 60);
-                }
-                
+
+                jiggle();
                 updateCounter();
             }
-            
+
             function gameOver() {
                 gameOverDiv.classList.add('show');
-                Matter.Runner.stop(runner);
+                stopRunner();
                 getAllElements().forEach(el => el.removeEventListener('click', handleClick));
             }
-            
+
             function gameWon() {
                 gameWonDiv.classList.add('show');
-                Matter.Runner.stop(runner);
+                stopRunner();
                 getAllElements().forEach(el => el.removeEventListener('click', handleClick));
             }
-            
+
             function handleClick() {
                 if (this.classList.contains('fading')) return;
-                
-                const value = this.querySelector('div').textContent;
-                const isAnswer = this.className.includes('Answer');
-                
+
+                const isAnswer = this.dataset.kind === 'answer';
+                const value = this.dataset.value;
+
                 if (selectedElement === this) {
                     this.classList.remove('selected');
                     selectedElement = null;
                     return;
                 }
-                
+
                 if (selectedElement) {
-                    const prevValue = selectedElement.querySelector('div').textContent;
-                    const prevIsAnswer = selectedElement.className.includes('Answer');
-                    
-                    if ((isAnswer && !prevIsAnswer && pairs[value] === prevValue) ||
-                        (!isAnswer && prevIsAnswer && pairs[prevValue] === value)) {
+                    const prevIsAnswer = selectedElement.dataset.kind === 'answer';
+                    const prevValue = selectedElement.dataset.value;
+
+                    if (isAnswer !== prevIsAnswer && value === prevValue) {
                         // Найдена пара
                         correctSound.play().catch(() => {});
                         this.classList.add('fading');
                         selectedElement.classList.add('fading');
-                        
+
                         const removedBodies = [this.body, selectedElement.body].filter(body => body && world.bodies.includes(body));
                         const elementToRemove = this;
                         const selectedElementToRemove = selectedElement;
-                        
+                        selectedElement = null;
+
                         setTimeout(() => {
                             if (removedBodies.length > 0) {
                                 Matter.World.remove(world, removedBodies);
@@ -420,25 +655,12 @@
                                 const index = bodies.indexOf(body);
                                 if (index !== -1) bodies.splice(index, 1);
                             });
-                            world.bodies.forEach(body => {
-                                const angle = Math.random() * 2 * Math.PI;
-                                Matter.Body.applyForce(body, body.position, {
-                                    x: 0.0005 * Math.cos(angle),
-                                    y: 0.0005 * Math.sin(angle)
-                                });
-                                Matter.Body.setAngularVelocity(body, 0);
-                            });
-                            for (let i = 0; i < 3; i++) {
-                                Matter.Engine.update(engine, 1000 / 60);
-                            }
-                            
+                            jiggle();
                             updateCounter();
                             if (getAllElements().length === 0) {
                                 gameWon();
                             }
                         }, 500);
-                        
-                        selectedElement = null;
                     } else {
                         // Неправильная пара
                         wrongSound.play().catch(() => {});
@@ -453,50 +675,65 @@
                     selectedElement = this;
                 }
             }
-            
-            getAllElements().forEach(element => {
-                element.addEventListener('click', handleClick);
-            });
-            
-            const pairs = {
-                '12': '4×3',
-                '27': '9×3',
-                '72': '9×8',
-                '32': '4×8',
-                '35': '7×5',
-                '56': '7×8',
-                '48': '8×6',
-                '63': '9×7',
-                '54': '9×6',
-                '45': '9×5'
-            };
-            
-            let selectedElement = null;
-            
+
             function updateElements() {
                 world.bodies.forEach(body => {
                     const element = body.element;
                     if (!element || element.classList.contains('fading')) return;
                     const radius = parseInt(element.style.width) / 2;
-                    element.style.transform = `translate(${body.position.x - radius}px, ${body.position.y - radius}px) rotate(${body.angle}rad)`;
+                    element.style.transform = `translate(${body.position.x - radius}px, ${body.position.y - radius}px)`;
                 });
             }
-            
-            document.querySelectorAll('#restartButton').forEach(button => {
-                button.addEventListener('click', () => {
-                    window.location.reload();
+
+            // ---------- Меню ----------
+            function wireOptionRow(rowId, attributeName, apply) {
+                const row = document.querySelector(rowId);
+                row.querySelectorAll('.option').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        row.querySelectorAll('.option').forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        apply(btn.dataset[attributeName]);
+                    });
                 });
+            }
+
+            wireOptionRow('#typeRow', 'type', value => {
+                settings.type = value;
             });
-            
-            const runner = Matter.Runner.create();
-            Matter.Runner.run(runner, engine);
-            
+
+            wireOptionRow('#difficultyRow', 'difficulty', value => {
+                settings.difficulty = value;
+                difficultyHint.textContent = DIFFICULTY_HINTS[value];
+            });
+
+            difficultyHint.textContent = DIFFICULTY_HINTS[settings.difficulty];
+
+            function showMenu() {
+                resetGame();
+                modeLabel.textContent = '';
+                updateCounter();
+                menuDiv.classList.add('open');
+            }
+
+            document.querySelector('#playButton').addEventListener('click', () => {
+                menuDiv.classList.remove('open');
+                startGame();
+            });
+
+            document.querySelectorAll('.modal-button.restart').forEach(btn => {
+                btn.addEventListener('click', () => startGame());
+            });
+
+            document.querySelectorAll('.modal-button.tomenu').forEach(btn => {
+                btn.addEventListener('click', showMenu);
+            });
+
+            document.querySelector('#menuButton').addEventListener('click', showMenu);
+
             (function render() {
                 updateElements();
                 requestAnimationFrame(render);
             })();
-            
-            updateCounter();
         });
     </script>
 </body>
